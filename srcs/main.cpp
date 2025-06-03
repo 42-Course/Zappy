@@ -7,13 +7,12 @@ extern "C" {
     #include <string.h>
     #include <fcntl.h>
     #include <stdlib.h>
-    #include <time.h>
+    #include <sys/time.h>
 }
 
-#include <toml++/toml.hpp>
-
 #include "Zappy.inc"
-#include "GameEngine.hpp"
+#include "core/Engine.hpp"
+#include "core/Config.hpp"
 
 int g_stop_sig = 42;
 
@@ -46,8 +45,6 @@ static void print_help() {
         "  -x <width>          refers to the initial horizontal size of trantor (width > 10)" << std::endl <<
         "  -y <height>         refers to the initial vertical size of trantor (height > 10)" << std::endl <<
         "\n[Extra OPTIONS]:, if a parameter is not between `[]` then it's mandatory\n" <<
-        "  -f <file>    set the configuration file (TOML format)" << std::endl <<
-        "               by default `./conf.toml` is used" << std::endl <<
         "  -t <ms>      set the time unit divider, it's 100 by default (100 frames per second)" << std::endl <<
         "               the higher this number, the faster the world will be (ms > 0)" << std::endl <<
         "  -T <ms>      set the connection timeout, if a player doesn't join a team after ms" << std::endl <<
@@ -82,26 +79,21 @@ ssize_t gettimeofday_ms() {
 int main(int argc, char *argv[])
 {
     // Seed rand
-    srand (time(NULL));
+    srand(time(NULL));
     int opt;
     std::string lang("en");
-    std::string file_name("conf.toml");
     int players_port(4242);
     int spectators_port(2121);
     int default_time(100);
     int w(20), h(20), num_players(3), timeout(60000); // Just for testing purposes
-    // int w(-1), h(-1), num_players(-1), timeout(60000);
     std::vector<std::string> teams;
 
     setup_signals();
     try {
-        while ((opt = getopt(argc, argv, "l:f:P:S:t:x:y:c:T:hn")) != -1) {
+        while ((opt = getopt(argc, argv, "l:P:S:t:x:y:c:T:hn")) != -1) {
             switch (opt) {
             case 'l':
                 lang.assign(optarg);
-                break ;
-            case 'f':
-                file_name.assign(optarg);
                 break ;
             case 'P':
                 players_port = std::stoi(optarg);
@@ -180,18 +172,29 @@ int main(int argc, char *argv[])
         // return (1);
     }
 
-
     try {
-        Zappy::GameEngine trantor(teams, default_time, file_name, lang, players_port, spectators_port,
-            {w, h}, num_players, timeout);
-        trantor.start(&g_stop_sig);
-        // Zappy::Server s;
-    } catch (const toml::parse_error& err) {
-        std::cerr
-            << "Error parsing file '" << *err.source().path
-            << "':\n" << RED << err.description() << ENDC
-            << "\n\t(" << err.source().begin << ")\n";
-        return (1);
+        // Create configuration
+        Zappy::Config config(w, h, default_time, players_port, spectators_port, num_players);
+        
+        // Add teams from command line
+        for (const auto& team : teams) {
+            config.addTeam(team);
+        }
+
+        // Create and start engine
+        Zappy::Engine engine(config);
+        engine.start();
+        
+        // Main loop
+        while (g_stop_sig) {
+            // The engine handles its own update loop
+            if (!engine.isRunning()) {
+                break;
+            }
+            usleep(1000); // Small sleep to prevent CPU hogging
+        }
+        
+        engine.stop();
     } catch (std::exception &e) {
         std::cerr << RED << e.what() << ENDC << std::endl;
         return (1);

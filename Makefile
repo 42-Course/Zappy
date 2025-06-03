@@ -1,103 +1,82 @@
-# Makefile created automatically from script\n
-# C++ Zappy [Thu Feb 15 07:45:39 PM CET 2024]\n
-#MAKEFLAGS += --silent  # Silence makefile [Commented by default]\n
-NAME  = Zappy
+# Makefile for Zappy Server
+NAME = Zappy
 
 .RECIPEPREFIX = >
 
-SRC = $(wildcard srcs/*.cpp)
+# Core components
+SRC = srcs/main.cpp
+SRC += srcs/core/Engine.cpp \
+       srcs/core/World.cpp \
+       srcs/core/GameLoop.cpp \
+       srcs/core/Map.cpp \
+       srcs/core/Team.cpp \
+       srcs/core/Player.cpp \
+       srcs/core/Spectator.cpp \
+       srcs/core/Tile.cpp \
+       srcs/core/Inventory.cpp
 
-# Add Player Commands
-SRC += srcs/Commands/PlayerClientCommands/Advance.cpp \
-  srcs/Commands/PlayerClientCommands/Join.cpp \
-  srcs/Commands/PlayerClientCommands/Right.cpp \
-  srcs/Commands/PlayerClientCommands/Left.cpp \
+# Network components
+SRC += srcs/net/NetworkManager.cpp \
+       srcs/net/ClientConnection.cpp \
+       srcs/net/CommandRouter.cpp
 
-# Add Spectator Commands
-SRC += srcs/Commands/SpectatorClientCommands/MapSize.cpp \
-  srcs/Commands/SpectatorClientCommands/BoxContentTile.cpp \
-  srcs/Commands/SpectatorClientCommands/MapContentTile.cpp \
-  srcs/Commands/SpectatorClientCommands/TeamsNames.cpp \
-  srcs/Commands/SpectatorClientCommands/Players.cpp \
-  srcs/Commands/SpectatorClientCommands/PlayerPosition.cpp \
-  srcs/Commands/SpectatorClientCommands/PlayerLevel.cpp \
-  srcs/Commands/SpectatorClientCommands/GetTimeUnit.cpp \
-  srcs/Commands/SpectatorClientCommands/SetTimeUnit.cpp \
-  srcs/Commands/SpectatorClientCommands/PlayerInventory.cpp \
+# Command components
+SRC += srcs/commands/ServerCommand.cpp \
+       srcs/commands/server/ExitCommand.cpp \
+       srcs/commands/server/StatusCommand.cpp \
+       srcs/commands/server/HelpCommand.cpp
 
-# Add Server Commands
-SRC += srcs/Commands/ServerCommands/HelpServer.cpp \
-srcs/Commands/ServerCommands/StatusServer.cpp \
-  srcs/Commands/ServerCommands/ExitServer.cpp \
-  srcs/Commands/ServerCommands/LangServer.cpp \
-  srcs/Commands/ServerCommands/ClearServer.cpp \
-  srcs/Commands/ServerCommands/PlayersServer.cpp \
-
-# Add The Geometry srcs
-SRC += srcs/Geometry/Point.cpp \
-  srcs/Geometry/Direction.cpp \
-
-# Add The Resources srcs
-SRC += srcs/Resources/Mineral.cpp \
-  srcs/Resources/Inventory.cpp \
-
-
-CFLAGS  = -Wall -Wextra -Werror -std=c++20 #-fsanitize=leak
-#CFLAGS  = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak
+CFLAGS = -Wall -Wextra -Werror -std=c++20 #-fsanitize=leak
+#CFLAGS = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak
 
 INC = -I includes -I tomlplusplus/include
 
-DEPS = Command Commands/PlayerClientCommand Geometry Resources
+# Object directories structure
+OBJS_D = objs
+OBJS_DIRS = ${OBJS_D}/core \
+            ${OBJS_D}/net \
+            ${OBJS_D}/commands \
+            ${OBJS_D}/commands/server
 
-OBJS_D  = objs
-
-OBJS_DIRS = ${OBJS_D}/Commands \
-  ${OBJS_D}/Commands/SpectatorClientCommands \
-  ${OBJS_D}/Commands/PlayerClientCommands \
-  ${OBJS_D}/Commands/ServerCommands \
-  ${OBJS_D}/Resources \
-  ${OBJS_D}/Geometry \
-
-DEBUG_OBJS_D  = debug_objs
-
-DEBUG_OBJS_DIRS = ${DEBUG_OBJS_D}/Commands \
-  ${DEBUG_OBJS_D}/Commands/SpectatorClientCommands \
-  ${DEBUG_OBJS_D}/Commands/PlayerClientCommands \
-  ${DEBUG_OBJS_D}/Commands/ServerCommands \
-  ${DEBUG_OBJS_D}/Resources \
-  ${DEBUG_OBJS_D}/Geometry \
+DEBUG_OBJS_D = debug_objs
+DEBUG_OBJS_DIRS = ${DEBUG_OBJS_D}/core \
+                  ${DEBUG_OBJS_D}/net \
+                  ${DEBUG_OBJS_D}/commands \
+                  ${DEBUG_OBJS_D}/commands/server
 
 OBJ = $(SRC:srcs/%.cpp=$(OBJS_D)/%.o)
-
 DEBUG_OBJ = $(SRC:srcs/%.cpp=$(DEBUG_OBJS_D)/%.o)
 
-UNAME :=  $(shell uname)
+UNAME := $(shell uname)
+RM = rm -rf
 
-RM    = rm -rf
-
+# Compiler selection based on platform
 ifeq ($(UNAME), Darwin)
   CC = g++
 else ifeq ($(UNAME), FreeBSD)
   CC = clang++
 else
-  CC  = g++
+  CC = g++
   CFLAGS += -D LINUX
 endif
 
-$(NAME):$(OBJ)
+# Main target
+$(NAME): $(OBJ)
 > @printf "Compiling $(C_YELLOW)$(NAME)$(C_END) ... \n"
 > $(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 > @printf "$(C_GREEN)DONE$(C_END)\n"
 
-$(OBJS_D)/%.o:srcs/%.cpp
+# Object compilation rules
+$(OBJS_D)/%.o: srcs/%.cpp
 > @mkdir -p $(OBJS_D) ${OBJS_DIRS}
 > $(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
-$(DEBUG_OBJS_D)/%.o:srcs/%.cpp
+$(DEBUG_OBJS_D)/%.o: srcs/%.cpp
 > @mkdir -p $(DEBUG_OBJS_D) ${DEBUG_OBJS_DIRS}
 > $(CC) $(CFLAGS) -D DEBUG=1 $(INC) -o $@ -c $<
 
-test:   re
+# Utility targets
+test: re
 > @printf "$(C_BLUE)Testing $(C_YELLOW)$(NAME)$(C_END)\n"
 > @printf "\n$(C_BLUE)********************************************$(C_END)\n"
 > @./$(NAME)
@@ -106,7 +85,7 @@ test:   re
 > @$(MAKE) show
 > @$(MAKE) fclean
 
-all:$(NAME)
+all: $(NAME)
 
 debug: $(DEBUG_OBJ)
 > @printf "Compiling DEBUG $(C_YELLOW)debug_$(NAME)$(C_END) ...\n"
@@ -117,28 +96,29 @@ clean:
 > $(RM) $(OBJS_D) $(DEBUG_OBJS_D)
 > @printf "$(C_RED)Cleaning objs$(C_END)\n"
 
-fclean:   clean
+fclean: clean
 > $(RM) $(NAME) debug_$(NAME)
 > @printf "$(C_RED)Deleted Everything$(C_END)\n"
 
-re:fclean all
+re: fclean all
 
 show:
 > @printf "$(C_GREEN)"
 > @printf "UNAME    : $(UNAME)\n"
 > @printf "NAME     : $(C_YELLOW)$(NAME)$(C_GREEN)\n"
-> @printf "CC   : $(CC)\n"
+> @printf "CC       : $(CC)\n"
 > @printf "CFLAGS   : $(CFLAGS)\n"
 > @printf "INCLUDES : $(INC)\n"
-> @printf "SRC    : $(C_YELLOW)$(SRC)$(C_GREEN)\n"
-> @printf "OBJ    : $(C_YELLOW)[$(OBJS_D)] --> $(OBJ)$(C_END)\n"
+> @printf "SRC      : $(C_YELLOW)$(SRC)$(C_GREEN)\n"
+> @printf "OBJ      : $(C_YELLOW)[$(OBJS_D)] --> $(OBJ)$(C_END)\n"
 
-.PHONY: all test re
+.PHONY: all test re clean fclean show debug
 
-C_BLACK   = \033[0;30m
-C_RED   = \033[0;31m
-C_GREEN   = \033[0;32m
-C_YELLOW  = \033[0;33m
-C_BLUE    = \033[0;34m
-C_WHITE   = \033[0;37m
-C_END   = \033[0m
+# Color definitions
+C_BLACK = \033[0;30m
+C_RED = \033[0;31m
+C_GREEN = \033[0;32m
+C_YELLOW = \033[0;33m
+C_BLUE = \033[0;34m
+C_WHITE = \033[0;37m
+C_END = \033[0m

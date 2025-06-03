@@ -18,13 +18,11 @@ class Socket
 
   def get_full_response
     response = []
-    after_welcome = false
     begin
       Timeout.timeout(TIMEOUT_SECONDS) do
         while (line = @socket.gets)
           if line.strip.empty?
-            break if after_welcome  # Exit on empty line (Zappy's end-of-message welcome message)
-            after_welcome = true
+            break
           end
           response << line.chomp
         end

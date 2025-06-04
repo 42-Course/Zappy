@@ -4,17 +4,17 @@
 #include <iomanip>
 
 namespace Zappy {
-    StatusCommand::StatusCommand(Engine* engine)
-        : ServerCommand("status", engine) {
+    StatusCommand::StatusCommand(Engine& engine)
+        : ServerCommand(engine, "status") {
     }
 
     void StatusCommand::execute() {
         std::cout << "\nServer Status:\n";
         std::cout << "-------------\n";
         
-        const auto& world = engine_->getWorld();
-        const auto& network = engine_->getNetwork();
-        const auto& gameLoop = engine_->getGameLoop();
+        const auto& world = engine_.getWorld();
+        const auto& network = engine_.getNetwork();
+        const auto& gameLoop = engine_.getGameLoop();
         
         // Server info
         double uptime = static_cast<double>(gameLoop.getCurrentTick()) / gameLoop.getTickRate();

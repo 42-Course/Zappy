@@ -3,13 +3,13 @@
 #include <iostream>
 
 namespace Zappy {
-    ExitCommand::ExitCommand(Engine* engine)
-        : ServerCommand("exit", engine) {
+    ExitCommand::ExitCommand(Engine& engine)
+        : ServerCommand(engine, "exit") {
     }
 
     void ExitCommand::execute() {
         std::cout << "\nStopping server...\n";
-        engine_->stop();
+        engine_.stop();
         std::cout << "Server stopped. Goodbye!\n" << std::endl;
     }
 } 

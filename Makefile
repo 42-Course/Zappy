@@ -24,7 +24,12 @@ SRC += srcs/net/NetworkManager.cpp \
 SRC += srcs/commands/ServerCommand.cpp \
        srcs/commands/server/ExitCommand.cpp \
        srcs/commands/server/StatusCommand.cpp \
-       srcs/commands/server/HelpCommand.cpp
+       srcs/commands/server/HelpCommand.cpp \
+       srcs/commands/server/WatchCommand.cpp \
+       srcs/commands/server/ClearCommand.cpp
+
+# Services
+SRC += srcs/services/WatchService.cpp \
 
 CFLAGS = -Wall -Wextra -Werror -std=c++20 #-fsanitize=leak
 #CFLAGS = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak
@@ -35,12 +40,14 @@ INC = -I includes -I tomlplusplus/include
 OBJS_D = objs
 OBJS_DIRS = ${OBJS_D}/core \
             ${OBJS_D}/net \
+            ${OBJS_D}/services \
             ${OBJS_D}/commands \
             ${OBJS_D}/commands/server
 
 DEBUG_OBJS_D = debug_objs
 DEBUG_OBJS_DIRS = ${DEBUG_OBJS_D}/core \
                   ${DEBUG_OBJS_D}/net \
+                  ${DEBUG_OBJS_D}/services \
                   ${DEBUG_OBJS_D}/commands \
                   ${DEBUG_OBJS_D}/commands/server
 

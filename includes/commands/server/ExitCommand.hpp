@@ -5,10 +5,13 @@
 namespace Zappy {
     class ExitCommand : public ServerCommand {
     public:
-        ExitCommand(Engine* engine);
+        explicit ExitCommand(Engine& engine);
         void execute() override;
         std::string getDescription() const override {
             return "Stop the server and exit";
+        }
+        std::string getUsage() const override {
+            return "exit - Gracefully shutdown the server";
         }
     };
 } 

@@ -4,11 +4,13 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include "World.hpp"
 #include "net/NetworkManager.hpp"
 #include "GameLoop.hpp"
 #include "Config.hpp"
+#include "services/WatchService.hpp"
 
 namespace Zappy {
     class Engine {
@@ -23,6 +25,7 @@ namespace Zappy {
         World& getWorld() { return *world_; }
         NetworkManager& getNetwork() { return *network_; }
         GameLoop& getGameLoop() { return *gameLoop_; }
+        WatchService& getWatchService() { return *watchService_; }
         
         bool isRunning() const { return running_; }
         
@@ -31,11 +34,20 @@ namespace Zappy {
         static void handleSignal(int signal);
         static Engine* getInstance() { return instance_; }
         
+        // Command information
+        const std::map<std::string, std::pair<std::string, std::string>>& getCommandInfo() const { return commandInfo_; }
+        
     private:
+        void registerCommands();
+        
         std::unique_ptr<World> world_;
         std::unique_ptr<NetworkManager> network_;
         std::unique_ptr<GameLoop> gameLoop_;
+        std::unique_ptr<WatchService> watchService_;
         bool running_;
+        
+        // Command information (name -> {description, usage})
+        std::map<std::string, std::pair<std::string, std::string>> commandInfo_;
         
         // Singleton instance for signal handling
         static Engine* instance_;

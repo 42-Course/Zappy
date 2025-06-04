@@ -2,7 +2,7 @@
 #include "net/CommandRouter.hpp"
 
 namespace Zappy {
-    ServerCommand::ServerCommand(const std::string& name, Engine* engine)
+    ServerCommand::ServerCommand(Engine& engine, const std::string& name)
         : Command(name)
         , engine_(engine) {
         // Parse command arguments if any

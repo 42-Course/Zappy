@@ -3,21 +3,22 @@
 #include <string>
 #include <vector>
 #include "Command.hpp"
+#include "net/CommandRouter.hpp"
 
 namespace Zappy {
     class Engine;  // Forward declaration
 
     class ServerCommand : public Command {
     public:
-        ServerCommand(const std::string& name, Engine* engine);
+        ServerCommand(Engine& engine, const std::string& commandLine);
         virtual ~ServerCommand() = default;
 
-        // Pure virtual method that each server command must implement
-        virtual void execute() = 0;
+        // Pure virtual methods that each server command must implement
+        virtual void execute() override = 0;
         virtual std::string getDescription() const = 0;
+        virtual std::string getUsage() const = 0;
 
     protected:
-        Engine* engine_;
-        std::vector<std::string> args_;
+        Engine& engine_;
     };
 } 

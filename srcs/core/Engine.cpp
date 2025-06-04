@@ -41,8 +41,14 @@ namespace Zappy {
         registerCommands();
 
         // Show welcome message and initial prompt
-        std::cout << "\033[1;32m=== Welcome to Zappy Server ===\033[0m\n";
-        std::cout << "Type 'help' for available commands\n";
+        std::cout << "\033[1;32m=> Booting Zappy in development mode\033[0m\n";
+        std::cout << "\033[1;32m=> ZappyServer version: 42.0\033[0m\n";
+        std::cout << "\033[1;32m=> Run `./Zappy --help` for more startup options\033[0m\n";
+        std::cout << "Zappy listening in single thread mode\n";
+        std::cout << "* C++ version:\t" << __cplusplus << "\n";
+        std::cout << "* Server PID:\t" << getpid() << "\n";
+        std::cout << "* Players:\thttp://host:" << network_->getPlayerPort() << "\n";
+        std::cout << "* Spectators:\thttp://host:" << network_->getSpectatorPort() << "\n\n";
         std::cout << "$> " << std::flush;
     }
 

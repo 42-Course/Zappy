@@ -22,6 +22,11 @@ namespace Zappy {
         void removeClient(int clientId);
         ClientConnection* getClient(int clientId);
         const ClientConnection* getClient(int clientId) const;
+        const std::map<int, std::unique_ptr<ClientConnection>>& getClients() const { return clients_; }
+
+        // Port getters
+        int getPlayerPort() const { return playerPort_; }
+        int getSpectatorPort() const { return spectatorPort_; }
 
         // Command handling
         void registerCommandHandler(const std::string& command, CommandHandler handler);
@@ -38,6 +43,8 @@ namespace Zappy {
         int epollFd_;
         int playerServerFd_;
         int spectatorServerFd_;
+        int playerPort_;
+        int spectatorPort_;
         std::vector<epoll_event> events_;
         std::map<int, std::unique_ptr<ClientConnection>> clients_;
         std::unique_ptr<CommandRouter> commandRouter_;

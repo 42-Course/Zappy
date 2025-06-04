@@ -42,6 +42,8 @@ namespace Zappy {
         : epollFd_(-1)
         , playerServerFd_(-1)
         , spectatorServerFd_(-1)
+        , playerPort_(playerPort)
+        , spectatorPort_(spectatorPort)
         , commandRouter_(std::make_unique<CommandRouter>())
         , serverCommandRouter_(std::make_unique<CommandRouter>())
         , running_(false) {

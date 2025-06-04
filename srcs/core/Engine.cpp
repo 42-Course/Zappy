@@ -2,13 +2,22 @@
 #include "commands/server/HelpCommand.hpp"
 #include "commands/server/StatusCommand.hpp"
 #include "commands/server/ExitCommand.hpp"
+#include <csignal>
+#include <string.h>
+#include <iostream>
 
 namespace Zappy {
+    // Initialize static member
+    Engine* Engine::instance_ = nullptr;
+
     Engine::Engine(const Config& config)
         : world_(std::make_unique<World>(config.getMapWidth(), config.getMapHeight()))
         , network_(std::make_unique<NetworkManager>(config.getPlayerPort(), config.getSpectatorPort()))
         , gameLoop_(std::make_unique<GameLoop>(config.getTickRate()))
         , running_(false) {
+        
+        // Set singleton instance
+        instance_ = this;
         
         // Initialize teams
         for (const auto& team : config.getTeams()) {
@@ -43,6 +52,34 @@ namespace Zappy {
 
     Engine::~Engine() {
         stop();
+        if (instance_ == this) {
+            instance_ = nullptr;
+        }
+    }
+
+    void Engine::setupSignalHandlers() {
+        struct sigaction sa;
+        sa.sa_handler = handleSignal;
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = 0;
+
+        // Handle SIGINT (Ctrl+C)
+        sigaction(SIGINT, &sa, nullptr);
+        
+        // Handle SIGTERM
+        sigaction(SIGTERM, &sa, nullptr);
+        
+        // Handle SIGQUIT
+        sigaction(SIGQUIT, &sa, nullptr);
+    }
+
+    void Engine::handleSignal(int signal) {
+        std::cout << "\nReceived signal " << signal << " (" << strsignal(signal) << ")" << std::endl;
+        
+        if (instance_) {
+            std::cout << "Stopping server gracefully..." << std::endl;
+            instance_->stop();
+        }
     }
 
     void Engine::start() {
@@ -61,5 +98,7 @@ namespace Zappy {
         // Stop subsystems in reverse order
         gameLoop_->stop();
         network_->stop();
+        
+        std::cout << "Server stopped." << std::endl;
     }
 } 

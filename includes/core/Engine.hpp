@@ -26,10 +26,18 @@ namespace Zappy {
         
         bool isRunning() const { return running_; }
         
+        // Signal handling
+        static void setupSignalHandlers();
+        static void handleSignal(int signal);
+        static Engine* getInstance() { return instance_; }
+        
     private:
         std::unique_ptr<World> world_;
         std::unique_ptr<NetworkManager> network_;
         std::unique_ptr<GameLoop> gameLoop_;
         bool running_;
+        
+        // Singleton instance for signal handling
+        static Engine* instance_;
     };
 } 

@@ -1,6 +1,7 @@
 #include "core/Team.hpp"
 #include "core/Player.hpp"
 #include <algorithm>
+#include <stdexcept>
 
 namespace Zappy {
     Team::Team(const std::string& name, int maxPlayers)

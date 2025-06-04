@@ -31,7 +31,7 @@ SRC += srcs/commands/ServerCommand.cpp \
 # Services
 SRC += srcs/services/WatchService.cpp \
 
-CFLAGS = -Wall -Wextra -Werror -std=c++20 #-fsanitize=leak
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -fsanitize=leak,address
 #CFLAGS = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak
 
 INC = -I includes -I tomlplusplus/include

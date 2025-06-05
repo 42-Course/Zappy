@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <sys/epoll.h>
+#include "net/Socket.hpp"
 #include "ClientConnection.hpp"
 #include "CommandRouter.hpp"
 
@@ -27,6 +28,10 @@ namespace Zappy {
         // Port getters
         int getPlayerPort() const { return playerPort_; }
         int getSpectatorPort() const { return spectatorPort_; }
+        
+        // Socket fd getters
+        int getPlayerServerFd() const { return playerSocket_.getFd(); }
+        int getSpectatorServerFd() const { return spectatorSocket_.getFd(); }
 
         // Command handling
         void registerCommandHandler(const std::string& command, CommandHandler handler);
@@ -41,8 +46,8 @@ namespace Zappy {
         void cleanup();
 
         int epollFd_;
-        int playerServerFd_;
-        int spectatorServerFd_;
+        Socket playerSocket_;
+        Socket spectatorSocket_;
         int playerPort_;
         int spectatorPort_;
         std::vector<epoll_event> events_;
@@ -54,19 +59,5 @@ namespace Zappy {
         bool running_;
         
         std::string stdinBuffer_;
-    };
-
-    // Helper class for RAII socket handling
-    class Socket {
-    public:
-        Socket(int domain, int type, int protocol);
-        ~Socket();
-        int getFd() const { return fd_; }
-        void setNonBlocking();
-        
-        static void setNonBlocking(int fd);
-        
-    private:
-        int fd_;
     };
 } 

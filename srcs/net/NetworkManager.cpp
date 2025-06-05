@@ -9,108 +9,69 @@
 #include <iostream>
 
 namespace Zappy {
-    // Socket implementation
-    Socket::Socket(int domain, int type, int protocol) {
-        fd_ = socket(domain, type, protocol);
-        if (fd_ == -1) {
-            throw std::runtime_error("Failed to create socket");
-        }
-    }
-
-    Socket::~Socket() {
-        if (fd_ != -1) {
-            close(fd_);
-        }
-    }
-
-    void Socket::setNonBlocking() {
-        setNonBlocking(fd_);
-    }
-
-    void Socket::setNonBlocking(int fd) {
-        int flags = fcntl(fd, F_GETFL, 0);
-        if (flags == -1) {
-            throw std::runtime_error("Failed to get socket flags");
-        }
-        if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-            throw std::runtime_error("Failed to set socket non-blocking");
-        }
-    }
-
     // NetworkManager implementation
     NetworkManager::NetworkManager(int playerPort, int spectatorPort)
         : epollFd_(-1)
-        , playerServerFd_(-1)
-        , spectatorServerFd_(-1)
+        , playerSocket_(AF_INET, SOCK_STREAM, 0)
+        , spectatorSocket_(AF_INET, SOCK_STREAM, 0)
         , playerPort_(playerPort)
         , spectatorPort_(spectatorPort)
         , commandRouter_(std::make_unique<CommandRouter>())
         , serverCommandRouter_(std::make_unique<CommandRouter>())
         , running_(false) {
         
+        std::cout << "NetworkManager constructor" << playerPort << " " << spectatorPort << std::endl;
         try {
-            initializeEpoll();
-            
-            // Setup player server socket
-            Socket playerSocket(AF_INET, SOCK_STREAM, 0);
-            playerSocket.setNonBlocking();
-            
             struct sockaddr_in playerAddr;
             playerAddr.sin_family = AF_INET;
             playerAddr.sin_port = htons(playerPort);
-            playerAddr.sin_addr.s_addr = INADDR_ANY;
+            playerAddr.sin_addr.s_addr = htonl(INADDR_ANY);
             
-            if (bind(playerSocket.getFd(), (struct sockaddr*)&playerAddr, sizeof(playerAddr)) == -1) {
+            if (bind(playerSocket_.getFd(), (struct sockaddr*)&playerAddr, sizeof(playerAddr)) == -1) {
                 throw std::runtime_error("Failed to bind player socket");
             }
             
-            if (listen(playerSocket.getFd(), SOMAXCONN) == -1) {
+            if (listen(playerSocket_.getFd(), SOMAXCONN) == -1) {
                 throw std::runtime_error("Failed to listen on player socket");
             }
-            
-            playerServerFd_ = playerSocket.getFd();
-            
-            // Setup spectator server socket similarly
-            Socket spectatorSocket(AF_INET, SOCK_STREAM, 0);
-            spectatorSocket.setNonBlocking();
             
             struct sockaddr_in spectatorAddr;
             spectatorAddr.sin_family = AF_INET;
             spectatorAddr.sin_port = htons(spectatorPort);
-            spectatorAddr.sin_addr.s_addr = INADDR_ANY;
+            spectatorAddr.sin_addr.s_addr = htonl(INADDR_ANY);
             
-            if (bind(spectatorSocket.getFd(), (struct sockaddr*)&spectatorAddr, sizeof(spectatorAddr)) == -1) {
+            if (bind(spectatorSocket_.getFd(), (struct sockaddr*)&spectatorAddr, sizeof(spectatorAddr)) == -1) {
                 throw std::runtime_error("Failed to bind spectator socket");
             }
             
-            if (listen(spectatorSocket.getFd(), SOMAXCONN) == -1) {
+            if (listen(spectatorSocket_.getFd(), SOMAXCONN) == -1) {
                 throw std::runtime_error("Failed to listen on spectator socket");
             }
             
-            spectatorServerFd_ = spectatorSocket.getFd();
+            initializeEpoll();
             
             // Add server sockets to epoll
             epoll_event ev;
-            ev.events = EPOLLIN;
+            ev.events = EPOLLIN | EPOLLET;
             
-            ev.data.fd = playerServerFd_;
-            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, playerServerFd_, &ev) == -1) {
+            ev.data.fd = getPlayerServerFd();
+            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, getPlayerServerFd(), &ev) == -1) {
                 throw std::runtime_error("Failed to add player server to epoll");
             }
             
-            ev.data.fd = spectatorServerFd_;
-            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, spectatorServerFd_, &ev) == -1) {
+            ev.data.fd = getSpectatorServerFd();
+            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, getSpectatorServerFd(), &ev) == -1) {
                 throw std::runtime_error("Failed to add spectator server to epoll");
             }
 
             // Add stdin to epoll
-            Socket::setNonBlocking(STDIN_FILENO);
             ev.data.fd = STDIN_FILENO;
             if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, STDIN_FILENO, &ev) == -1) {
                 throw std::runtime_error("Failed to add stdin to epoll");
             }
-            
+            std::cout << "NetworkManager constructor success" << std::endl;
         } catch (...) {
+            std::cerr << "NetworkManager constructor failed" << std::endl;
             cleanup();
             throw;
         }
@@ -122,12 +83,7 @@ namespace Zappy {
 
     void NetworkManager::cleanup() {
         if (epollFd_ != -1) close(epollFd_);
-        if (playerServerFd_ != -1) close(playerServerFd_);
-        if (spectatorServerFd_ != -1) close(spectatorServerFd_);
-        
         epollFd_ = -1;
-        playerServerFd_ = -1;
-        spectatorServerFd_ = -1;
     }
 
     void NetworkManager::initializeEpoll() {
@@ -150,7 +106,6 @@ namespace Zappy {
 
         events_.resize(MAX_EVENTS);
         int nfds = epoll_wait(epollFd_, events_.data(), MAX_EVENTS, 0);
-        
         if (nfds == -1) {
             if (errno != EINTR) {
                 throw std::runtime_error("epoll_wait failed");
@@ -161,10 +116,12 @@ namespace Zappy {
         for (int n = 0; n < nfds; ++n) {
             if (events_[n].data.fd == STDIN_FILENO) {
                 handleStdinCommand();
-            } else if (events_[n].data.fd == playerServerFd_ || events_[n].data.fd == spectatorServerFd_) {
+            } else if (events_[n].data.fd == getPlayerServerFd() || events_[n].data.fd == getSpectatorServerFd()) {
                 acceptNewConnections();
+                std::cout << "acceptNewConnections" << std::endl;
             } else {
                 handleClientData();
+                std::cout << "handleClientData" << std::endl;
             }
         }
     }
@@ -174,7 +131,7 @@ namespace Zappy {
         socklen_t clientLen = sizeof(clientAddr);
         
         // Accept connections on both server sockets
-        for (int serverFd : {playerServerFd_, spectatorServerFd_}) {
+        for (int serverFd : {getPlayerServerFd(), getSpectatorServerFd()}) {
             while (running_) {
                 int clientFd = accept(serverFd, (struct sockaddr*)&clientAddr, &clientLen);
                 
@@ -192,7 +149,7 @@ namespace Zappy {
                 auto client = std::make_unique<ClientConnection>(clientFd);
                 
                 // Set initial client type based on which server accepted it
-                if (serverFd == playerServerFd_) {
+                if (serverFd == getPlayerServerFd()) {
                     client->setType(ClientConnection::Type::Player);
                 } else {
                     client->setType(ClientConnection::Type::Spectator);
@@ -215,7 +172,7 @@ namespace Zappy {
 
     void NetworkManager::handleClientData() {
         for (const auto& event : events_) {
-            if (event.data.fd == playerServerFd_ || event.data.fd == spectatorServerFd_) {
+            if (event.data.fd == getPlayerServerFd() || event.data.fd == getSpectatorServerFd()) {
                 continue;  // Skip server sockets
             }
             

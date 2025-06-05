@@ -18,7 +18,8 @@ SRC += srcs/core/Engine.cpp \
 # Network components
 SRC += srcs/net/NetworkManager.cpp \
        srcs/net/ClientConnection.cpp \
-       srcs/net/CommandRouter.cpp
+       srcs/net/CommandRouter.cpp \
+       srcs/net/Socket.cpp
 
 # Command components
 SRC += srcs/commands/ServerCommand.cpp \

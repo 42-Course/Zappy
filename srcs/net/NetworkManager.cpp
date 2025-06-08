@@ -20,7 +20,6 @@ namespace Zappy {
         , serverCommandRouter_(std::make_unique<CommandRouter>())
         , running_(false) {
         
-        std::cout << "NetworkManager constructor" << playerPort << " " << spectatorPort << std::endl;
         try {
             struct sockaddr_in playerAddr;
             playerAddr.sin_family = AF_INET;
@@ -69,7 +68,6 @@ namespace Zappy {
             if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, STDIN_FILENO, &ev) == -1) {
                 throw std::runtime_error("Failed to add stdin to epoll");
             }
-            std::cout << "NetworkManager constructor success" << std::endl;
         } catch (...) {
             std::cerr << "NetworkManager constructor failed" << std::endl;
             cleanup();

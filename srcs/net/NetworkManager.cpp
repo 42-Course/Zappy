@@ -191,14 +191,39 @@ namespace Zappy {
                 // Process any complete commands
                 while (client->hasCompleteCommand()) {
                     std::string commandLine = client->getNextCommand();
-                    auto command = commandRouter_->routeCommand(commandLine, client.get());
+                    std::string commandName = CommandRouter::getCommandName(commandLine);
+
+                    // Check if client can execute this command
+                    if (!client->canExecuteCommand(commandName)) {
+                        if (client->getType() == ClientConnection::Type::Player && 
+                            client->getState() == ClientConnection::State::UNREGISTERED) {
+                            client->sendData("ko\n");  // Invalid command for unregistered player
+                        }
+                        continue;
+                    }
+
+                    // Route to appropriate command handler based on client type
+                    std::unique_ptr<Command> command;
+                    if (client->getType() == ClientConnection::Type::Spectator) {
+                        command = commandRouter_->routeCommand(commandLine, client.get());
+                    } else if (client->getType() == ClientConnection::Type::Player) {
+                        command = commandRouter_->routeCommand(commandLine, client.get());
+                    }
+
                     if (command) {
                         command->execute();
+                    } else {
+                        client->sendData("ko\n");  // Unknown command
                     }
                 }
             }
             
-            // Handle error or hangup
+            // Handle writable events if needed
+            if (event.events & EPOLLOUT) {
+                // Handle any pending writes
+            }
+            
+            // Handle error conditions
             if (event.events & (EPOLLERR | EPOLLHUP)) {
                 removeClient(event.data.fd);
             }

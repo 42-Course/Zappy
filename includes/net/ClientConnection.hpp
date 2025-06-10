@@ -16,6 +16,12 @@ namespace Zappy {
             Spectator
         };
 
+        enum class State {
+            UNREGISTERED,  // Initial state
+            TEAM_SELECTED, // Player has selected a team
+            ACTIVE        // Fully registered and active
+        };
+
         ClientConnection(int fd);
         ~ClientConnection();
 
@@ -28,6 +34,11 @@ namespace Zappy {
         void setType(Type type);
         Type getType() const { return type_; }
         bool isAuthenticated() const { return type_ != Type::Unknown; }
+        
+        // Client state management
+        void setState(State state) { state_ = state; }
+        State getState() const { return state_; }
+        bool canExecuteCommand(const std::string& command) const;
         
         // Buffer management
         bool hasCompleteCommand() const;
@@ -45,6 +56,7 @@ namespace Zappy {
         
         int fd_;
         Type type_;
+        State state_;
         std::vector<char> readBuffer_;
         std::string commandBuffer_;
         std::queue<std::string> pendingCommands_;

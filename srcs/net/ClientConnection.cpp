@@ -3,11 +3,13 @@
 #include <sys/socket.h>
 #include <errno.h>
 #include <stdexcept>
+#include <algorithm>
 
 namespace Zappy {
     ClientConnection::ClientConnection(int fd)
         : fd_(fd)
         , type_(Type::Unknown)
+        , state_(State::UNREGISTERED)
         , readBuffer_(BUFFER_SIZE) {
     }
 
@@ -67,6 +69,37 @@ namespace Zappy {
 
     void ClientConnection::setType(Type type) {
         type_ = type;
+        // Spectators are immediately active after type is set
+        if (type == Type::Spectator) {
+            state_ = State::ACTIVE;
+        }
+    }
+
+    bool ClientConnection::canExecuteCommand(const std::string& command) const {
+        // Spectators can execute commands immediately
+        if (type_ == Type::Spectator) {
+            return true;
+        }
+
+        // Players need to follow the registration flow
+        if (type_ == Type::Player) {
+            // Unregistered players can only use team selection command
+            if (state_ == State::UNREGISTERED) {
+                return command == "team";  // Allow only team selection
+            }
+            
+            // Players who selected team but haven't received welcome message
+            if (state_ == State::TEAM_SELECTED) {
+                return false;  // Wait for server to send welcome message
+            }
+
+            // Active players can use any player command
+            if (state_ == State::ACTIVE) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     bool ClientConnection::hasCompleteCommand() const {

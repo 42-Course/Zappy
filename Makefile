@@ -24,8 +24,7 @@ SRC += srcs/net/NetworkManager.cpp \
 # Command System
 SRC += srcs/commands/Command.cpp \
        srcs/commands/CommandFactory.cpp \
-       srcs/commands/CommandHandler.cpp \
-       srcs/commands/ServerCommand.cpp
+       srcs/commands/CommandHandler.cpp
 
 # Spectator Commands
 SRC += srcs/commands/spectator/MSZCommand.cpp

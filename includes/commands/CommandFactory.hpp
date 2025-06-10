@@ -12,7 +12,6 @@ namespace Zappy {
 
 class CommandFactory {
 public:
-    using CommandPtr = std::shared_ptr<ICommand>;
     using CommandCreator = std::function<CommandPtr(ClientConnection*, const std::vector<std::string>&)>;
     
     static CommandFactory& getInstance();

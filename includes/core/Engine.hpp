@@ -34,9 +34,6 @@ namespace Zappy {
         static void handleSignal(int signal);
         static Engine* getInstance() { return instance_; }
         
-        // Command information
-        const std::map<std::string, std::pair<std::string, std::string>>& getCommandInfo() const { return commandInfo_; }
-        
     private:
         void registerCommands();
         
@@ -45,9 +42,6 @@ namespace Zappy {
         std::unique_ptr<GameLoop> gameLoop_;
         std::unique_ptr<WatchService> watchService_;
         bool running_;
-        
-        // Command information (name -> {description, usage})
-        std::map<std::string, std::pair<std::string, std::string>> commandInfo_;
         
         // Singleton instance for signal handling
         static Engine* instance_;

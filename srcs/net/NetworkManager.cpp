@@ -271,4 +271,14 @@ namespace Zappy {
     void NetworkManager::registerServerCommandHandler(const std::string& command, CommandHandler handler) {
         serverCommandRouter_->registerHandler(command, handler);
     }
+
+    std::vector<std::string> NetworkManager::getServerCommandNames() const {
+        return serverCommandRouter_->getCommandNames();
+    }
+
+    std::unique_ptr<Command> NetworkManager::createServerCommand(const std::string& command,
+                                                               const std::vector<std::string>& tokens,
+                                                               ClientConnection* client) const {
+        return serverCommandRouter_->createCommand(command, tokens, client);
+    }
 } 

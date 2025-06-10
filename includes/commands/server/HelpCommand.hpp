@@ -12,7 +12,6 @@ namespace Zappy {
     public:
         HelpCommand(Engine& engine, 
                    const std::vector<std::string>& tokens,
-                   const std::map<std::string, std::pair<std::string, std::string>>& commandInfo,
                    ClientConnection* client);
         
         CommandStatus execute() override;
@@ -23,6 +22,5 @@ namespace Zappy {
 
     private:
         Engine& engine_;
-        const std::map<std::string, std::pair<std::string, std::string>>& commandInfo_;
     };
 } // namespace Zappy 

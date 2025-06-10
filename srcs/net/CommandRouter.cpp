@@ -19,22 +19,14 @@ namespace Zappy {
     }
 
     std::unique_ptr<Command> CommandRouter::routeCommand(const std::string& commandLine, ClientConnection* client) {
-        // Split the command line into tokens
-        std::vector<std::string> tokens = Command::splitArgs(commandLine);
+        // Extract command name and arguments
+        std::string commandName = getCommandName(commandLine);
+        auto args = getCommandArgs(commandLine);
         
-        if (tokens.empty()) {
-            return nullptr;
-        }
-        
-        // Get the command name and convert to lowercase
-        std::string commandName = tokens[0];
-        std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
-        
-        // Find the handler
-        auto it = handlers_.find(commandName);
-        if (it != handlers_.end()) {
-            // Pass the entire tokens vector to the handler, including command name
-            return it->second(tokens, client);
+        // Find handler for command
+        auto handlerIt = handlers_.find(commandName);
+        if (handlerIt != handlers_.end()) {
+            return handlerIt->second(args, client);
         }
         
         return nullptr;
@@ -44,26 +36,41 @@ namespace Zappy {
         std::istringstream iss(commandLine);
         std::string commandName;
         iss >> commandName;
-        
-        // Convert to lowercase for case-insensitive comparison
-        std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
-        
         return commandName;
     }
 
     std::vector<std::string> CommandRouter::getCommandArgs(const std::string& commandLine) {
         std::istringstream iss(commandLine);
-        std::vector<std::string> args;
         std::string token;
+        std::vector<std::string> args;
         
         // Skip the command name
         iss >> token;
         
-        // Get remaining arguments
+        // Get remaining tokens as arguments
         while (iss >> token) {
             args.push_back(token);
         }
         
         return args;
+    }
+
+    std::vector<std::string> CommandRouter::getCommandNames() const {
+        std::vector<std::string> names;
+        names.reserve(handlers_.size());
+        for (const auto& [name, _] : handlers_) {
+            names.push_back(name);
+        }
+        return names;
+    }
+
+    std::unique_ptr<Command> CommandRouter::createCommand(const std::string& command,
+                                                        const std::vector<std::string>& tokens,
+                                                        ClientConnection* client) const {
+        auto handlerIt = handlers_.find(command);
+        if (handlerIt != handlers_.end()) {
+            return handlerIt->second(tokens, client);
+        }
+        return nullptr;
     }
 } 

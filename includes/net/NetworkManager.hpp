@@ -7,6 +7,7 @@
 #include "net/Socket.hpp"
 #include "ClientConnection.hpp"
 #include "CommandRouter.hpp"
+#include "commands/Command.hpp"
 
 namespace Zappy {
     class NetworkManager {
@@ -37,6 +38,12 @@ namespace Zappy {
         void registerCommandHandler(const std::string& command, CommandHandler handler);
         void registerServerCommandHandler(const std::string& command, CommandHandler handler);
         void handleCommand(const std::string& command, ClientConnection* client);
+
+        // Command introspection
+        std::vector<std::string> getServerCommandNames() const;
+        std::unique_ptr<Command> createServerCommand(const std::string& command, 
+                                                   const std::vector<std::string>& tokens = {},
+                                                   ClientConnection* client = nullptr) const;
 
     private:
         void initializeEpoll();

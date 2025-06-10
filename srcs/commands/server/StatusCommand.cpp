@@ -5,92 +5,67 @@
 #include <sstream>
 
 namespace Zappy {
-    StatusCommand::StatusCommand(Engine& engine, ClientConnection* client)
-        : ServerCommand("status", engine, client) {
-    }
 
-    CommandStatus StatusCommand::execute() {
-        try {
-            std::stringstream status;
-            const auto& world = engine_.getWorld();
-            const auto& network = engine_.getNetwork();
-            const auto& gameLoop = engine_.getGameLoop();
-            
-            // Server info
-            status << "\nServer Status:\n";
-            status << "-------------\n";
-            double uptime = static_cast<double>(gameLoop.getCurrentTick()) / gameLoop.getTickRate();
-            status << "Uptime: " << uptime << " seconds\n";
-            status << "Current tick: " << gameLoop.getCurrentTick() << "\n";
-            status << "Tick rate: " << gameLoop.getTickRate() << " ticks/second\n\n";
-            
-            // World info
-            const auto& players = world.getPlayers();
-            const auto& teams = world.getTeams();
-            
-            status << "World Statistics:\n";
-            status << "- Map size: " << world.getMap().getWidth() << "x" << world.getMap().getHeight() << "\n";
-            status << "- Total players: " << players.size() << "\n";
-            status << "- Total teams: " << teams.size() << "\n\n";
-            
-            // Team details
-            status << "Teams:\n";
-            for (const auto* team : teams) {
-                status << "- " << std::left << std::setw(20) << team->getName() 
-                       << ": " << team->getCurrentPlayers() << " players\n";
-            }
-            status << "\n";
-            
-            // Network info
-            int totalClients = 0;
-            int playerCount = 0;
-            int spectatorCount = 0;
-
-            // Count client types
-            for (int fd = 3; fd < 1024; ++fd) { // Reasonable fd range
-                const auto* client = network.getClient(fd);
-                if (!client) continue;
-                
-                totalClients++;
-                if (client->getType() == ClientConnection::Type::Player) {
-                    playerCount++;
-                } else if (client->getType() == ClientConnection::Type::Spectator) {
-                    spectatorCount++;
-                }
-            }
-            
-            status << "Network Statistics:\n";
-            status << "- Connected clients: " << totalClients << "\n";
-            status << "- Players connected: " << playerCount << "\n";
-            status << "- Spectators connected: " << spectatorCount << "\n";
-            status << std::endl;
-            
-            // If we have a client, send the status through the network
-            if (getClient()) {
-                getClient()->sendData(status.str());
-            } else {
-                // Otherwise print to console
-                std::cout << status.str();
-            }
-            
-            logCommand("Detailed status information sent");
-            return CommandStatus::COMPLETED;
-        } catch (const std::exception& e) {
-            setErrorMessage(std::string("Failed to execute status command: ") + e.what());
-            return CommandStatus::FAILED;
+StatusCommand::StatusCommand(Engine& engine, 
+                           const std::vector<std::string>& tokens,
+                           ClientConnection* client)
+    : Command("status", client)
+    , engine_(engine) {
+    // Skip validation if we have no tokens (direct command creation)
+    if (!tokens.empty()) {
+        // Skip the first token (command name) when parsing args
+        std::vector<std::string> args(tokens.begin() + 1, tokens.end());
+        if (!parseArgs(args)) {
+            setErrorMessage("Status command takes no arguments");
+            setStatus(CommandStatus::INVALID);
         }
     }
+}
 
-    bool StatusCommand::parseArgs(const std::vector<std::string>& args) {
-        if (!Command::parseArgs(args)) return false;
-        return validateArgCount(0);  // Status command takes no arguments
+CommandStatus StatusCommand::execute() {
+    if (getStatus() == CommandStatus::INVALID) {
+        std::cout << "Error: " << getErrorMessage() << "\n";
+        std::cout << "Usage: " << getUsage() << "\n";
+        return CommandStatus::FAILED;
     }
 
-    std::string StatusCommand::getDescription() const {
-        return "Display detailed server status and statistics";
-    }
+    std::cout << "\nServer Status:\n";
+    std::cout << "-------------\n";
+    std::cout << "Running: " << (engine_.isRunning() ? "Yes" : "No") << "\n";
+    
+    // Network status
+    auto& network = engine_.getNetwork();
+    std::cout << "\nNetwork:\n";
+    std::cout << "  Player Port: " << network.getPlayerPort() << "\n";
+    std::cout << "  Spectator Port: " << network.getSpectatorPort() << "\n";
+    std::cout << "  Connected Clients: " << network.getClients().size() << "\n";
+    
+    // World status
+    auto& world = engine_.getWorld();
+    auto& map = world.getMap();
+    std::cout << "\nWorld:\n";
+    std::cout << "  Size: " << map.getWidth() << "x" << map.getHeight() << "\n";
+    std::cout << "  Teams: " << world.getTeams().size() << "\n";
+    
+    // Game loop status
+    auto& gameLoop = engine_.getGameLoop();
+    std::cout << "\nGame Loop:\n";
+    std::cout << "  Tick Rate: " << gameLoop.getTickRate() << " Hz\n";
+    std::cout << "  Running: " << (gameLoop.isRunning() ? "Yes" : "No") << "\n";
+    
+    return CommandStatus::COMPLETED;
+}
 
-    std::string StatusCommand::getUsage() const {
-        return "status";
-    }
+bool StatusCommand::parseArgs(const std::vector<std::string>& args) {
+    // Status takes no arguments
+    return args.empty();
+}
+
+std::string StatusCommand::getDescription() const {
+    return "Display detailed server status and statistics";
+}
+
+std::string StatusCommand::getUsage() const {
+    return "status";
+}
 } 

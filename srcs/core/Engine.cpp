@@ -53,26 +53,17 @@ namespace Zappy {
     }
 
     void Engine::registerCommands() {
-        // Register command information
-        commandInfo_["help"] = {"Display available commands and their usage", "help [command] - Show help for all commands or specific command"};
-        commandInfo_["status"] = {"Display server status and statistics", "status - Show current server state"};
-        commandInfo_["exit"] = {"Stop the server and exit", "exit - Gracefully shutdown the server"};
-        commandInfo_["watch"] = {"Toggle watch mode to monitor server status", "watch [on|off] - Toggle watch mode or explicitly enable/disable it"};
-        commandInfo_["clear"] = {"Clear the terminal screen", "clear - Clear terminal output"};
-
         // Register command handlers
         network_->registerServerCommandHandler("help", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
-            return std::make_unique<HelpCommand>(*this, tokens, commandInfo_, client);
+            return std::make_unique<HelpCommand>(*this, tokens, client);
         });
 
-        network_->registerServerCommandHandler("status", [this](const std::vector<std::string>& [[maybe_unused]] tokens, ClientConnection* client) {
-            (void)tokens;
-            return std::make_unique<StatusCommand>(*this, client);
+        network_->registerServerCommandHandler("status", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<StatusCommand>(*this, tokens, client);
         });
 
-        network_->registerServerCommandHandler("exit", [this](const std::vector<std::string>& [[maybe_unused]] tokens, ClientConnection* client) {
-            (void)tokens;
-            return std::make_unique<ExitCommand>(*this, client);
+        network_->registerServerCommandHandler("exit", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<ExitCommand>(*this, tokens, client);
         });
 
         network_->registerServerCommandHandler("watch", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
@@ -80,8 +71,7 @@ namespace Zappy {
         });
 
         network_->registerServerCommandHandler("clear", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
-            (void)tokens;
-            return std::make_unique<ClearCommand>(*this, client);
+            return std::make_unique<ClearCommand>(*this, tokens, client);
         });
     }
 

@@ -28,6 +28,12 @@ namespace Zappy {
         // Command parsing
         static std::string getCommandName(const std::string& commandLine);
         static std::vector<std::string> getCommandArgs(const std::string& commandLine);
+        
+        // Command introspection
+        std::vector<std::string> getCommandNames() const;
+        std::unique_ptr<Command> createCommand(const std::string& command,
+                                             const std::vector<std::string>& tokens = {},
+                                             ClientConnection* client = nullptr) const;
 
     private:
         std::map<std::string, CommandHandler> handlers_;

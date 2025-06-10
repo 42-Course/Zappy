@@ -1,20 +1,18 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include "Command.hpp"
+#include "commands/Command.hpp"
 #include "net/CommandRouter.hpp"
+#include "net/ClientConnection.hpp"
 
 namespace Zappy {
     class Engine;  // Forward declaration
 
     class ServerCommand : public Command {
     public:
-        ServerCommand(Engine& engine, const std::string& commandLine);
+        ServerCommand(const std::string& name, Engine& engine, ClientConnection* client = nullptr);
         virtual ~ServerCommand() = default;
 
-        // Pure virtual methods that each server command must implement
-        virtual void execute() override = 0;
+        // Additional server command functionality
         virtual std::string getDescription() const = 0;
         virtual std::string getUsage() const = 0;
 

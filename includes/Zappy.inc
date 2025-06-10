@@ -5,10 +5,6 @@
 #ifndef __ZAPPY_HPP__
 # define __ZAPPY_HPP__
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
-
 #include <iostream>
 
 # define BLACK  "\033[0;30m"

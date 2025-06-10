@@ -1,15 +1,27 @@
 #include "commands/server/ClearCommand.hpp"
+#include "core/Engine.hpp"
 #include <iostream>
 
 namespace Zappy {
 
-ClearCommand::ClearCommand(Engine& engine)
-    : ServerCommand(engine, "clear")
-{}
+ClearCommand::ClearCommand(Engine& engine, ClientConnection* client)
+    : ServerCommand("clear", engine, client) {}
 
-void ClearCommand::execute() {
-    // Clear screen using ANSI escape code
-    std::cout << "\033[2J\033[H";
+CommandStatus ClearCommand::execute() {
+    try {
+        // ANSI escape sequence to clear screen and move cursor to home position
+        std::cout << "\033[2J\033[H" << std::flush;
+        logCommand("Screen cleared");
+        return CommandStatus::COMPLETED;
+    } catch (const std::exception& e) {
+        setErrorMessage(std::string("Failed to execute clear command: ") + e.what());
+        return CommandStatus::FAILED;
+    }
+}
+
+bool ClearCommand::parseArgs(const std::vector<std::string>& args) {
+    if (!Command::parseArgs(args)) return false;
+    return validateArgCount(0);  // Clear command takes no arguments
 }
 
 std::string ClearCommand::getDescription() const {
@@ -17,7 +29,7 @@ std::string ClearCommand::getDescription() const {
 }
 
 std::string ClearCommand::getUsage() const {
-    return "clear - Clear the terminal screen";
+    return "clear";
 }
 
 } // namespace Zappy 

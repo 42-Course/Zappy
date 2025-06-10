@@ -1,43 +1,70 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include "commands/ICommand.hpp"
+#include "services/Logger.hpp"
+#include "net/ClientConnection.hpp"
+#include <sstream>
+#include <algorithm>
 
 namespace Zappy {
-    class Command {
-    public:
-        explicit Command(const std::string& commandLine) {
-            // Parse command line into name and args
-            size_t pos = commandLine.find(' ');
-            if (pos != std::string::npos) {
-                name_ = commandLine.substr(0, pos);
-                // Parse remaining arguments
-                std::string remaining = commandLine.substr(pos + 1);
-                size_t start = 0, end;
-                while ((end = remaining.find(' ', start)) != std::string::npos) {
-                    if (end > start) {
-                        args_.push_back(remaining.substr(start, end - start));
-                    }
-                    start = end + 1;
-                }
-                if (start < remaining.length()) {
-                    args_.push_back(remaining.substr(start));
-                }
-            } else {
-                name_ = commandLine;
-            }
-        }
-        virtual ~Command() = default;
 
-        // Pure virtual method that each command must implement
-        virtual void execute() = 0;
+class Command : public ICommand {
+public:
+    Command(const std::string& name, ClientConnection* client);
+    Command(const std::string& name, CommandType type, int timeCost, ClientConnection* client);
+    virtual ~Command() = default;
 
-        // Getters
-        const std::string& getName() const { return name_; }
-        const std::vector<std::string>& getArgs() const { return args_; }
+    // ICommand interface implementation
+    std::string getName() const override;
+    CommandType getType() const override;
+    int getTimeCost() const override;
+    ClientConnection* getClient() const override;
+    CommandStatus getStatus() const override;
+    void setStatus(CommandStatus status) override;
+    std::string getErrorMessage() const override;
+    bool parseArgs(const std::vector<std::string>& args) override;
+    
+    // Default implementations for help text
+    std::string getDescription() const override { return "No description available"; }
+    std::string getUsage() const override { return name_ + " - Basic command"; }
 
-    protected:
-        std::string name_;
-        std::vector<std::string> args_;
-    };
-} 
+    // Get parsed arguments (excluding command name)
+    const std::vector<std::string>& getArgs() const;
+    size_t getArgCount() const;
+    std::string getArg(size_t index) const;
+    
+    // String manipulation helpers
+    static std::string trim(const std::string& str);
+    static std::vector<std::string> splitArgs(const std::string& cmdLine);
+
+protected:
+    // Common functionality for derived classes
+    void setErrorMessage(const std::string& message);
+    void logCommand(const std::string& message);
+
+    // Argument validation helpers
+    bool validateArgCount(size_t expected, const std::string& usage = "");
+    bool validateArgCount(size_t min, size_t max, const std::string& usage = "");
+    
+    // Type conversion helpers with validation
+    bool tryParseInt(const std::string& arg, int& out);
+    bool tryParseFloat(const std::string& arg, float& out);
+    bool tryParseCoordinates(size_t startIndex, int& x, int& y);
+    
+    // Command validation helpers
+    bool validateCommandName(const std::string& cmdName);
+    
+    // Store validated arguments (excluding command name)
+    std::vector<std::string> args_;
+    std::string name_;
+    CommandStatus status_;
+
+private:
+    CommandType type_;
+    int timeCost_;
+    ClientConnection* client_;
+    std::string errorMessage_;
+};
+
+} // namespace Zappy
+ 

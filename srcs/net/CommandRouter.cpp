@@ -1,4 +1,5 @@
 #include "net/CommandRouter.hpp"
+#include "commands/Command.hpp"
 #include <sstream>
 #include <algorithm>
 
@@ -18,11 +19,22 @@ namespace Zappy {
     }
 
     std::unique_ptr<Command> CommandRouter::routeCommand(const std::string& commandLine, ClientConnection* client) {
-        std::string commandName = getCommandName(commandLine);
+        // Split the command line into tokens
+        std::vector<std::string> tokens = Command::splitArgs(commandLine);
         
+        if (tokens.empty()) {
+            return nullptr;
+        }
+        
+        // Get the command name and convert to lowercase
+        std::string commandName = tokens[0];
+        std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
+        
+        // Find the handler
         auto it = handlers_.find(commandName);
         if (it != handlers_.end()) {
-            return it->second(commandLine, client);
+            // Pass the entire tokens vector to the handler, including command name
+            return it->second(tokens, client);
         }
         
         return nullptr;

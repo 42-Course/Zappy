@@ -1,15 +1,17 @@
 #pragma once
 
 #include "commands/ServerCommand.hpp"
+#include "net/ClientConnection.hpp"
 
 namespace Zappy {
 
 class ClearCommand : public ServerCommand {
 public:
-    explicit ClearCommand(Engine& engine);
-    ~ClearCommand() = default;
-
-    void execute() override;
+    ClearCommand(Engine& engine, ClientConnection* client = nullptr);
+    
+    CommandStatus execute() override;
+    bool parseArgs(const std::vector<std::string>& args) override;
+    
     std::string getDescription() const override;
     std::string getUsage() const override;
 };

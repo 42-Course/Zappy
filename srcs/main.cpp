@@ -13,6 +13,7 @@ extern "C" {
 #include "Zappy.inc"
 #include "core/Engine.hpp"
 #include "core/Config.hpp"
+#include "services/Logger.hpp"
 
 static void print_help() {
     std::cout << "Usage: ./Zappy -x width -y height -c #clients -n team [team2] ... [OPTIONS]\n" <<
@@ -34,33 +35,32 @@ static void print_help() {
         "  -h           display this help message" << std::endl;
 }
 
-void setnonblocking(int fd) {
-    int flags = fcntl(fd, F_GETFL, 0);
-    if (flags == -1) {
-        perror("fcntl()");
-        exit(EXIT_FAILURE);
-    }
-    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-        perror("fcntl()");
-        exit(EXIT_FAILURE);     
-    }
-}
+// void setnonblocking(int fd) {
+//     int flags = fcntl(fd, F_GETFL, 0);
+//     if (flags == -1) {
+//         perror("fcntl()");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+//         perror("fcntl()");
+//         exit(EXIT_FAILURE);     
+//     }
+// }
 
-ssize_t gettimeofday_ms() {
-    struct timeval tv;
+// ssize_t gettimeofday_ms() {
+//     struct timeval tv;
 
-    if(gettimeofday(&tv, NULL) == -1) {
-        throw std::runtime_error(std::string("gettimeofday()") + std::string(strerror(errno)));
-    }
-    return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
+//     if(gettimeofday(&tv, NULL) == -1) {
+//         throw std::runtime_error(std::string("gettimeofday()") + std::string(strerror(errno)));
+//     }
+//     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+// }
 
 int main(int argc, char *argv[])
 {
     // Seed rand
     srand(time(NULL));
     int opt;
-    std::string lang("en");
     int players_port(4242);
     int spectators_port(2121);
     int default_time(100);
@@ -92,12 +92,6 @@ int main(int argc, char *argv[])
                 default_time = std::stoi(optarg);
                 if (default_time < 1)
                     throw std::runtime_error("time unit must be >= 1");
-                break;
-            case 'f':
-                // TODO: Load config from file
-                break;
-            case 'l':
-                lang = optarg;
                 break;
             case 'P':
                 players_port = std::stoi(optarg);
@@ -142,29 +136,41 @@ int main(int argc, char *argv[])
     }
 
     try {
+        // Initialize logger
+        auto& logger = Zappy::Logger::getInstance();
+        logger.info("Zappy Server starting up...");
+        
         // Create configuration
         Zappy::Config config(w, h, default_time, players_port, spectators_port, num_players);
+        logger.info("Configuration created: " + std::to_string(w) + "x" + std::to_string(h) + 
+                   " map, " + std::to_string(num_players) + " players per team");
         
         // Add teams from command line
         for (const auto& team : teams) {
             config.addTeam(team);
+            logger.info("Added team: " + team);
         }
 
         // Create and start engine
+        logger.info("Initializing game engine...");
         Zappy::Engine engine(config);
         
         // Set up signal handlers
+        logger.info("Setting up signal handlers...");
         Zappy::Engine::setupSignalHandlers();
         
         // Start the engine
+        logger.info("Starting game engine...");
         engine.start();
         
         // The engine's GameLoop will handle the main loop until a signal is received
         // or the exit command is issued
         
+        logger.info("Zappy Server shutting down normally");
         std::cout << YELLOW << "Thank you for using the " << GREEN "Zappy Server" << ENDC << " :)" << std::endl;
         return (0);
     } catch (std::exception &e) {
+        Zappy::Logger::getInstance().error("Fatal error: " + std::string(e.what()));
         std::cerr << RED << e.what() << ENDC << std::endl;
         return (1);
     }

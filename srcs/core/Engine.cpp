@@ -61,24 +61,27 @@ namespace Zappy {
         commandInfo_["clear"] = {"Clear the terminal screen", "clear - Clear terminal output"};
 
         // Register command handlers
-        network_->registerServerCommandHandler("help", [this](const std::string& commandLine, ClientConnection*) {
-            return std::make_unique<HelpCommand>(*this, commandLine, commandInfo_);
+        network_->registerServerCommandHandler("help", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<HelpCommand>(*this, tokens, commandInfo_, client);
         });
 
-        network_->registerServerCommandHandler("status", [this](const std::string&, ClientConnection*) {
-            return std::make_unique<StatusCommand>(*this);
+        network_->registerServerCommandHandler("status", [this](const std::vector<std::string>& [[maybe_unused]] tokens, ClientConnection* client) {
+            (void)tokens;
+            return std::make_unique<StatusCommand>(*this, client);
         });
 
-        network_->registerServerCommandHandler("exit", [this](const std::string&, ClientConnection*) {
-            return std::make_unique<ExitCommand>(*this);
+        network_->registerServerCommandHandler("exit", [this](const std::vector<std::string>& [[maybe_unused]] tokens, ClientConnection* client) {
+            (void)tokens;
+            return std::make_unique<ExitCommand>(*this, client);
         });
 
-        network_->registerServerCommandHandler("watch", [this](const std::string& commandLine, ClientConnection*) {
-            return std::make_unique<WatchCommand>(*this, commandLine, *watchService_);
+        network_->registerServerCommandHandler("watch", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<WatchCommand>(*this, tokens, *watchService_, client);
         });
 
-        network_->registerServerCommandHandler("clear", [this](const std::string&, ClientConnection*) {
-            return std::make_unique<ClearCommand>(*this);
+        network_->registerServerCommandHandler("clear", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            (void)tokens;
+            return std::make_unique<ClearCommand>(*this, client);
         });
     }
 

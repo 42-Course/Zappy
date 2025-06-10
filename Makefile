@@ -21,9 +21,20 @@ SRC += srcs/net/NetworkManager.cpp \
        srcs/net/CommandRouter.cpp \
        srcs/net/Socket.cpp
 
-# Command components
-SRC += srcs/commands/ServerCommand.cpp \
-       srcs/commands/server/ExitCommand.cpp \
+# Command System
+SRC += srcs/commands/Command.cpp \
+       srcs/commands/CommandFactory.cpp \
+       srcs/commands/CommandHandler.cpp \
+       srcs/commands/ServerCommand.cpp
+
+# Spectator Commands
+SRC += srcs/commands/spectator/MSZCommand.cpp
+
+# Player Commands
+# To be added...
+
+# STDIN Commands
+SRC += srcs/commands/server/ExitCommand.cpp \
        srcs/commands/server/StatusCommand.cpp \
        srcs/commands/server/HelpCommand.cpp \
        srcs/commands/server/WatchCommand.cpp \
@@ -31,6 +42,7 @@ SRC += srcs/commands/ServerCommand.cpp \
 
 # Services
 SRC += srcs/services/WatchService.cpp \
+       srcs/services/Logger.cpp
 
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -g -O3 # -fsanitize=leak,address
 #CFLAGS = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak
@@ -43,14 +55,18 @@ OBJS_DIRS = ${OBJS_D}/core \
             ${OBJS_D}/net \
             ${OBJS_D}/services \
             ${OBJS_D}/commands \
-            ${OBJS_D}/commands/server
+            ${OBJS_D}/commands/server \
+            ${OBJS_D}/commands/spectator \
+            ${OBJS_D}/commands/player
 
 DEBUG_OBJS_D = debug_objs
 DEBUG_OBJS_DIRS = ${DEBUG_OBJS_D}/core \
                   ${DEBUG_OBJS_D}/net \
                   ${DEBUG_OBJS_D}/services \
                   ${DEBUG_OBJS_D}/commands \
-                  ${DEBUG_OBJS_D}/commands/server
+                  ${DEBUG_OBJS_D}/commands/server \
+                  ${DEBUG_OBJS_D}/commands/spectator \
+                  ${DEBUG_OBJS_D}/commands/player
 
 OBJ = $(SRC:srcs/%.cpp=$(OBJS_D)/%.o)
 DEBUG_OBJ = $(SRC:srcs/%.cpp=$(DEBUG_OBJS_D)/%.o)

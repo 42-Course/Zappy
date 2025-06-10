@@ -1,26 +1,28 @@
 #pragma once
 
-#include <string>
-#include <functional>
-#include <unordered_map>
-#include <memory>
 #include "commands/Command.hpp"
+#include <string>
+#include <memory>
+#include <map>
+#include <vector>
+#include <functional>
 #include "net/ClientConnection.hpp"
 
 namespace Zappy {
 
-    using CommandHandler = std::function<std::unique_ptr<Command>(const std::string&, ClientConnection*)>;
+    // Define command handler type as a function that takes tokens and client
+    using CommandHandler = std::function<std::unique_ptr<Command>(const std::vector<std::string>&, ClientConnection*)>;
 
     class CommandRouter {
     public:
         CommandRouter();
         ~CommandRouter();
 
-        // Command registration
+        // Register/unregister command handlers
         void registerHandler(const std::string& command, CommandHandler handler);
         void unregisterHandler(const std::string& command);
 
-        // Command routing
+        // Route and execute commands
         std::unique_ptr<Command> routeCommand(const std::string& commandLine, ClientConnection* client);
 
         // Command parsing
@@ -28,6 +30,6 @@ namespace Zappy {
         static std::vector<std::string> getCommandArgs(const std::string& commandLine);
 
     private:
-        std::unordered_map<std::string, CommandHandler> handlers_;
+        std::map<std::string, CommandHandler> handlers_;
     };
 } 

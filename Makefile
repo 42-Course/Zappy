@@ -13,6 +13,7 @@ SRC += srcs/core/Engine.cpp \
        srcs/core/Player.cpp \
        srcs/core/Spectator.cpp \
        srcs/core/Tile.cpp \
+       srcs/core/Resource.cpp \
        srcs/core/Inventory.cpp
 
 # Network components

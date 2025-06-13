@@ -26,6 +26,7 @@ namespace Zappy {
         int getPlayerPort() const { return playerPort_; }
         int getSpectatorPort() const { return spectatorPort_; }
         int getMaxPlayersPerTeam() const { return maxPlayersPerTeam_; }
+        bool isInfiniteMap() const { return infinite_map_; }
         const std::vector<std::string>& getTeams() const { return teams_; }
 
         // Setters
@@ -38,6 +39,7 @@ namespace Zappy {
         int playerPort_;
         int spectatorPort_;
         int maxPlayersPerTeam_;
+        bool infinite_map_;
         std::vector<std::string> teams_;
     };
 } 

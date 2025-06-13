@@ -71,7 +71,7 @@ void WatchService::printServerInfo() const {
     
     // Team Information
     std::cout << "\033[1;36mTeam Status:\033[0m\n";
-    for (const auto* team : world.getTeams()) {
+    for (const auto& team : world.getTeams()) {
         std::cout << "* " << std::left << std::setfill(' ') << std::setw(20) << team->getName() 
                   << ": " << team->getCurrentPlayers() << " players\n";
     }

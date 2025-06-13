@@ -38,7 +38,7 @@ namespace Zappy {
         if (!world_) return "tna\n";
         std::stringstream ss;
         ss << "tna";
-        for (const auto* team : world_->getTeams()) {
+        for (const auto& team : world_->getTeams()) {
             ss << " " << team->getName();
         }
         ss << "\n";

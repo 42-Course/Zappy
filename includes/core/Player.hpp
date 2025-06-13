@@ -1,57 +1,81 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <vector>
-#include "Direction.hpp"
+#include "Resource.hpp"
+#include "Inventory.hpp"
+#include "Observer.hpp"
 
 namespace Zappy {
-    class Team;
-    class Resource;
-    class Inventory;
+    class Team;  // Forward declaration
+
+    enum class Direction {
+        NORTH = 1,
+        EAST = 2,
+        SOUTH = 3,
+        WEST = 4
+    };
 
     class Player {
     public:
-        Player(int id, Team* team);
+        Player(int id, Team& team, int x, int y, Direction direction);
         ~Player();
 
-        // Basic info
+        // Getters (all const)
         int getId() const { return id_; }
-        Team* getTeam() const { return team_; }
-        int getLevel() const { return level_; }
-        
-        // Position and orientation
+        const Team& getTeam() const { return team_; }
         int getX() const { return x_; }
         int getY() const { return y_; }
         Direction getDirection() const { return direction_; }
-        void setPosition(int x, int y);
-        void setDirection(Direction dir);
-        
+        int getLevel() const { return level_; }
+        const Inventory& getInventory() const { return inventory_; }
+        bool isAlive() const { return alive_; }
+
         // Movement
-        void moveForward();
-        void turnLeft();
-        void turnRight();
-        
-        // Actions
-        void look();
-        void inventory();
+        void setPosition(int x, int y);
+        void setDirection(Direction direction);
+
+        // Level management
+        void levelUp();
+
+        // Inventory management
+        void addResource(ResourceType type, int amount);
+        void removeResource(ResourceType type, int amount);
+        void setInventory(const Inventory& inventory);
         void take(Resource* resource);
         void drop(Resource* resource);
-        void broadcast(const std::string& message);
+
+        // Game mechanics
         bool startIncantation();
         void fork();
-        
-        // State
-        bool isAlive() const { return food_ > 0; }
+        void broadcast(const std::string& message);
+
+        // Life management
+        void die();
+
+        // State updates
         void update();
+
+        // Observer pattern
+        void attach(Observer* observer);
+        void detach(Observer* observer);
+
+    protected:
+        void notifyMoved() const;
+        void notifyTurned() const;
+        void notifyLevelUp() const;
+        void notifyInventoryChanged() const;
+        void notifyDied() const;
 
     private:
         int id_;
-        Team* team_;  // Non-owning pointer, team owned by World
-        int level_;
-        int x_, y_;
+        Team& team_;  // Reference to team, owned by World
+        int x_;
+        int y_;
         Direction direction_;
-        int food_;
-        std::unique_ptr<Inventory> inventory_;
+        int level_;
+        Inventory inventory_;
+        bool alive_;
+        std::vector<Observer*> observers_;  // Non-owning pointers
     };
 } 

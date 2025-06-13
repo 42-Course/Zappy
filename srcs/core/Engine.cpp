@@ -14,8 +14,8 @@ namespace Zappy {
     Engine* Engine::instance_ = nullptr;
 
     Engine::Engine(const Config& config)
-        : world_(std::make_unique<World>(config.getMapWidth(), config.getMapHeight()))
-        , network_(std::make_unique<NetworkManager>(config.getPlayerPort(), config.getSpectatorPort()))
+        : world_(std::make_unique<World>(config.getMapWidth(), config.getMapHeight(), config.isInfiniteMap()))
+        , network_(std::make_unique<NetworkManager>(*world_, config.getPlayerPort(), config.getSpectatorPort()))
         , gameLoop_(std::make_unique<GameLoop>(config.getTickRate()))
         , watchService_(std::make_unique<WatchService>(*this))
         , running_(false) {
@@ -28,6 +28,19 @@ namespace Zappy {
             world_->addTeam(team, config.getMaxPlayersPerTeam());
         }
 
+        // Set up world callbacks
+        world_->setPlayerUpdateCallback([this](int playerId, const Player* player) {
+            network_->handlePlayerUpdate(playerId, player);
+        });
+
+        world_->setTeamUpdateCallback([this](const std::string& teamName, const Team* team) {
+            network_->handleTeamUpdate(teamName, team);
+        });
+
+        world_->setMapUpdateCallback([this](int x, int y, const Tile* tile) {
+            network_->handleMapUpdate(x, y, tile);
+        });
+
         // Set up game loop callbacks
         gameLoop_->onUpdate([this]() {
             network_->update();  // Process network events
@@ -38,7 +51,10 @@ namespace Zappy {
             world_->update();    // Update game state
         });
 
-        // Register commands and their information
+        // Set up signal handlers
+        setupSignalHandlers();
+        
+        // Register commands
         registerCommands();
 
         // Show welcome message and initial prompt

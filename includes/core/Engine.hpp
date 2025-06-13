@@ -1,4 +1,3 @@
-// Engine.hpp - Core game engine coordinator
 #pragma once
 
 #include <memory>
@@ -46,4 +45,4 @@ namespace Zappy {
         // Singleton instance for signal handling
         static Engine* instance_;
     };
-} 
+}

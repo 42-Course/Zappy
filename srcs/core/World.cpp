@@ -2,34 +2,34 @@
 #include <stdexcept>
 
 namespace Zappy {
-    World::World(int width, int height)
-        : map_(std::make_unique<Map>(width, height))
-        , nextPlayerId_(1) {
+    World::World(int width, int height, bool infiniteMap)
+        : nextPlayerId_(1) {
+        map_ = std::make_unique<Map>(width, height, infiniteMap);
+        
+        // Set up map update callback
+        map_->setUpdateCallback([this](int x, int y, const Tile* tile) {
+            notifyMapUpdate(x, y, tile);
+        });
     }
 
-    World::~World() {
-        // Clean up teams
-        for (auto team : teams_) {
-            delete team;
-        }
-        teams_.clear();
-    }
+    World::~World() = default;
 
     bool World::addTeam(const std::string& name, int maxPlayers) {
-        // Check if team already exists
-        for (const auto& team : teams_) {
-            if (team->getName() == name) {
-                return false;
-            }
+        if (getTeam(name)) {
+            return false;  // Team already exists
         }
-        teams_.push_back(new Team(name, maxPlayers));
+
+        auto team = std::make_unique<Team>(name, maxPlayers);
+        Team* teamPtr = team.get();
+        teams_.push_back(std::move(team));
+        notifyTeamUpdate(name, teamPtr);
         return true;
     }
 
     Team* World::getTeam(const std::string& name) {
-        for (auto team : teams_) {
+        for (const auto& team : teams_) {
             if (team->getName() == name) {
-                return team;
+                return team.get();
             }
         }
         return nullptr;
@@ -41,13 +41,22 @@ namespace Zappy {
             return nullptr;
         }
 
-        // Create new player
-        auto player = std::make_unique<Player>(nextPlayerId_++, team);
+        if (!team->canAddPlayer()) {
+            return nullptr;
+        }
+
+        // Get a random starting position
+        int x = rand() % map_->getWidth();
+        int y = rand() % map_->getHeight();
+        Direction direction = static_cast<Direction>((rand() % 4) + 1);  // Random direction
+
+        auto player = std::make_unique<Player>(nextPlayerId_++, *team, x, y, direction);
         Player* playerPtr = player.get();
-        
-        // Add to players map
         players_[playerPtr->getId()] = std::move(player);
-        
+        team->addPlayer(playerPtr);
+
+        // Notify about new player
+        notifyPlayerUpdate(playerPtr->getId(), playerPtr);
         return playerPtr;
     }
 
@@ -57,16 +66,45 @@ namespace Zappy {
     }
 
     void World::removePlayer(int id) {
-        players_.erase(id);
+        auto it = players_.find(id);
+        if (it != players_.end()) {
+            Player* player = it->second.get();
+            player->getTeam().removePlayer(player);
+            players_.erase(it);
+            notifyPlayerUpdate(id, nullptr);  // Notify about player removal
+        }
     }
 
     void World::update() {
-        // Update map resources
-        map_->update();
-
-        // Update all players
+        // Update all game entities
         for (auto& [id, player] : players_) {
             player->update();
+            notifyPlayerUpdate(id, player.get());
+        }
+
+        for (auto& team : teams_) {
+            team->update();
+            notifyTeamUpdate(team->getName(), team.get());
+        }
+
+        map_->update();
+    }
+
+    void World::notifyPlayerUpdate(int playerId, const Player* player) {
+        if (playerUpdateCallback_) {
+            playerUpdateCallback_(playerId, player);
+        }
+    }
+
+    void World::notifyTeamUpdate(const std::string& teamName, const Team* team) {
+        if (teamUpdateCallback_) {
+            teamUpdateCallback_(teamName, team);
+        }
+    }
+
+    void World::notifyMapUpdate(int x, int y, const Tile* tile) {
+        if (mapUpdateCallback_) {
+            mapUpdateCallback_(x, y, tile);
         }
     }
 } 

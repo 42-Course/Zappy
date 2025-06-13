@@ -1,31 +1,30 @@
 #pragma once
 
 #include <map>
-#include <string>
-#include <algorithm>
+#include <memory>
+#include "Resource.hpp"
 
 namespace Zappy {
-    // class Resource;
-
     class Inventory {
     public:
         Inventory();
-        ~Inventory();
+        ~Inventory() = default;
 
-        // Resource operations
-        // void addResource(Resource* resource);
-        // bool removeResource(Resource* resource);
-        void add(const std::string& resource, int amount);
-        void remove(const std::string& resource, int amount);
-        int get(const std::string& resource) const;
-        void set(const std::string& resource, int amount);
-        int getResourceCount(const std::string& type) const;
-        bool hasResources(const std::map<std::string, int>& requirements) const;
+        // Resource management
+        bool add(Resource* resource);
+        bool remove(Resource* resource);
+        int getCount(ResourceType type) const;
 
-        // Getters
-        const std::map<std::string, int>& getContents() const;
+        // Resource getters
+        int getFood() const { return getCount(ResourceType::FOOD); }
+        int getLinemate() const { return getCount(ResourceType::LINEMATE); }
+        int getDeraumere() const { return getCount(ResourceType::DERAUMERE); }
+        int getSibur() const { return getCount(ResourceType::SIBUR); }
+        int getMendiane() const { return getCount(ResourceType::MENDIANE); }
+        int getPhiras() const { return getCount(ResourceType::PHIRAS); }
+        int getThystame() const { return getCount(ResourceType::THYSTAME); }
 
     private:
-        std::map<std::string, int> contents_;  // Maps resource type to count
+        std::map<ResourceType, int> resources_;
     };
 } 

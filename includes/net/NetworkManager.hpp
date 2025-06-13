@@ -3,16 +3,22 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <set>
 #include <sys/epoll.h>
 #include "net/Socket.hpp"
 #include "ClientConnection.hpp"
 #include "CommandRouter.hpp"
 #include "commands/Command.hpp"
+#include "core/Player.hpp"
+#include "core/Team.hpp"
+#include "core/Tile.hpp"
+#include "core/Observer.hpp"
+#include "core/World.hpp"
 
 namespace Zappy {
-    class NetworkManager {
+    class NetworkManager : public Observer {
     public:
-        NetworkManager(int playerPort, int spectatorPort);
+        NetworkManager(World& world, int playerPort, int spectatorPort);
         ~NetworkManager();
 
         void start();
@@ -45,13 +51,47 @@ namespace Zappy {
                                                    const std::vector<std::string>& tokens = {},
                                                    ClientConnection* client = nullptr) const;
 
+        // World update handlers
+        void handlePlayerUpdate(int playerId, const Player* player);
+        void handleTeamUpdate(const std::string& teamName, const Team* team);
+        void handleMapUpdate(int x, int y, const Tile* tile);
+
+        // Observer interface implementation
+        void onPlayerMoved(const Player* player) override;
+        void onPlayerTurned(const Player* player) override;
+        void onPlayerLevelUp(const Player* player) override;
+        void onPlayerInventoryChanged(const Player* player) override;
+        void onPlayerDied(const Player* player) override;
+        void onPlayerAdded(const Player* player) override;
+        void onPlayerRemoved(const Player* player) override;
+        void onTeamWon(const Team* team) override;
+        void onResourceAdded(const Tile* tile, ResourceType type) override;
+        void onResourceRemoved(const Tile* tile, ResourceType type) override;
+
+        // Team management
+        void registerTeam(const std::string& name, Team* team);
+        void unregisterTeam(const std::string& name);
+
+        // Player management
+        void registerPlayer(Player* player);
+        void unregisterPlayer(Player* player);
+
+        // Map updates
+        void updateTile(int x, int y, const Tile* tile);
+        void registerTile(Tile* tile);
+        void unregisterTile(Tile* tile);
+
     private:
         void initializeEpoll();
         void acceptNewConnections();
         void handleClientData();
         void handleStdinCommand();
         void cleanup();
+        void broadcastToSpectators(const std::string& message);
+        void sendTeamInfoToSpectator(ClientConnection* spectator);
+        void sendInitialStateToSpectator(ClientConnection* spectator);
 
+        World& world_;  // Reference to World
         int epollFd_;
         Socket playerSocket_;
         Socket spectatorSocket_;
@@ -66,5 +106,10 @@ namespace Zappy {
         bool running_;
         
         std::string stdinBuffer_;
+
+        std::vector<Player*> players_;  // Non-owning pointers
+        std::vector<Team*> teams_;      // Non-owning pointers
+        std::vector<Tile*> tiles_;      // Non-owning pointers
+        std::set<int> spectatorsWithTeamInfo_;  // Track which spectators have received team info
     };
 } 

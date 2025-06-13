@@ -1,126 +1,970 @@
-==97109== Memcheck, a memory error detector
-==97109== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==97109== Using Valgrind-3.22.0-bd4db67b1d-20231031 and LibVEX; rerun with -h for copyright info
-==97109== Command: ./Zappy
-==97109== Parent PID: 30062
-==97109== 
---97109-- 
---97109-- Valgrind options:
---97109--    --leak-check=full
---97109--    --show-leak-kinds=all
---97109--    --track-origins=yes
---97109--    --verbose
---97109--    --log-file=valgrind-out.txt
---97109-- Contents of /proc/version:
---97109--   Linux version 6.11.0-26-generic (buildd@lcy02-amd64-074) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #26~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Apr 17 19:20:47 UTC 2
---97109-- 
---97109-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
---97109-- Page sizes: currently 4096, max supported 4096
---97109-- Valgrind library directory: /usr/libexec/valgrind
---97109-- Reading syms from /home/pulgamecanica/Zappy/Zappy
---97109-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
---97109--   Considering /usr/lib/debug/.build-id/1c/8db5f83bba514f8fd5f1fb6d7be975be1bb855.debug ..
---97109--   .. build-id is valid
---97109-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
---97109--    object doesn't have a dynamic symbol table
---97109-- Scheduler: using generic scheduler lock implementation.
---97109-- Reading suppressions file: /usr/libexec/valgrind/default.supp
-==97109== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-97109-by-pulgamecanica-on-???
-==97109== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-97109-by-pulgamecanica-on-???
-==97109== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-97109-by-pulgamecanica-on-???
-==97109== 
-==97109== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==97109== don't want to do, unless you know exactly what you're doing,
-==97109== or are doing some strange experiment):
-==97109==   /usr/bin/vgdb --pid=97109 ...command...
-==97109== 
-==97109== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==97109==   /path/to/gdb ./Zappy
-==97109== and then give GDB the following command
-==97109==   target remote | /usr/bin/vgdb --pid=97109
-==97109== --pid is optional if only one valgrind process is running
-==97109== 
---97109-- REDIR: 0x4028b00 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c2e1a (???)
---97109-- REDIR: 0x40272b0 (ld-linux-x86-64.so.2:index) redirected to 0x580c2e34 (???)
---97109-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
---97109-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
-==97109== WARNING: new redirection conflicts with existing -- ignoring it
---97109--     old: 0x04028b00 (strlen              ) R-> (0000.0) 0x580c2e1a ???
---97109--     new: 0x04028b00 (strlen              ) R-> (2007.0) 0x0484f340 strlen
---97109-- REDIR: 0x40274e0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4850460 (strcmp)
---97109-- REDIR: 0x4026910 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853cd0 (mempcpy)
---97109-- Reading syms from /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33
---97109-- Reading syms from /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
---97109-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
---97109--   Considering /usr/lib/debug/.build-id/42/c84c92e6f98126b3e2230ebfdead22c235b667.debug ..
---97109--   .. build-id is valid
---97109-- Reading syms from /usr/lib/x86_64-linux-gnu/libm.so.6
---97109-- REDIR: 0x4028ca0 (ld-linux-x86-64.so.2:strncmp) redirected to 0x484fc90 (strncmp)
---97109-- REDIR: 0x4bd8050 (libc.so.6:strnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd80e0 (libc.so.6:strpbrk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd61a0 (libc.so.6:strcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bef3b0 (libc.so.6:wcsnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd5290 (libc.so.6:memset) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4beeb20 (libc.so.6:wcslen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4c5a3c0 (libc.so.6:__memcpy_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd5200 (libc.so.6:memrchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bef350 (libc.so.6:wcsncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd4720 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bed8e0 (libc.so.6:wcschr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd6090 (libc.so.6:index) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd8110 (libc.so.6:rindex) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bed990 (libc.so.6:wcscmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd54b0 (libc.so.6:stpncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bfbeb0 (libc.so.6:wmemchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7ef0 (libc.so.6:strncmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd5510 (libc.so.6:strcasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7310 (libc.so.6:strcspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bee8f0 (libc.so.6:wcscpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd6020 (libc.so.6:strcat) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7df0 (libc.so.6:strncasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd6110 (libc.so.6:strchrnul) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd4630 (libc.so.6:bcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd72a0 (libc.so.6:strcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd55b0 (libc.so.6:strcasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7cc0 (libc.so.6:strlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7f90 (libc.so.6:strncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bfbf30 (libc.so.6:wmemcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4c5a4e0 (libc.so.6:__memmove_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
-==97109== WARNING: new redirection conflicts with existing -- ignoring it
---97109--     old: 0x04cab9d0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04853dd0 __memcpy_chk
---97109--     new: 0x04cab9d0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04853740 __memmove_chk
---97109-- REDIR: 0x4bd5440 (libc.so.6:stpcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd4fc0 (libc.so.6:memmove) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
-==97109== Preferring higher priority redirection:
---97109--     old: 0x04caba00 (__memcpy_avx_unalign) R-> (2018.0) 0x04851580 __memcpy_avx_unaligned_erms
---97109--     new: 0x04caba00 (__memcpy_avx_unalign) R-> (2018.1) 0x04852d60 memmove
---97109-- REDIR: 0x4bd45b0 (libc.so.6:memchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd82e0 (libc.so.6:strspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd50e0 (libc.so.6:mempcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4bd7d50 (libc.so.6:strncasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
---97109-- REDIR: 0x4cb05f0 (libc.so.6:__strrchr_avx2) redirected to 0x484ed20 (rindex)
---97109-- REDIR: 0x4cae740 (libc.so.6:__strlen_avx2) redirected to 0x484f220 (strlen)
---97109-- REDIR: 0x4cab2a0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852480 (bcmp)
---97109-- REDIR: 0x4caf820 (libc.so.6:__strncmp_avx2) redirected to 0x484fab0 (strncmp)
---97109-- REDIR: 0x4bd0650 (libc.so.6:malloc) redirected to 0x48467b0 (malloc)
---97109-- REDIR: 0x4caba00 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852d60 (memmove)
---97109-- REDIR: 0x49328e0 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x4846f30 (operator new(unsigned long))
---97109-- REDIR: 0x49308b0 (libstdc++.so.6:operator delete(void*, unsigned long)) redirected to 0x484a530 (operator delete(void*, unsigned long))
---97109-- REDIR: 0x4cac400 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852c50 (memset)
---97109-- REDIR: 0x4cab9c0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x48538d0 (mempcpy)
---97109-- REDIR: 0x4cab000 (libc.so.6:__memchr_avx2) redirected to 0x48504e0 (memchr)
---97109-- REDIR: 0x4bd0d30 (libc.so.6:free) redirected to 0x4849820 (free)
---97109-- REDIR: 0x4cab9d0 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853dd0 (__memcpy_chk)
---97109-- REDIR: 0x4cadb60 (libc.so.6:__strchr_avx2) redirected to 0x484ef00 (index)
---97109-- REDIR: 0x4cadf90 (libc.so.6:__strcmp_avx2) redirected to 0x4850360 (strcmp)
---97109-- REDIR: 0x4cadda0 (libc.so.6:__strchrnul_avx2) redirected to 0x48537b0 (strchrnul)
---97109-- REDIR: 0x4cb0320 (libc.so.6:__strnlen_avx2) redirected to 0x484f1c0 (strnlen)
---97109-- REDIR: 0x4cac6b0 (libc.so.6:__stpcpy_avx2) redirected to 0x48525a0 (stpcpy)
-==97109== 
-==97109== HEAP SUMMARY:
-==97109==     in use at exit: 0 bytes in 0 blocks
-==97109==   total heap usage: 3,599 allocs, 3,599 frees, 154,289 bytes allocated
-==97109== 
-==97109== All heap blocks were freed -- no leaks are possible
-==97109== 
-==97109== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==62651== Memcheck, a memory error detector
+==62651== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==62651== Using Valgrind-3.22.0-bd4db67b1d-20231031 and LibVEX; rerun with -h for copyright info
+==62651== Command: ./Zappy
+==62651== Parent PID: 5255
+==62651== 
+--62651-- 
+--62651-- Valgrind options:
+--62651--    --leak-check=full
+--62651--    --show-leak-kinds=all
+--62651--    --track-origins=yes
+--62651--    --verbose
+--62651--    --log-file=valgrind-out.txt
+--62651-- Contents of /proc/version:
+--62651--   Linux version 6.11.0-26-generic (buildd@lcy02-amd64-074) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #26~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Apr 17 19:20:47 UTC 2
+--62651-- 
+--62651-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--62651-- Page sizes: currently 4096, max supported 4096
+--62651-- Valgrind library directory: /usr/libexec/valgrind
+--62651-- Reading syms from /home/pulgamecanica/Zappy/Zappy
+--62651-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--62651--   Considering /usr/lib/debug/.build-id/1c/8db5f83bba514f8fd5f1fb6d7be975be1bb855.debug ..
+--62651--   .. build-id is valid
+--62651-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--62651--    object doesn't have a dynamic symbol table
+--62651-- Scheduler: using generic scheduler lock implementation.
+--62651-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==62651== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-62651-by-pulgamecanica-on-???
+==62651== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-62651-by-pulgamecanica-on-???
+==62651== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-62651-by-pulgamecanica-on-???
+==62651== 
+==62651== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==62651== don't want to do, unless you know exactly what you're doing,
+==62651== or are doing some strange experiment):
+==62651==   /usr/bin/vgdb --pid=62651 ...command...
+==62651== 
+==62651== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==62651==   /path/to/gdb ./Zappy
+==62651== and then give GDB the following command
+==62651==   target remote | /usr/bin/vgdb --pid=62651
+==62651== --pid is optional if only one valgrind process is running
+==62651== 
+--62651-- REDIR: 0x4028b00 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c2e1a (???)
+--62651-- REDIR: 0x40272b0 (ld-linux-x86-64.so.2:index) redirected to 0x580c2e34 (???)
+--62651-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--62651-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+==62651== WARNING: new redirection conflicts with existing -- ignoring it
+--62651--     old: 0x04028b00 (strlen              ) R-> (0000.0) 0x580c2e1a ???
+--62651--     new: 0x04028b00 (strlen              ) R-> (2007.0) 0x0484f340 strlen
+--62651-- REDIR: 0x40274e0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4850460 (strcmp)
+--62651-- REDIR: 0x4026910 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853cd0 (mempcpy)
+--62651-- Reading syms from /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33
+--62651-- Reading syms from /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+--62651-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--62651--   Considering /usr/lib/debug/.build-id/42/c84c92e6f98126b3e2230ebfdead22c235b667.debug ..
+--62651--   .. build-id is valid
+--62651-- Reading syms from /usr/lib/x86_64-linux-gnu/libm.so.6
+--62651-- REDIR: 0x4028ca0 (ld-linux-x86-64.so.2:strncmp) redirected to 0x484fc90 (strncmp)
+--62651-- REDIR: 0x4bd8050 (libc.so.6:strnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd80e0 (libc.so.6:strpbrk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd61a0 (libc.so.6:strcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bef3b0 (libc.so.6:wcsnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd5290 (libc.so.6:memset) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4beeb20 (libc.so.6:wcslen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4c5a3c0 (libc.so.6:__memcpy_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd5200 (libc.so.6:memrchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bef350 (libc.so.6:wcsncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd4720 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bed8e0 (libc.so.6:wcschr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd6090 (libc.so.6:index) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd8110 (libc.so.6:rindex) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bed990 (libc.so.6:wcscmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd54b0 (libc.so.6:stpncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bfbeb0 (libc.so.6:wmemchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7ef0 (libc.so.6:strncmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd5510 (libc.so.6:strcasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7310 (libc.so.6:strcspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bee8f0 (libc.so.6:wcscpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd6020 (libc.so.6:strcat) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7df0 (libc.so.6:strncasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd6110 (libc.so.6:strchrnul) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd4630 (libc.so.6:bcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd72a0 (libc.so.6:strcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd55b0 (libc.so.6:strcasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7cc0 (libc.so.6:strlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7f90 (libc.so.6:strncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bfbf30 (libc.so.6:wmemcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4c5a4e0 (libc.so.6:__memmove_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+==62651== WARNING: new redirection conflicts with existing -- ignoring it
+--62651--     old: 0x04cab9d0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04853dd0 __memcpy_chk
+--62651--     new: 0x04cab9d0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04853740 __memmove_chk
+--62651-- REDIR: 0x4bd5440 (libc.so.6:stpcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd4fc0 (libc.so.6:memmove) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+==62651== Preferring higher priority redirection:
+--62651--     old: 0x04caba00 (__memcpy_avx_unalign) R-> (2018.0) 0x04851580 __memcpy_avx_unaligned_erms
+--62651--     new: 0x04caba00 (__memcpy_avx_unalign) R-> (2018.1) 0x04852d60 memmove
+--62651-- REDIR: 0x4bd45b0 (libc.so.6:memchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd82e0 (libc.so.6:strspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd50e0 (libc.so.6:mempcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4bd7d50 (libc.so.6:strncasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--62651-- REDIR: 0x4cb05f0 (libc.so.6:__strrchr_avx2) redirected to 0x484ed20 (rindex)
+--62651-- REDIR: 0x4cae740 (libc.so.6:__strlen_avx2) redirected to 0x484f220 (strlen)
+--62651-- REDIR: 0x4cab2a0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852480 (bcmp)
+--62651-- REDIR: 0x4caf820 (libc.so.6:__strncmp_avx2) redirected to 0x484fab0 (strncmp)
+--62651-- REDIR: 0x4bd0650 (libc.so.6:malloc) redirected to 0x48467b0 (malloc)
+--62651-- REDIR: 0x4caba00 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852d60 (memmove)
+--62651-- REDIR: 0x49328e0 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x4846f30 (operator new(unsigned long))
+--62651-- REDIR: 0x4cab000 (libc.so.6:__memchr_avx2) redirected to 0x48504e0 (memchr)
+--62651-- REDIR: 0x4cadb60 (libc.so.6:__strchr_avx2) redirected to 0x484ef00 (index)
+--62651-- REDIR: 0x4932950 (libstdc++.so.6:operator new[](unsigned long)) redirected to 0x4848550 (operator new[](unsigned long))
+--62651-- REDIR: 0x4bd0d30 (libc.so.6:free) redirected to 0x4849820 (free)
+--62651-- REDIR: 0x4cab9d0 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853dd0 (__memcpy_chk)
+--62651-- REDIR: 0x4cadf90 (libc.so.6:__strcmp_avx2) redirected to 0x4850360 (strcmp)
+--62651-- REDIR: 0x4cac400 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852c50 (memset)
+--62651-- REDIR: 0x49308b0 (libstdc++.so.6:operator delete(void*, unsigned long)) redirected to 0x484a530 (operator delete(void*, unsigned long))
+--62651-- REDIR: 0x49308a0 (libstdc++.so.6:operator delete(void*)) redirected to 0x484a080 (operator delete(void*))
+==62651== Invalid read of size 8
+==62651==    at 0x116C9C: operator==<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3715)
+==62651==    by 0x116C9C: getTeam (World.cpp:30)
+==62651==    by 0x116C9C: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:18)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Address 0x4e48ca8 is 8 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+--62651-- REDIR: 0x4cab9c0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x48538d0 (mempcpy)
+==62651== Invalid read of size 8
+==62651==    at 0x1185AB: __normal_iterator (stl_iterator.h:1077)
+==62651==    by 0x1185AB: end (stl_vector.h:894)
+==62651==    by 0x1185AB: Zappy::Team::update() (Team.cpp:111)
+==62651==    by 0x116ADA: Zappy::World::update() (World.cpp:85)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cd0 is 48 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 8
+==62651==    at 0x1185AF: __normal_iterator (stl_iterator.h:1077)
+==62651==    by 0x1185AF: begin (stl_vector.h:874)
+==62651==    by 0x1185AF: Zappy::Team::update() (Team.cpp:111)
+==62651==    by 0x116ADA: Zappy::World::update() (World.cpp:85)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cc8 is 40 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 8
+==62651==    at 0x1356D5: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:417)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48ca8 is 8 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 8
+==62651==    at 0x1356D9: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:417)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48ca0 is 0 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 2
+==62651==    at 0x4852EB0: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cb0 is 16 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 1
+==62651==    at 0x4852EE0: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cb4 is 20 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== Invalid read of size 2
+==62651==    at 0x4852EBF: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48da4 is 20 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== Process terminating with default action of signal 13 (SIGPIPE)
+==62651==    at 0x4C4EEAD: send (send.c:28)
+==62651==    by 0x142193: Zappy::ClientConnection::sendData(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (ClientConnection.cpp:46)
+==62651==    by 0x135831: broadcastToSpectators (NetworkManager.cpp:317)
+==62651==    by 0x135831: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:426)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== HEAP SUMMARY:
+==62651==     in use at exit: 125,229 bytes in 440 blocks
+==62651==   total heap usage: 2,038 allocs, 1,598 frees, 200,071 bytes allocated
+==62651== 
+==62651== Searching for pointers to 440 not-freed blocks
+==62651== Checked 186,248 bytes
+==62651== 
+==62651== 15 bytes in 1 blocks are still reachable in loss record 1 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4BD735E: strdup (strdup.c:42)
+==62651==    by 0x4C03788: tzset_internal (tzset.c:402)
+==62651==    by 0x4C0418A: __tz_convert (tzset.c:577)
+==62651==    by 0x15244E: Zappy::Logger::getCurrentTimestamp[abi:cxx11]() const (Logger.cpp:88)
+==62651==    by 0x152A9A: Zappy::Logger::log(Zappy::LogLevel, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (Logger.cpp:57)
+==62651==    by 0x112EA8: main (main.cpp:163)
+==62651== 
+==62651== 16 bytes in 1 blocks are still reachable in loss record 2 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1155BD: make_unique<Zappy::WatchService, Zappy::Engine&> (unique_ptr.h:1070)
+==62651==    by 0x1155BD: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:20)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 16 bytes in 1 blocks are still reachable in loss record 3 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116E55: allocate (new_allocator.h:151)
+==62651==    by 0x116E55: allocate (alloc_traits.h:482)
+==62651==    by 0x116E55: _M_allocate (stl_vector.h:381)
+==62651==    by 0x116E55: void std::vector<Zappy::Team*, std::allocator<Zappy::Team*> >::_M_realloc_insert<Zappy::Team*>(__gnu_cxx::__normal_iterator<Zappy::Team**, std::vector<Zappy::Team*, std::allocator<Zappy::Team*> > >, Zappy::Team*&&) (vector.tcc:459)
+==62651==    by 0x116D5C: emplace_back<Zappy::Team*> (vector.tcc:123)
+==62651==    by 0x116D5C: push_back (stl_vector.h:1299)
+==62651==    by 0x116D5C: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:23)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 20 bytes in 1 blocks are still reachable in loss record 4 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4C02DF8: __tzstring_len (tzset.c:98)
+==62651==    by 0x4C04EDB: __tzfile_read (tzfile.c:413)
+==62651==    by 0x4C0379B: tzset_internal (tzset.c:405)
+==62651==    by 0x4C0418A: __tz_convert (tzset.c:577)
+==62651==    by 0x15244E: Zappy::Logger::getCurrentTimestamp[abi:cxx11]() const (Logger.cpp:88)
+==62651==    by 0x152A9A: Zappy::Logger::log(Zappy::LogLevel, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (Logger.cpp:57)
+==62651==    by 0x112A99: main (main.cpp:141)
+==62651== 
+==62651== 31 bytes in 1 blocks are still reachable in loss record 5 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49DF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49E104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135799: append (basic_string.h:1474)
+==62651==    by 0x135799: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3690)
+==62651==    by 0x135799: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 32 bytes in 1 blocks are still reachable in loss record 6 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1145F5: allocate (new_allocator.h:151)
+==62651==    by 0x1145F5: allocate (alloc_traits.h:482)
+==62651==    by 0x1145F5: _M_allocate (stl_vector.h:381)
+==62651==    by 0x1145F5: void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) (vector.tcc:459)
+==62651==    by 0x113076: push_back (stl_vector.h:1299)
+==62651==    by 0x113076: main (main.cpp:134)
+==62651== 
+==62651== 48 bytes in 1 blocks are still reachable in loss record 7 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1414BC: make_unique<Zappy::CommandRouter> (unique_ptr.h:1070)
+==62651==    by 0x1414BC: Zappy::NetworkManager::NetworkManager(int, int) (NetworkManager.cpp:23)
+==62651==    by 0x11558F: make_unique<Zappy::NetworkManager, int, int> (unique_ptr.h:1070)
+==62651==    by 0x11558F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:18)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 48 bytes in 1 blocks are still reachable in loss record 8 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1414D5: make_unique<Zappy::CommandRouter> (unique_ptr.h:1070)
+==62651==    by 0x1414D5: Zappy::NetworkManager::NetworkManager(int, int) (NetworkManager.cpp:24)
+==62651==    by 0x11558F: make_unique<Zappy::NetworkManager, int, int> (unique_ptr.h:1070)
+==62651==    by 0x11558F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:18)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 48 bytes in 1 blocks are still reachable in loss record 9 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x13484B: allocate (new_allocator.h:151)
+==62651==    by 0x13484B: allocate (alloc_traits.h:482)
+==62651==    by 0x13484B: _M_get_node (stl_tree.h:563)
+==62651==    by 0x13484B: _M_create_node<const std::piecewise_construct_t&, std::tuple<int const&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x13484B: _Auto_node<const std::piecewise_construct_t&, std::tuple<int const&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x13484B: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<int const&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x13484B: operator[] (stl_map.h:513)
+==62651==    by 0x13484B: Zappy::NetworkManager::acceptNewConnections() (NetworkManager.cpp:170)
+==62651==    by 0x1417EC: Zappy::NetworkManager::update() (NetworkManager.cpp:122)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 64 bytes in 1 blocks are still reachable in loss record 10 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x114136: allocate (new_allocator.h:151)
+==62651==    by 0x114136: allocate (alloc_traits.h:482)
+==62651==    by 0x114136: _M_allocate (stl_vector.h:381)
+==62651==    by 0x114136: void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (vector.tcc:459)
+==62651==    by 0x112DEC: push_back (stl_vector.h:1292)
+==62651==    by 0x112DEC: addTeam (Config.hpp:33)
+==62651==    by 0x112DEC: main (main.cpp:150)
+==62651== 
+==62651== 64 bytes in 1 blocks are still reachable in loss record 11 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x141E46: allocate (new_allocator.h:151)
+==62651==    by 0x141E46: allocate (alloc_traits.h:482)
+==62651==    by 0x141E46: _M_allocate_map (stl_deque.h:597)
+==62651==    by 0x141E46: _M_initialize_map (stl_deque.h:646)
+==62651==    by 0x141E46: _Deque_base (stl_deque.h:460)
+==62651==    by 0x141E46: deque (stl_deque.h:855)
+==62651==    by 0x141E46: queue<> (stl_queue.h:167)
+==62651==    by 0x141E46: Zappy::ClientConnection::ClientConnection(int) (ClientConnection.cpp:13)
+==62651==    by 0x134799: make_unique<Zappy::ClientConnection, int&> (unique_ptr.h:1070)
+==62651==    by 0x134799: Zappy::NetworkManager::acceptNewConnections() (NetworkManager.cpp:151)
+==62651==    by 0x1417EC: Zappy::NetworkManager::update() (NetworkManager.cpp:122)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 72 bytes in 1 blocks are still reachable in loss record 12 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1161B9: make_unique<Zappy::Map, int&, int&, bool&> (unique_ptr.h:1070)
+==62651==    by 0x1161B9: Zappy::World::World(int, int, bool) (World.cpp:7)
+==62651==    by 0x115568: make_unique<Zappy::World, int, int, bool> (unique_ptr.h:1070)
+==62651==    by 0x115568: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:17)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 13 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135425: Zappy::NetworkManager::registerServerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:301)
+==62651==    by 0x1151B5: Zappy::Engine::registerCommands() (Engine.cpp:74)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 14 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135425: Zappy::NetworkManager::registerServerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:301)
+==62651==    by 0x115245: Zappy::Engine::registerCommands() (Engine.cpp:78)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 15 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135425: Zappy::NetworkManager::registerServerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:301)
+==62651==    by 0x1152CB: Zappy::Engine::registerCommands() (Engine.cpp:82)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 16 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135425: Zappy::NetworkManager::registerServerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:301)
+==62651==    by 0x115356: Zappy::Engine::registerCommands() (Engine.cpp:86)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 17 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135425: Zappy::NetworkManager::registerServerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:301)
+==62651==    by 0x1153E1: Zappy::Engine::registerCommands() (Engine.cpp:90)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 96 bytes in 1 blocks are still reachable in loss record 18 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x14421C: allocate (new_allocator.h:151)
+==62651==    by 0x14421C: allocate (alloc_traits.h:482)
+==62651==    by 0x14421C: _M_get_node (stl_tree.h:563)
+==62651==    by 0x14421C: _M_create_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:613)
+==62651==    by 0x14421C: _Auto_node<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:1637)
+==62651==    by 0x14421C: _M_emplace_hint_unique<const std::piecewise_construct_t&, std::tuple<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>, std::tuple<> > (stl_tree.h:2462)
+==62651==    by 0x14421C: operator[] (stl_map.h:513)
+==62651==    by 0x14421C: Zappy::CommandRouter::registerHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (CommandRouter.cpp:14)
+==62651==    by 0x135025: Zappy::NetworkManager::registerCommandHandler(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<std::unique_ptr<Zappy::Command, std::default_delete<Zappy::Command> > (std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, Zappy::ClientConnection*)>) (NetworkManager.cpp:260)
+==62651==    by 0x11546E: Zappy::Engine::registerCommands() (Engine.cpp:95)
+==62651==    by 0x115911: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:58)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 104 bytes in 1 blocks are still reachable in loss record 19 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1155A1: make_unique<Zappy::GameLoop, int> (unique_ptr.h:1070)
+==62651==    by 0x1155A1: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:19)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 123 bytes in 6 blocks are still reachable in loss record 20 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4C02D94: __tzstring_len (tzset.c:98)
+==62651==    by 0x4C04EDB: __tzfile_read (tzfile.c:413)
+==62651==    by 0x4C0379B: tzset_internal (tzset.c:405)
+==62651==    by 0x4C0418A: __tz_convert (tzset.c:577)
+==62651==    by 0x15244E: Zappy::Logger::getCurrentTimestamp[abi:cxx11]() const (Logger.cpp:88)
+==62651==    by 0x152A9A: Zappy::Logger::log(Zappy::LogLevel, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (Logger.cpp:57)
+==62651==    by 0x112A99: main (main.cpp:141)
+==62651== 
+==62651== 168 bytes in 1 blocks are still reachable in loss record 21 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x13478C: make_unique<Zappy::ClientConnection, int&> (unique_ptr.h:1070)
+==62651==    by 0x13478C: Zappy::NetworkManager::acceptNewConnections() (NetworkManager.cpp:151)
+==62651==    by 0x1417EC: Zappy::NetworkManager::update() (NetworkManager.cpp:122)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 184 bytes in 1 blocks are still reachable in loss record 22 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x115553: make_unique<Zappy::World, int, int, bool> (unique_ptr.h:1070)
+==62651==    by 0x115553: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:17)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 232 bytes in 1 blocks are still reachable in loss record 23 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x11557E: make_unique<Zappy::NetworkManager, int, int> (unique_ptr.h:1070)
+==62651==    by 0x11557E: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:18)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 472 bytes in 1 blocks are still reachable in loss record 24 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4BA8E7E: __fopen_internal (iofopen.c:65)
+==62651==    by 0x4BA8E7E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==62651==    by 0x497006C: std::__basic_file<char>::open(char const*, std::_Ios_Openmode, int) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49A5F2E: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x1530F3: open (fstream:930)
+==62651==    by 0x1530F3: Zappy::Logger::Logger() (Logger.cpp:18)
+==62651==    by 0x153271: Zappy::Logger::getInstance() (Logger.cpp:9)
+==62651==    by 0x112A43: main (main.cpp:140)
+==62651== 
+==62651== 472 bytes in 1 blocks are still reachable in loss record 25 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4BA8E7E: __fopen_internal (iofopen.c:65)
+==62651==    by 0x4BA8E7E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==62651==    by 0x497006C: std::__basic_file<char>::open(char const*, std::_Ios_Openmode, int) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49A5F2E: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x15311D: open (fstream:930)
+==62651==    by 0x15311D: Zappy::Logger::Logger() (Logger.cpp:19)
+==62651==    by 0x153271: Zappy::Logger::getInstance() (Logger.cpp:9)
+==62651==    by 0x112A43: main (main.cpp:140)
+==62651== 
+==62651== 512 bytes in 1 blocks are still reachable in loss record 26 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x1428E7: allocate (new_allocator.h:151)
+==62651==    by 0x1428E7: allocate (alloc_traits.h:482)
+==62651==    by 0x1428E7: _M_allocate_node (stl_deque.h:583)
+==62651==    by 0x1428E7: void std::deque<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_push_back_aux<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (deque.tcc:497)
+==62651==    by 0x14271C: push_back (stl_deque.h:1548)
+==62651==    by 0x14271C: push (stl_queue.h:286)
+==62651==    by 0x14271C: Zappy::ClientConnection::processBuffer() (ClientConnection.cpp:132)
+==62651==    by 0x142818: Zappy::ClientConnection::readData() (ClientConnection.cpp:29)
+==62651==    by 0x134CC8: Zappy::NetworkManager::handleClientData() (NetworkManager.cpp:190)
+==62651==    by 0x141768: Zappy::NetworkManager::update() (NetworkManager.cpp:125)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 768 bytes in 1 blocks are still reachable in loss record 27 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x141B80: allocate (new_allocator.h:151)
+==62651==    by 0x141B80: allocate (alloc_traits.h:482)
+==62651==    by 0x141B80: _M_allocate (stl_vector.h:381)
+==62651==    by 0x141B80: std::vector<epoll_event, std::allocator<epoll_event> >::_M_default_append(unsigned long) (vector.tcc:663)
+==62651==    by 0x141872: resize (stl_vector.h:1016)
+==62651==    by 0x141872: Zappy::NetworkManager::update() (NetworkManager.cpp:109)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 1,024 bytes in 1 blocks are still reachable in loss record 28 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4BA81B4: _IO_file_doallocate (filedoalloc.c:101)
+==62651==    by 0x4BB8523: _IO_doallocbuf (genops.c:347)
+==62651==    by 0x4BB5F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
+==62651==    by 0x4BB6AAE: _IO_new_file_xsputn (fileops.c:1244)
+==62651==    by 0x4BB6AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
+==62651==    by 0x4BA9A11: fwrite (iofwrite.c:39)
+==62651==    by 0x49CDDC3: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x11592C: operator<< <std::char_traits<char> > (ostream:667)
+==62651==    by 0x11592C: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:61)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 1,694 bytes in 1 blocks are still reachable in loss record 29 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49DF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49E104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x142810: append (basic_string.h:1459)
+==62651==    by 0x142810: Zappy::ClientConnection::readData() (ClientConnection.cpp:28)
+==62651==    by 0x134CC8: Zappy::NetworkManager::handleClientData() (NetworkManager.cpp:190)
+==62651==    by 0x141768: Zappy::NetworkManager::update() (NetworkManager.cpp:125)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 1,818 bytes in 1 blocks are still reachable in loss record 30 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x4C04722: __tzfile_read (tzfile.c:280)
+==62651==    by 0x4C0379B: tzset_internal (tzset.c:405)
+==62651==    by 0x4C0418A: __tz_convert (tzset.c:577)
+==62651==    by 0x15244E: Zappy::Logger::getCurrentTimestamp[abi:cxx11]() const (Logger.cpp:88)
+==62651==    by 0x152A9A: Zappy::Logger::log(Zappy::LogLevel, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (Logger.cpp:57)
+==62651==    by 0x112A99: main (main.cpp:141)
+==62651== 
+==62651== 3,200 bytes in 1 blocks are still reachable in loss record 31 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x117E16: allocate (new_allocator.h:151)
+==62651==    by 0x117E16: allocate (alloc_traits.h:482)
+==62651==    by 0x117E16: _M_allocate (stl_vector.h:381)
+==62651==    by 0x117E16: std::vector<std::unique_ptr<Zappy::Tile, std::default_delete<Zappy::Tile> >, std::allocator<std::unique_ptr<Zappy::Tile, std::default_delete<Zappy::Tile> > > >::reserve(unsigned long) (vector.tcc:79)
+==62651==    by 0x11795A: Zappy::Map::Map(int, int, bool) (Map.cpp:17)
+==62651==    by 0x1161CE: make_unique<Zappy::Map, int&, int&, bool&> (unique_ptr.h:1070)
+==62651==    by 0x1161CE: Zappy::World::World(int, int, bool) (World.cpp:7)
+==62651==    by 0x115568: make_unique<Zappy::World, int, int, bool> (unique_ptr.h:1070)
+==62651==    by 0x115568: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:17)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 4,096 bytes in 1 blocks are still reachable in loss record 32 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x141DC0: allocate (new_allocator.h:151)
+==62651==    by 0x141DC0: allocate (alloc_traits.h:482)
+==62651==    by 0x141DC0: _M_allocate (stl_vector.h:381)
+==62651==    by 0x141DC0: _M_create_storage (stl_vector.h:398)
+==62651==    by 0x141DC0: _Vector_base (stl_vector.h:335)
+==62651==    by 0x141DC0: vector (stl_vector.h:557)
+==62651==    by 0x141DC0: Zappy::ClientConnection::ClientConnection(int) (ClientConnection.cpp:13)
+==62651==    by 0x134799: make_unique<Zappy::ClientConnection, int&> (unique_ptr.h:1070)
+==62651==    by 0x134799: Zappy::NetworkManager::acceptNewConnections() (NetworkManager.cpp:151)
+==62651==    by 0x1417EC: Zappy::NetworkManager::update() (NetworkManager.cpp:122)
+==62651==    by 0x114933: operator() (Engine.cpp:46)
+==62651==    by 0x114933: __invoke_impl<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:61)
+==62651==    by 0x114933: __invoke_r<void, Zappy::Engine::Engine(const Zappy::Config&)::<lambda()>&> (invoke.h:111)
+==62651==    by 0x114933: std::_Function_handler<void (), Zappy::Engine::Engine(Zappy::Config const&)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==62651==    by 0x11721E: operator() (std_function.h:591)
+==62651==    by 0x11721E: Zappy::GameLoop::run() (GameLoop.cpp:73)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651== 
+==62651== 8,192 bytes in 1 blocks are still reachable in loss record 33 of 36
+==62651==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49A1BC3: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49A5F46: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x1530F3: open (fstream:930)
+==62651==    by 0x1530F3: Zappy::Logger::Logger() (Logger.cpp:18)
+==62651==    by 0x153271: Zappy::Logger::getInstance() (Logger.cpp:9)
+==62651==    by 0x112A43: main (main.cpp:140)
+==62651== 
+==62651== 8,192 bytes in 1 blocks are still reachable in loss record 34 of 36
+==62651==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49A1BC3: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x49A5F46: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x15311D: open (fstream:930)
+==62651==    by 0x15311D: Zappy::Logger::Logger() (Logger.cpp:19)
+==62651==    by 0x153271: Zappy::Logger::getInstance() (Logger.cpp:9)
+==62651==    by 0x112A43: main (main.cpp:140)
+==62651== 
+==62651== 19,200 bytes in 400 blocks are still reachable in loss record 35 of 36
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x117985: make_unique<Zappy::Tile> (unique_ptr.h:1070)
+==62651==    by 0x117985: Zappy::Map::Map(int, int, bool) (Map.cpp:19)
+==62651==    by 0x1161CE: make_unique<Zappy::Map, int&, int&, bool&> (unique_ptr.h:1070)
+==62651==    by 0x1161CE: Zappy::World::World(int, int, bool) (World.cpp:7)
+==62651==    by 0x115568: make_unique<Zappy::World, int, int, bool> (unique_ptr.h:1070)
+==62651==    by 0x115568: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:17)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 73,728 bytes in 1 blocks are still reachable in loss record 36 of 36
+==62651==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x492E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x400571E: call_init.part.0 (dl-init.c:74)
+==62651==    by 0x4005823: call_init (dl-init.c:120)
+==62651==    by 0x4005823: _dl_init (dl-init.c:121)
+==62651==    by 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+==62651== 
+==62651== LEAK SUMMARY:
+==62651==    definitely lost: 0 bytes in 0 blocks
+==62651==    indirectly lost: 0 bytes in 0 blocks
+==62651==      possibly lost: 0 bytes in 0 blocks
+==62651==    still reachable: 125,229 bytes in 440 blocks
+==62651==         suppressed: 0 bytes in 0 blocks
+==62651== 
+==62651== ERROR SUMMARY: 22611 errors from 8 contexts (suppressed: 0 from 0)
+==62651== 
+==62651== 1 errors in context 1 of 8:
+==62651== Invalid read of size 8
+==62651==    at 0x116C9C: operator==<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3715)
+==62651==    by 0x116C9C: getTeam (World.cpp:30)
+==62651==    by 0x116C9C: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:18)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Address 0x4e48ca8 is 8 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 2 of 8:
+==62651== Invalid read of size 1
+==62651==    at 0x4852EE0: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cb4 is 20 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 3 of 8:
+==62651== Invalid read of size 2
+==62651==    at 0x4852EBF: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48da4 is 20 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 4 of 8:
+==62651== Invalid read of size 8
+==62651==    at 0x1356D9: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:417)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48ca0 is 0 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 5 of 8:
+==62651== Invalid read of size 8
+==62651==    at 0x1356D5: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:417)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48ca8 is 8 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 6 of 8:
+==62651== Invalid read of size 8
+==62651==    at 0x1185AF: __normal_iterator (stl_iterator.h:1077)
+==62651==    by 0x1185AF: begin (stl_vector.h:874)
+==62651==    by 0x1185AF: Zappy::Team::update() (Team.cpp:111)
+==62651==    by 0x116ADA: Zappy::World::update() (World.cpp:85)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cc8 is 40 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 2660 errors in context 7 of 8:
+==62651== Invalid read of size 8
+==62651==    at 0x1185AB: __normal_iterator (stl_iterator.h:1077)
+==62651==    by 0x1185AB: end (stl_vector.h:894)
+==62651==    by 0x1185AB: Zappy::Team::update() (Team.cpp:111)
+==62651==    by 0x116ADA: Zappy::World::update() (World.cpp:85)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cd0 is 48 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== 
+==62651== 6650 errors in context 8 of 8:
+==62651== Invalid read of size 2
+==62651==    at 0x4852EB0: memmove (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x49E1023: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==62651==    by 0x135770: append (basic_string.h:1459)
+==62651==    by 0x135770: __str_concat<std::__cxx11::basic_string<char> > (basic_string.h:3539)
+==62651==    by 0x135770: operator+<char, std::char_traits<char>, std::allocator<char> > (basic_string.h:3578)
+==62651==    by 0x135770: Zappy::NetworkManager::handleTeamUpdate(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Zappy::Team const*) (NetworkManager.cpp:425)
+==62651==    by 0x116AF9: operator() (std_function.h:591)
+==62651==    by 0x116AF9: notifyTeamUpdate (World.cpp:100)
+==62651==    by 0x116AF9: Zappy::World::update() (World.cpp:86)
+==62651==    by 0x1171E6: operator() (std_function.h:591)
+==62651==    by 0x1171E6: Zappy::GameLoop::run() (GameLoop.cpp:65)
+==62651==    by 0x112EB8: main (main.cpp:164)
+==62651==  Address 0x4e48cb0 is 16 bytes inside a block of size 88 free'd
+==62651==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116D46: operator() (unique_ptr.h:99)
+==62651==    by 0x116D46: ~unique_ptr (unique_ptr.h:404)
+==62651==    by 0x116D46: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:26)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651==  Block was alloc'd at
+==62651==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62651==    by 0x116CE9: make_unique<Zappy::Team, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&> (unique_ptr.h:1070)
+==62651==    by 0x116CE9: Zappy::World::addTeam(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (World.cpp:22)
+==62651==    by 0x11563F: Zappy::Engine::Engine(Zappy::Config const&) (Engine.cpp:28)
+==62651==    by 0x112E67: main (main.cpp:156)
+==62651== 
+==62651== ERROR SUMMARY: 22611 errors from 8 contexts (suppressed: 0 from 0)

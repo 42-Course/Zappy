@@ -1,138 +1,197 @@
 #include "core/Player.hpp"
 #include "core/Team.hpp"
+#include "core/Resource.hpp"
 #include "core/Inventory.hpp"
-#include <stdexcept>
+#include <algorithm>
 
 namespace Zappy {
-    Player::Player(int id, Team* team)
+    Player::Player(int id, Team& team, int x, int y, Direction direction)
         : id_(id)
         , team_(team)
+        , x_(x)
+        , y_(y)
+        , direction_(direction)
         , level_(1)
-        , x_(0)
-        , y_(0)
-        , direction_(Direction::NORTH)
-        , food_(10)  // Start with 10 food units
-        , inventory_(std::make_unique<Inventory>()) {
-        if (!team) {
-            throw std::invalid_argument("Player must belong to a team");
+        , inventory_()
+        , alive_(true)
+    {}
+
+    Player::~Player() {
+        // Notify observers that player is being destroyed
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerDied(this);
+            }
         }
     }
 
-    Player::~Player() {
-        if (team_) {
-            team_->removePlayer(this);
+    void Player::attach(Observer* observer) {
+        if (observer) {
+            observers_.push_back(observer);
+        }
+    }
+
+    void Player::detach(Observer* observer) {
+        if (observer) {
+            observers_.erase(
+                std::remove(observers_.begin(), observers_.end(), observer),
+                observers_.end()
+            );
+        }
+    }
+
+    void Player::notifyMoved() const {
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerMoved(this);
+            }
+        }
+    }
+
+    void Player::notifyTurned() const {
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerTurned(this);
+            }
+        }
+    }
+
+    void Player::notifyLevelUp() const {
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerLevelUp(this);
+            }
+        }
+    }
+
+    void Player::notifyInventoryChanged() const {
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerInventoryChanged(this);
+            }
+        }
+    }
+
+    void Player::notifyDied() const {
+        for (auto observer : observers_) {
+            if (observer) {
+                observer->onPlayerDied(this);
+            }
         }
     }
 
     void Player::setPosition(int x, int y) {
-        // TODO: Add map bounds checking when World reference is available
+        if (!alive_) return;
         x_ = x;
         y_ = y;
+        notifyMoved();
     }
 
-    void Player::setDirection(Direction dir) {
-        direction_ = dir;
+    void Player::setDirection(Direction direction) {
+        if (!alive_) return;
+        direction_ = direction;
+        notifyTurned();
     }
 
-    void Player::moveForward() {
-        // Update position based on current direction
-        switch (direction_) {
-            case Direction::NORTH:
-                y_--;
-                break;
-            case Direction::SOUTH:
-                y_++;
-                break;
-            case Direction::EAST:
-                x_++;
-                break;
-            case Direction::WEST:
-                x_--;
-                break;
+    void Player::levelUp() {
+        if (!alive_) return;
+        level_++;
+        notifyLevelUp();
+    }
+
+    void Player::addResource(ResourceType type, int amount) {
+        if (!alive_ || amount <= 0) return;
+        
+        // Create a single resource and add it multiple times
+        Resource resource(type);
+        for (int i = 0; i < amount; i++) {
+            if (!inventory_.add(&resource)) {
+                break; // Stop if we can't add more
+            }
         }
-        // TODO: Add map wrapping when World reference is available
+        notifyInventoryChanged();
     }
 
-    void Player::turnLeft() {
-        switch (direction_) {
-            case Direction::NORTH:
-                direction_ = Direction::WEST;
-                break;
-            case Direction::WEST:
-                direction_ = Direction::SOUTH;
-                break;
-            case Direction::SOUTH:
-                direction_ = Direction::EAST;
-                break;
-            case Direction::EAST:
-                direction_ = Direction::NORTH;
-                break;
+    void Player::removeResource(ResourceType type, int amount) {
+        if (!alive_ || amount <= 0) return;
+        
+        // Create a single resource and remove it multiple times
+        Resource resource(type);
+        for (int i = 0; i < amount; i++) {
+            if (!inventory_.remove(&resource)) {
+                break; // Stop if we can't remove more
+            }
         }
+        notifyInventoryChanged();
     }
 
-    void Player::turnRight() {
-        switch (direction_) {
-            case Direction::NORTH:
-                direction_ = Direction::EAST;
-                break;
-            case Direction::EAST:
-                direction_ = Direction::SOUTH;
-                break;
-            case Direction::SOUTH:
-                direction_ = Direction::WEST;
-                break;
-            case Direction::WEST:
-                direction_ = Direction::NORTH;
-                break;
-        }
+    void Player::setInventory(const Inventory& inventory) {
+        if (!alive_) return;
+        inventory_ = inventory;
+        notifyInventoryChanged();
     }
 
-    void Player::look() {
-        // TODO: Implement vision cone based on direction
-        // This will need World reference to check tiles
+    void Player::die() {
+        if (!alive_) return;
+        alive_ = false;
+        notifyDied();
     }
 
-    void Player::inventory() {
-        // TODO: Return inventory contents
-        // This will be implemented once Inventory class is complete
-    }
-
+    // void Player::look() {
+    //     // TODO: Implement vision cone based on direction
+    //     // This will need World reference to check tiles
+    // }
+    
     void Player::take(Resource* resource) {
-        if (!resource) return;
-        // TODO: Add resource to inventory
-        // This will be implemented once Resource and Inventory classes are complete
+        if (!alive_ || !resource) return;
+        
+        if (inventory_.add(resource)) {
+            notifyInventoryChanged();
+        }
     }
 
     void Player::drop(Resource* resource) {
-        if (!resource) return;
-        // TODO: Remove resource from inventory and add to current tile
-        // This will be implemented once Resource and Inventory classes are complete
+        if (!alive_ || !resource) return;
+        
+        if (inventory_.remove(resource)) {
+            notifyInventoryChanged();
+        }
     }
 
     void Player::broadcast(const std::string& message) {
-        if (message.empty()) return;
+        if (!alive_ || message.empty()) return;
+        
         // TODO: Implement broadcast through World/NetworkManager
+        // - Send message to all players in range
+        // - Handle message routing
     }
 
     bool Player::startIncantation() {
-        // TODO: Check elevation requirements and start incantation
-        // This will need World reference to check tile resources and nearby players
+        if (!alive_) return false;
+        
+        // TODO: Implement elevation requirements check
+        // - Check if player has required resources
+        // - Check if other players are present and at correct level
+        // - Check if tile has required resources
         return false;
     }
 
     void Player::fork() {
+        if (!alive_) return;
+        
         // TODO: Implement player reproduction
-        // This will need World reference to create new player
+        // - Create new player in same team
+        // - Place on same tile
+        // - Initialize with basic resources
     }
 
     void Player::update() {
-        // Decrease food every tick
-        if (food_ > 0) {
-            food_--;
-        }
-
-        // TODO: Handle other time-based updates
-        // - Check incantation progress
+        if (!alive_) return;
+        
+        // TODO: Implement time-based updates
+        // - Check food level
         // - Update action cooldowns
+        // - Check for level up conditions
+        // - Handle ongoing actions
     }
 } 

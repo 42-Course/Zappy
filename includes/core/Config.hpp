@@ -14,7 +14,8 @@ namespace Zappy {
             , tickRate_(tickRate)
             , playerPort_(playerPort)
             , spectatorPort_(spectatorPort)
-            , maxPlayersPerTeam_(maxPlayersPerTeam) {
+            , maxPlayersPerTeam_(maxPlayersPerTeam)
+            , infinite_map_(false) {
             // Add a default team for testing
             teams_.push_back("Team1");
         }

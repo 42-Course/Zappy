@@ -11,7 +11,7 @@ namespace Zappy {
 
     class Map {
     public:
-        Map(int width, int height, bool infinite = false);
+        Map(int width, int height, bool infinite);
         ~Map();
 
         // Map dimensions and properties

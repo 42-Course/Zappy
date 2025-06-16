@@ -6,9 +6,9 @@ namespace Zappy {
     class Tile;
     class Team;
 
-    class Observer {
+    class IObserver {
     public:
-        virtual ~Observer() = default;
+        virtual ~IObserver() = default;
 
         // Player notifications
         virtual void onPlayerMoved(const Player* player) = 0;

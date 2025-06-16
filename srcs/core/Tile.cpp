@@ -6,39 +6,23 @@ namespace Zappy {
     Tile::Tile() = default;
 
     Tile::~Tile() {
-        // Notify observers that tile is being destroyed
-        for (auto observer : observers_) {
-            for (const auto& resource : resources_) {
-                observer->onResourceRemoved(this, resource->getType());
-            }
-        }
-    }
-
-    void Tile::attach(Observer* observer) {
-        if (observer) {
-            observers_.push_back(observer);
-        }
-    }
-
-    void Tile::detach(Observer* observer) {
-        if (observer) {
-            observers_.erase(
-                std::remove(observers_.begin(), observers_.end(), observer),
-                observers_.end()
-            );
+        for (const auto& resource : resources_) {
+            notify([this, resource](IObserver* obs) {
+                obs->onResourceRemoved(this, resource->getType());
+            });
         }
     }
 
     void Tile::notifyResourceAdded(ResourceType type) const {
-        for (auto observer : observers_) {
-            observer->onResourceAdded(this, type);
-        }
+        notify([this, type](IObserver* obs) {
+            obs->onResourceAdded(this, type);
+        });
     }
 
     void Tile::notifyResourceRemoved(ResourceType type) const {
-        for (auto observer : observers_) {
-            observer->onResourceRemoved(this, type);
-        }
+        notify([this, type](IObserver* obs) {
+            obs->onResourceRemoved(this, type);
+        });
     }
 
     void Tile::addResource(Resource* resource) {

@@ -13,56 +13,25 @@ namespace Zappy {
     }
 
     Team::~Team() {
-        // Notify observers that team is being destroyed
-        for (auto observer : observers_) {
-            if (observer) {
-                // Notify about each player being removed
-                for (const auto* player : players_) {
-                    if (player) {
-                        observer->onPlayerRemoved(player);
-                    }
-                }
-            }
-        }
-    }
 
-    void Team::attach(Observer* observer) {
-        if (observer) {
-            observers_.push_back(observer);
-        }
-    }
-
-    void Team::detach(Observer* observer) {
-        if (observer) {
-            observers_.erase(
-                std::remove(observers_.begin(), observers_.end(), observer),
-                observers_.end()
-            );
-        }
     }
 
     void Team::notifyPlayerAdded(const Player* player) const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerAdded(player);
-            }
-        }
+        notify([player](IObserver* obs) {
+            obs->onPlayerAdded(player);
+        });
     }
 
     void Team::notifyPlayerRemoved(const Player* player) const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerRemoved(player);
-            }
-        }
+        notify([player](IObserver* obs) {
+            obs->onPlayerRemoved(player);
+        });
     }
 
     void Team::notifyWinCondition() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onTeamWon(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onTeamWon(this);
+        });
     }
 
     void Team::addPlayer(Player* player) {
@@ -116,6 +85,8 @@ namespace Zappy {
         if (it != players_.end()) {
             players_.erase(it, players_.end());
         }
+
+        // TODO: notify player removed
 
         // Check win condition
         if (hasWon()) {

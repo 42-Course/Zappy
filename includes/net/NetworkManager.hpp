@@ -12,11 +12,11 @@
 #include "core/Player.hpp"
 #include "core/Team.hpp"
 #include "core/Tile.hpp"
-#include "core/Observer.hpp"
+#include "core/IObserver.hpp"
 #include "core/World.hpp"
 
 namespace Zappy {
-    class NetworkManager : public Observer {
+    class NetworkManager : public IObserver {
     public:
         NetworkManager(World& world, int playerPort, int spectatorPort);
         ~NetworkManager();

@@ -4,7 +4,8 @@
 #include <vector>
 #include "Resource.hpp"
 #include "Inventory.hpp"
-#include "Observer.hpp"
+#include "IObserver.hpp"
+#include "Subject.hpp"
 
 namespace Zappy {
     class Team;  // Forward declaration
@@ -16,7 +17,7 @@ namespace Zappy {
         WEST = 4
     };
 
-    class Player {
+    class Player : public Subject {
     public:
         Player(int id, Team& team, int x, int y, Direction direction);
         ~Player();
@@ -56,10 +57,6 @@ namespace Zappy {
         // State updates
         void update();
 
-        // Observer pattern
-        void attach(Observer* observer);
-        void detach(Observer* observer);
-
     protected:
         void notifyMoved() const;
         void notifyTurned() const;
@@ -76,6 +73,5 @@ namespace Zappy {
         int level_;
         Inventory inventory_;
         bool alive_;
-        std::vector<Observer*> observers_;  // Non-owning pointers
     };
 } 

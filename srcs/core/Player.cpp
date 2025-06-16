@@ -18,66 +18,39 @@ namespace Zappy {
 
     Player::~Player() {
         // Notify observers that player is being destroyed
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerDied(this);
-            }
-        }
-    }
-
-    void Player::attach(Observer* observer) {
-        if (observer) {
-            observers_.push_back(observer);
-        }
-    }
-
-    void Player::detach(Observer* observer) {
-        if (observer) {
-            observers_.erase(
-                std::remove(observers_.begin(), observers_.end(), observer),
-                observers_.end()
-            );
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerDied(this);
+        });
     }
 
     void Player::notifyMoved() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerMoved(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerMoved(this);
+        });
     }
 
     void Player::notifyTurned() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerTurned(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerTurned(this);
+        });
     }
 
     void Player::notifyLevelUp() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerLevelUp(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerLevelUp(this);
+        });
     }
 
     void Player::notifyInventoryChanged() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerInventoryChanged(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerInventoryChanged(this);
+        });
     }
 
     void Player::notifyDied() const {
-        for (auto observer : observers_) {
-            if (observer) {
-                observer->onPlayerDied(this);
-            }
-        }
+        notify([this](IObserver* obs) {
+            obs->onPlayerDied(this);
+        });
     }
 
     void Player::setPosition(int x, int y) {

@@ -3,12 +3,13 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "Observer.hpp"
+#include "IObserver.hpp"
+#include "Subject.hpp"
 
 namespace Zappy {
     class Player;
 
-    class Team {
+    class Team : public Subject {
     public:
         Team(const std::string& name, int maxPlayers);
         ~Team();
@@ -24,10 +25,6 @@ namespace Zappy {
         void removePlayer(Player* player);
         void removePlayer(Player* player) const;  // Const version for const Team references
         const std::vector<Player*>& getPlayers() const { return players_; }
-        
-        // Observer pattern
-        void attach(Observer* observer);
-        void detach(Observer* observer);
 
         // Game mechanics
         bool hasWon() const;
@@ -42,6 +39,5 @@ namespace Zappy {
         std::string name_;
         size_t maxPlayers_;
         mutable std::vector<Player*> players_;  // Non-owning pointers, players owned by World
-        std::vector<Observer*> observers_;  // Non-owning pointers
     };
 } 

@@ -14,7 +14,8 @@ SRC += srcs/core/Engine.cpp \
        srcs/core/Spectator.cpp \
        srcs/core/Tile.cpp \
        srcs/core/Resource.cpp \
-       srcs/core/Inventory.cpp
+       srcs/core/Inventory.cpp \
+       srcs/core/Subject.cpp
 
 # Network components
 SRC += srcs/net/NetworkManager.cpp \

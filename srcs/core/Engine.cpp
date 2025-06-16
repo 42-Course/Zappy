@@ -22,26 +22,19 @@ namespace Zappy {
         
         // Set singleton instance
         instance_ = this;
-        
+
         // Initialize teams
         for (const auto& team : config.getTeams()) {
             world_->addTeam(team, config.getMaxPlayersPerTeam());
         }
 
-        // Set up world callbacks
-        world_->setPlayerUpdateCallback([this](int playerId, const Player* player) {
-            network_->handlePlayerUpdate(playerId, player);
-        });
+        setupGameLoop();
+        setupSignalHandlers();
+        registerCommands();
+        welcome();
+    }
 
-        world_->setTeamUpdateCallback([this](const std::string& teamName, const Team* team) {
-            network_->handleTeamUpdate(teamName, team);
-        });
-
-        world_->setMapUpdateCallback([this](int x, int y, const Tile* tile) {
-            network_->handleMapUpdate(x, y, tile);
-        });
-
-        // Set up game loop callbacks
+    void Engine::setupGameLoop() {
         gameLoop_->onUpdate([this]() {
             network_->update();  // Process network events
             watchService_->tick(); // Update watch service
@@ -50,23 +43,6 @@ namespace Zappy {
         gameLoop_->onFixedUpdate([this]() {
             world_->update();    // Update game state
         });
-
-        // Set up signal handlers
-        setupSignalHandlers();
-        
-        // Register commands
-        registerCommands();
-
-        // Show welcome message and initial prompt
-        std::cout << "\033[1;32m=> Booting Zappy in development mode\033[0m\n";
-        std::cout << "\033[1;32m=> ZappyServer version: 42.0\033[0m\n";
-        std::cout << "\033[1;32m=> Run `./Zappy --help` for more startup options\033[0m\n";
-        std::cout << "Zappy listening in single thread mode\n";
-        std::cout << "* C++ version:\t" << __cplusplus << "\n";
-        std::cout << "* Server PID:\t" << getpid() << "\n";
-        std::cout << "* Players:\thttp://host:" << network_->getPlayerPort() << "\n";
-        std::cout << "* Spectators:\thttp://host:" << network_->getSpectatorPort() << "\n\n";
-        std::cout << "$> " << std::flush;
     }
 
     void Engine::registerCommands() {
@@ -103,6 +79,18 @@ namespace Zappy {
         if (instance_ == this) {
             instance_ = nullptr;
         }
+    }
+
+    void Engine::welcome() const {
+        std::cout << "\033[1;32m=> Booting Zappy in development mode\033[0m\n";
+        std::cout << "\033[1;32m=> ZappyServer version: 42.0\033[0m\n";
+        std::cout << "\033[1;32m=> Run `./Zappy --help` for more startup options\033[0m\n";
+        std::cout << "Zappy listening in single thread mode\n";
+        std::cout << "* C++ version:\t" << __cplusplus << "\n";
+        std::cout << "* Server PID:\t" << getpid() << "\n";
+        std::cout << "* Players:\thttp://host:" << network_->getPlayerPort() << "\n";
+        std::cout << "* Spectators:\thttp://host:" << network_->getSpectatorPort() << "\n\n";
+        std::cout << "$> " << std::flush;
     }
 
     void Engine::setupSignalHandlers() {

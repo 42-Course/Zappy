@@ -26,7 +26,6 @@ namespace Zappy {
         void update();
 
         // Connection management
-        void addClient(std::unique_ptr<ClientConnection> client);
         void removeClient(int clientId);
         ClientConnection* getClient(int clientId);
         const ClientConnection* getClient(int clientId) const;
@@ -43,18 +42,13 @@ namespace Zappy {
         // Command handling
         void registerCommandHandler(const std::string& command, CommandHandler handler);
         void registerServerCommandHandler(const std::string& command, CommandHandler handler);
-        void handleCommand(const std::string& command, ClientConnection* client);
+        // void handleCommand(const std::string& command, ClientConnection* client);
 
         // Command introspection
         std::vector<std::string> getServerCommandNames() const;
         std::unique_ptr<Command> createServerCommand(const std::string& command, 
                                                    const std::vector<std::string>& tokens = {},
                                                    ClientConnection* client = nullptr) const;
-
-        // World update handlers
-        void handlePlayerUpdate(int playerId, const Player* player);
-        void handleTeamUpdate(const std::string& teamName, const Team* team);
-        void handleMapUpdate(int x, int y, const Tile* tile);
 
         // Observer interface implementation
         void onPlayerMoved(const Player* player) override;
@@ -68,19 +62,6 @@ namespace Zappy {
         void onResourceAdded(const Tile* tile, ResourceType type) override;
         void onResourceRemoved(const Tile* tile, ResourceType type) override;
 
-        // Team management
-        void registerTeam(const std::string& name, Team* team);
-        void unregisterTeam(const std::string& name);
-
-        // Player management
-        void registerPlayer(Player* player);
-        void unregisterPlayer(Player* player);
-
-        // Map updates
-        void updateTile(int x, int y, const Tile* tile);
-        void registerTile(Tile* tile);
-        void unregisterTile(Tile* tile);
-
     private:
         void initializeEpoll();
         void acceptNewConnections();
@@ -88,7 +69,6 @@ namespace Zappy {
         void handleStdinCommand();
         void cleanup();
         void broadcastToSpectators(const std::string& message);
-        void sendTeamInfoToSpectator(ClientConnection* spectator);
         void sendInitialStateToSpectator(ClientConnection* spectator);
 
         World& world_;  // Reference to World
@@ -104,12 +84,5 @@ namespace Zappy {
         
         static const int MAX_EVENTS = 64;
         bool running_;
-        
-        std::string stdinBuffer_;
-
-        std::vector<Player*> players_;  // Non-owning pointers
-        std::vector<Team*> teams_;      // Non-owning pointers
-        std::vector<Tile*> tiles_;      // Non-owning pointers
-        std::set<int> spectatorsWithTeamInfo_;  // Track which spectators have received team info
     };
 } 

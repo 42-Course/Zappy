@@ -146,9 +146,6 @@ namespace Zappy {
                     break;
                 }
                 
-                // Set client socket to non-blocking
-                Socket::setNonBlocking(clientFd);
-                
                 // Create new client connection
                 auto client = std::make_unique<ClientConnection>(clientFd);
                 
@@ -163,7 +160,7 @@ namespace Zappy {
                 
                 // Add to epoll
                 epoll_event ev;
-                ev.events = EPOLLIN | EPOLLOUT | EPOLLET;  // Edge-triggered
+                ev.events = EPOLLIN | EPOLLOUT | EPOLLET;  // Edge-triggered (man epoll)
                 ev.data.fd = clientFd;
                 
                 if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, clientFd, &ev) == -1) {
@@ -176,54 +173,42 @@ namespace Zappy {
         }
     }
 
-    void NetworkManager::sendTeamInfoToSpectator(ClientConnection* spectator) {
-        if (!spectator || spectator->getType() != ClientConnection::Type::Spectator) {
-            return;
-        }
-
-        // Send team names
-        for (const auto* team : teams_) {
-            if (team) {
-                std::stringstream ss;
-                ss << "tna " << team->getName() << "\n";
-                spectator->sendData(ss.str());
-            }
-        }
-    }
 
     void NetworkManager::sendInitialStateToSpectator(ClientConnection* spectator) {
         if (!spectator || spectator->getType() != ClientConnection::Type::Spectator) {
             return;
         }
 
-        // Send map size
         const Map& map = world_.getMap();
-        std::stringstream ss;
-        ss << "msz " << map.getWidth() << " " << map.getHeight() << "\n";
-        spectator->sendData(ss.str());
+        const std::vector<std::unique_ptr<Team>>& teams = world_.getTeams();
 
-        // Send team info
-        sendTeamInfoToSpectator(spectator);
+        // Map size
+        std::stringstream ss;
+        ss << "msz " << map.getWidth() << " " << map.getHeight() << std::endl;
+//        spectator->sendData(ss.str());
+
+        // Team names
+        for (const auto& team : teams) {
+            ss << "tna " << team->getName() << std::endl;
+        }
 
         // Send current state of all tiles
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
-                const Tile* tile = map.getTile(x, y);
-                if (tile) {
-                    handleMapUpdate(x, y, tile);
-                }
-            }
-        }
+        // for (int y = 0; y < map.getHeight(); ++y) {
+        //     for (int x = 0; x < map.getWidth(); ++x) {
+        //         const Tile* tile = map.getTile(x, y);
+        //         if (tile) {
+        //             handleMapUpdate(x, y, tile);
+        //         }
+        //     }
+        // }
 
         // Send current state of all players
-        for (const auto& [id, player] : world_.getPlayers()) {
-            if (player) {
-                onPlayerAdded(player.get());
-            }
-        }
-
-        // Mark spectator as having received team info
-        spectatorsWithTeamInfo_.insert(spectator->getFd());
+        // for (const auto& [id, player] : world_.getPlayers()) {
+        //     if (player) {
+        //         onPlayerAdded(player.get());
+        //     }
+        // }
+       spectator->sendData(ss.str());
     }
 
     void NetworkManager::handleClientData() {
@@ -288,17 +273,9 @@ namespace Zappy {
         }
     }
 
-    void NetworkManager::addClient(std::unique_ptr<ClientConnection> client) {
-        clients_[client->getFd()] = std::move(client);
-    }
-
     void NetworkManager::removeClient(int clientId) {
         auto it = clients_.find(clientId);
         if (it != clients_.end()) {
-            // Remove from spectators with team info if it was a spectator
-            if (it->second->getType() == ClientConnection::Type::Spectator) {
-                spectatorsWithTeamInfo_.erase(clientId);
-            }
             epoll_ctl(epollFd_, EPOLL_CTL_DEL, clientId, nullptr);
             clients_.erase(it);
         }
@@ -318,25 +295,27 @@ namespace Zappy {
         commandRouter_->registerHandler(command, handler);
     }
 
-    void NetworkManager::handleCommand(const std::string& command, ClientConnection* client) {
-        auto cmd = commandRouter_->routeCommand(command, client);
-        if (cmd) {
-            cmd->execute();
-        }
-    }
+    // void NetworkManager::handleCommand(const std::string& command, ClientConnection* client) {
+    //     auto cmd = commandRouter_->routeCommand(command, client);
+    //     if (cmd) {
+    //         cmd->execute();
+    //     }
+    // }
 
     void NetworkManager::handleStdinCommand() {
         char buf[1024];
+        std::string stdinBuffer;
+
         ssize_t bytesRead = read(STDIN_FILENO, buf, sizeof(buf) - 1);
         
         if (bytesRead > 0) {
             buf[bytesRead] = '\0';
-            stdinBuffer_ += buf;
+            stdinBuffer += buf;
             
             // Process complete lines
             size_t pos;
-            while ((pos = stdinBuffer_.find('\n')) != std::string::npos) {
-                std::string cmd = stdinBuffer_.substr(0, pos);
+            while ((pos = stdinBuffer.find('\n')) != std::string::npos) {
+                std::string cmd = stdinBuffer.substr(0, pos);
                 if (!cmd.empty() && cmd.back() == '\r') {
                     cmd.pop_back();
                 }
@@ -350,7 +329,7 @@ namespace Zappy {
                     std::cout << "$> " << std::flush;
                 }
                 
-                stdinBuffer_.erase(0, pos + 1);
+                stdinBuffer.erase(0, pos + 1);
             }
         }
     }
@@ -455,77 +434,6 @@ namespace Zappy {
         broadcastToSpectators(bct);
     }
 
-    void NetworkManager::registerPlayer(Player* player) {
-        if (player) {
-            player->attach(this);
-            players_.push_back(player);
-        }
-    }
-
-    void NetworkManager::unregisterPlayer(Player* player) {
-        if (player) {
-            player->detach(this);
-            players_.erase(
-                std::remove(players_.begin(), players_.end(), player),
-                players_.end()
-            );
-        }
-    }
-
-    void NetworkManager::handleTeamUpdate(const std::string& teamName, const Team* team) {
-        if (!team) {
-            // Team was removed
-            std::stringstream ss;
-            ss << "tna " << teamName << "\n";
-            broadcastToSpectators(ss.str());
-            return;
-        }
-
-        // Only send team updates to spectators that haven't received initial state
-        for (const auto& [fd, client] : clients_) {
-            if (client->getType() == ClientConnection::Type::Spectator && 
-                spectatorsWithTeamInfo_.find(fd) == spectatorsWithTeamInfo_.end()) {
-                std::stringstream ss;
-                ss << "tna " << teamName << "\n";
-                client->sendData(ss.str());
-            }
-        }
-    }
-
-    void NetworkManager::handleMapUpdate(int x, int y, const Tile* tile) {
-        if (!tile) {
-            return;
-        }
-
-        // Broadcast tile update to spectators
-        std::string bct = "bct " + std::to_string(x) + " " + std::to_string(y) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::FOOD)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::LINEMATE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::DERAUMERE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::SIBUR)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::MENDIANE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::PHIRAS)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::THYSTAME)) + "\n";
-        broadcastToSpectators(bct);
-    }
-
-    void NetworkManager::registerTile(Tile* tile) {
-        if (tile) {
-            tile->attach(this);
-            tiles_.push_back(tile);
-        }
-    }
-
-    void NetworkManager::unregisterTile(Tile* tile) {
-        if (tile) {
-            tile->detach(this);
-            tiles_.erase(
-                std::remove(tiles_.begin(), tiles_.end(), tile),
-                tiles_.end()
-            );
-        }
-    }
-
     void NetworkManager::onPlayerAdded(const Player* player) {
         if (!player) return;
         std::stringstream ss;
@@ -551,38 +459,21 @@ namespace Zappy {
         ss << "seg " << team->getName() << "\n";
         broadcastToSpectators(ss.str());
     }
-
-    void NetworkManager::handlePlayerUpdate(int playerId, const Player* player) {
-        if (!player) return;
-
-        // Get the client connection for this player
-        auto it = clients_.find(playerId);
-        if (it == clients_.end()) return;
-
-        ClientConnection* client = it->second.get();
-        if (!client) return;
-
-        // Send player state update
-        std::stringstream ss;
-        ss << "pin " << player->getId() << " "
-           << player->getX() << " "
-           << player->getY() << " "
-           << static_cast<int>(player->getDirection()) << " "
-           << player->getLevel() << " "
-           << player->getTeam().getName() << "\n";
-        client->sendData(ss.str());
-
-        // Send inventory update
-        const auto& inventory = player->getInventory();
-        std::stringstream inv;
-        inv << "pinv " << player->getId() << " "
-            << inventory.getCount(ResourceType::FOOD) << " "
-            << inventory.getCount(ResourceType::LINEMATE) << " "
-            << inventory.getCount(ResourceType::DERAUMERE) << " "
-            << inventory.getCount(ResourceType::SIBUR) << " "
-            << inventory.getCount(ResourceType::MENDIANE) << " "
-            << inventory.getCount(ResourceType::PHIRAS) << " "
-            << inventory.getCount(ResourceType::THYSTAME) << "\n";
-        client->sendData(inv.str());
-    }
 } 
+
+// void NetworkManager::handleMapUpdate(int x, int y, const Tile* tile) {
+//     if (!tile) {
+//         return;
+//     }
+
+//     // Broadcast tile update to spectators
+//     std::string bct = "bct " + std::to_string(x) + " " + std::to_string(y) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::FOOD)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::LINEMATE)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::DERAUMERE)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::SIBUR)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::MENDIANE)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::PHIRAS)) + " " +
+//                      std::to_string(tile->getResourceCount(ResourceType::THYSTAME)) + "\n";
+//     broadcastToSpectators(bct);
+// }

@@ -19,6 +19,7 @@ namespace Zappy {
         
         void start();
         void stop();
+        void setupGameLoop();
         
         // Accessors for subsystems
         World& getWorld() { return *world_; }
@@ -27,6 +28,7 @@ namespace Zappy {
         WatchService& getWatchService() { return *watchService_; }
         
         bool isRunning() const { return running_; }
+        void welcome() const;
         
         // Signal handling
         static void setupSignalHandlers();

@@ -6,6 +6,8 @@
 #include "commands/server/ClearCommand.hpp"
 #include "commands/spectator/MSZCommand.hpp"
 #include "commands/spectator/BCTCommand.hpp"
+#include "commands/spectator/MCTCommand.hpp"
+#include "commands/spectator/TNACommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -77,6 +79,15 @@ namespace Zappy {
         network_->registerSpectatorCommand("bct", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<BCTCommand>(*world_, tokens, client);
         });
+
+        network_->registerSpectatorCommand("mct", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<MCTCommand>(*world_, tokens, client);
+        });
+
+        network_->registerSpectatorCommand("tna", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<TNACommand>(*world_, tokens, client);
+        });
+
     }
 
     Engine::~Engine() {

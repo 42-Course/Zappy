@@ -32,7 +32,9 @@ SRC += srcs/commands/Command.cpp \
 
 # Spectator Commands
 SRC += srcs/commands/spectator/MSZCommand.cpp \
-       srcs/commands/spectator/BCTCommand.cpp
+       srcs/commands/spectator/BCTCommand.cpp \
+       srcs/commands/spectator/MCTCommand.cpp \
+       srcs/commands/spectator/TNACommand.cpp
 
 # Player Commands
 # To be added...

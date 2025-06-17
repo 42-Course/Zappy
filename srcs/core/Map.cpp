@@ -121,6 +121,11 @@ namespace Zappy {
         }
     }
 
+    std::string Map::toMszString() const {
+        return "msz " + std::to_string(width_) + " " + std::to_string(height_) + "\n";
+    }
+
+
     void Map::update() {
         // Update map state if needed
         // For example, resource regeneration timers

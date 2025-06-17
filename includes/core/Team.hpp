@@ -30,6 +30,8 @@ namespace Zappy {
         bool hasWon() const;
         void update();
 
+        // Serialization helpers for network responses
+        std::string toTnaString() const;
     protected:
         void notifyPlayerAdded(const Player* player) const;
         void notifyPlayerRemoved(const Player* player) const;

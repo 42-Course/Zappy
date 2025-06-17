@@ -61,6 +61,10 @@ namespace Zappy {
         }
     }
 
+    std::string Team::toTnaString() const {
+        return "tna " + name_ + "\n";
+    }
+
     bool Team::hasWon() const {
         // A team wins when it has 6 players at level 8
         int levelEightPlayers = 0;

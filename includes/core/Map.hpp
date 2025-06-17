@@ -42,6 +42,8 @@ namespace Zappy {
         using MapUpdateCallback = std::function<void(int x, int y, const Tile* tile)>;
         void setUpdateCallback(MapUpdateCallback callback) { updateCallback_ = callback; }
 
+        // Serialization helpers for network responses
+        std::string toMszString() const;
     private:
         int width_;
         int height_;

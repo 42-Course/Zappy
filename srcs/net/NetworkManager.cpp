@@ -127,8 +127,7 @@ namespace Zappy {
 
         client->sendData("WELCOME\n");
 
-        const Map& map = world_.getMap();
-        client->sendData("msz " + std::to_string(map.getWidth()) + " " + std::to_string(map.getHeight()) + "\n");
+        client->sendData(world_.getMap().toMszString());
 
         broadcaster_.broadcast(client->getPlayer()->toPnwString());
         return true;
@@ -196,15 +195,14 @@ namespace Zappy {
         }
 
         const Map& map = world_.getMap();
-        const std::vector<std::unique_ptr<Team>>& teams = world_.getTeams();
 
         // Map size
         std::stringstream ss;
-        ss << "msz " << map.getWidth() << " " << map.getHeight() << std::endl;
+        ss << map.toMszString();
 
         // Team names
-        for (const auto& team : teams) {
-            ss << "tna " << team->getName() << std::endl;
+        for (const auto& team : world_.getTeams()) {
+            ss << team->toTnaString();
         }
 
         // Players
@@ -254,10 +252,9 @@ namespace Zappy {
                     if (command) {
                         command->execute();
                     }
-                    // Prompt after command execution
-                    std::cout << "$> " << std::flush;
                 }
                 
+                std::cout << "$> " << std::flush;
                 stdinBuffer.erase(0, pos + 1);
             }
         }

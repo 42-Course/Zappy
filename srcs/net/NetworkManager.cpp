@@ -183,7 +183,14 @@ namespace Zappy {
             ss << "tna " << team->getName() << std::endl;
         }
 
-        // Send current state of all tiles
+        // Players
+        for (const auto& [id, player] : world_.getPlayers()) {
+            if (player) {
+                ss << player->toPnwString();
+            }
+        }
+
+        // Tiles
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
                 const Tile* tile = map.getTile(x, y);
@@ -192,21 +199,7 @@ namespace Zappy {
                 ss << tile->toBctString(x, y);
             }
         }
-        // for (int y = 0; y < map.getHeight(); ++y) {
-        //     for (int x = 0; x < map.getWidth(); ++x) {
-        //         const Tile* tile = map.getTile(x, y);
-        //         if (tile) {
-        //             handleMapUpdate(x, y, tile);
-        //         }
-        //     }
-        // }
 
-        // Send current state of all players
-        // for (const auto& [id, player] : world_.getPlayers()) {
-        //     if (player) {
-        //         onPlayerAdded(player.get());
-        //     }
-        // }
        spectator->sendData(ss.str());
     }
 

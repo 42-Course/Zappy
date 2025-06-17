@@ -57,6 +57,14 @@ namespace Zappy {
         // State updates
         void update();
 
+        // Serialization helpers for network responses
+        std::string toPnwString() const;  // Player new
+        std::string toPpoString() const;  // Position
+        std::string toPlvString() const;  // Level
+        std::string toPinString() const;  // Inventory
+        std::string toPexString() const;  // Expel
+        std::string toPbcString(const std::string& message) const;  // Broadcast
+
     protected:
         void notifyMoved() const;
         void notifyTurned() const;

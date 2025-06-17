@@ -167,4 +167,46 @@ namespace Zappy {
         // - Check for level up conditions
         // - Handle ongoing actions
     }
+
+    std::string Player::toPnwString() const {
+        return "pnw " + std::to_string(id_) + " " +
+            std::to_string(x_) + " " +
+            std::to_string(y_) + " " +
+            std::to_string(static_cast<int>(direction_)) + " " +
+            std::to_string(level_) + " " +
+            team_.getName() + "\n";
+    }
+
+
+    std::string Player::toPpoString() const {
+        return "ppo " + std::to_string(id_) + " " +
+            std::to_string(x_) + " " +
+            std::to_string(y_) + " " +
+            std::to_string(static_cast<int>(direction_)) + "\n";
+    }
+
+    std::string Player::toPlvString() const {
+        return "plv " + std::to_string(id_) + " " +
+            std::to_string(level_) + "\n";
+    }
+
+    std::string Player::toPinString() const {
+        std::string result = "pin " + std::to_string(id_) + " " +
+                            std::to_string(x_) + " " +
+                            std::to_string(y_);
+        for (int i = 0; i < static_cast<int>(ResourceType::THYSTAME); ++i) {
+            result += " " + std::to_string(inventory_.getCount(static_cast<ResourceType>(i)));
+        }
+        result += "\n";
+        return result;
+    }
+
+    std::string Player::toPexString() const {
+        return "pex " + std::to_string(id_) + "\n";
+    }
+
+    std::string Player::toPbcString(const std::string& message) const {
+        return "pbc " + std::to_string(id_) + " " + message + "\n";
+    }
+
 } 

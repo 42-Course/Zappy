@@ -84,7 +84,7 @@ void WatchService::printServerInfo() const {
     int spectatorCount = 0;
     
     // Count client types
-    for (const auto& client : network.getClients()) {
+    for (const auto& client : network.getClientManager().getClients()) {
         totalClients++;
         if (client.second->getType() == ClientConnection::Type::Spectator) {
             spectatorCount++;

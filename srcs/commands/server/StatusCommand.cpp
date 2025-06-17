@@ -38,7 +38,7 @@ CommandStatus StatusCommand::execute() {
     std::cout << "\nNetwork:\n";
     std::cout << "  Player Port: " << network.getPlayerPort() << "\n";
     std::cout << "  Spectator Port: " << network.getSpectatorPort() << "\n";
-    std::cout << "  Connected Clients: " << network.getClients().size() << "\n";
+    std::cout << "  Connected Clients: " << network.connectedClientsSize() << "\n";
     
     // World status
     auto& world = engine_.getWorld();

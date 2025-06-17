@@ -2,6 +2,7 @@
 #include "commands/Command.hpp"
 #include <stdexcept>
 #include <unistd.h>
+#include <cstring>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -14,10 +15,8 @@
 #include "net/CommandRouter.hpp"
 
 namespace Zappy {
-    // NetworkManager implementation
     NetworkManager::NetworkManager(World& world, int playerPort, int spectatorPort)
         : world_(world)
-        , epollFd_(-1)
         , playerSocket_(AF_INET, SOCK_STREAM, 0)
         , spectatorSocket_(AF_INET, SOCK_STREAM, 0)
         , playerPort_(playerPort)
@@ -52,52 +51,30 @@ namespace Zappy {
             if (listen(spectatorSocket_.getFd(), SOMAXCONN) == -1) {
                 throw std::runtime_error("Failed to listen on spectator socket");
             }
-            
-            initializeEpoll();
-            
-            // Add server sockets to epoll
-            epoll_event ev;
-            ev.events = EPOLLIN | EPOLLET;
-            
-            ev.data.fd = getPlayerServerFd();
-            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, getPlayerServerFd(), &ev) == -1) {
-                throw std::runtime_error("Failed to add player server to epoll");
-            }
-            
-            ev.data.fd = getSpectatorServerFd();
-            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, getSpectatorServerFd(), &ev) == -1) {
-                throw std::runtime_error("Failed to add spectator server to epoll");
-            }
-
-            // Add stdin to epoll
-            ev.data.fd = STDIN_FILENO;
-            if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, STDIN_FILENO, &ev) == -1) {
-                throw std::runtime_error("Failed to add stdin to epoll");
-            }
         } catch (...) {
             std::cerr << "NetworkManager constructor failed" << std::endl;
-            cleanup();
             throw;
         }
     }
 
-    NetworkManager::~NetworkManager() {
-        cleanup();
-    }
-
-    void NetworkManager::cleanup() {
-        if (epollFd_ != -1) close(epollFd_);
-        epollFd_ = -1;
-    }
-
-    void NetworkManager::initializeEpoll() {
-        epollFd_ = epoll_create1(0);
-        if (epollFd_ == -1) {
-            throw std::runtime_error("Failed to create epoll instance");
-        }
-    }
-
     void NetworkManager::start() {
+        // Register player socket
+        eventLoop_.addFd(playerSocket_.getFd(), EPOLLIN | EPOLLET, [this](uint32_t events) {
+            if (events & EPOLLIN)
+                acceptNewConnection(playerSocket_.getFd(), ClientConnection::Type::Player);
+        });
+
+        // Register spectator socket
+        eventLoop_.addFd(spectatorSocket_.getFd(), EPOLLIN | EPOLLET, [this](uint32_t events) {
+            if (events & EPOLLIN)
+                acceptNewConnection(spectatorSocket_.getFd(), ClientConnection::Type::Spectator);
+        });
+
+        // Register STDIN
+        eventLoop_.addFd(STDIN_FILENO, EPOLLIN, [this](uint32_t events) {
+            if (events & EPOLLIN)
+                handleStdinCommand();
+        });
         running_ = true;
     }
 
@@ -108,71 +85,80 @@ namespace Zappy {
     void NetworkManager::update() {
         if (!running_) return;
 
-        events_.resize(MAX_EVENTS);
-        int nfds = epoll_wait(epollFd_, events_.data(), MAX_EVENTS, 0);
-        if (nfds == -1) {
-            if (errno != EINTR) {
-                throw std::runtime_error("epoll_wait failed");
-            }
-            return;
-        }
-
-        for (int n = 0; n < nfds; ++n) {
-            if (events_[n].data.fd == STDIN_FILENO) {
-                handleStdinCommand();
-            } else if (events_[n].data.fd == getPlayerServerFd() || events_[n].data.fd == getSpectatorServerFd()) {
-                acceptNewConnections();
-                std::cout << "acceptNewConnections" << std::endl;
-            } else {
-                handleClientData();
-                std::cout << "handleClientData" << std::endl;
-            }
-        }
+        eventLoop_.poll();
     }
 
-    void NetworkManager::acceptNewConnections() {
-        struct sockaddr_in clientAddr;
+    void NetworkManager::acceptNewConnection(int serverFd, ClientConnection::Type type) {
+        sockaddr_in clientAddr;
         socklen_t clientLen = sizeof(clientAddr);
-        
-        // Accept connections on both server sockets
-        for (int serverFd : {getPlayerServerFd(), getSpectatorServerFd()}) {
-            while (running_) {
-                int clientFd = accept(serverFd, (struct sockaddr*)&clientAddr, &clientLen);
-                
-                if (clientFd == -1) {
-                    if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                        throw std::runtime_error("Accept failed");
-                    }
+
+        while (true) {
+            int clientFd = ::accept(serverFd, reinterpret_cast<sockaddr*>(&clientAddr), &clientLen);
+            if (clientFd == -1) {
+                if (errno == EAGAIN || errno == EWOULDBLOCK)
                     break;
-                }
-                
-                // Create new client connection
-                auto client = std::make_unique<ClientConnection>(clientFd);
-                
-                // Set initial client type based on which server accepted it
-                if (serverFd == getPlayerServerFd()) {
-                    client->setType(ClientConnection::Type::Player);
-                } else {
-                    client->setType(ClientConnection::Type::Spectator);
-                    // Send initial state to new spectator
-                    sendInitialStateToSpectator(client.get());
-                }
-                
-                // Add to epoll
-                epoll_event ev;
-                ev.events = EPOLLIN | EPOLLOUT | EPOLLET;  // Edge-triggered (man epoll)
-                ev.data.fd = clientFd;
-                
-                if (epoll_ctl(epollFd_, EPOLL_CTL_ADD, clientFd, &ev) == -1) {
-                    throw std::runtime_error("Failed to add client to epoll");
-                }
-                
-                // Store client connection
-                clients_[clientFd] = std::move(client);
+                throw std::runtime_error("accept failed: " + std::string(std::strerror(errno)));
             }
+
+            auto conn = std::make_unique<ClientConnection>(clientFd);
+            conn->setType(type);
+
+            if (type == ClientConnection::Type::Spectator)
+                sendInitialStateToSpectator(conn.get());
+
+            clientManager_.addClient(clientFd, std::move(conn));
+
+            eventLoop_.addFd(clientFd, EPOLLIN | EPOLLOUT | EPOLLET, [this, clientFd](uint32_t events) {
+                handleClientEvent(clientFd, events);
+            });
         }
     }
 
+    void NetworkManager::handleClientEvent(int clientFd, uint32_t events) {
+        ClientConnection* client = clientManager_.getClient(clientFd);
+        if (!client) return;
+
+        if (events & EPOLLIN) {
+            if (!client->readData()) {
+                clientManager_.removeClient(clientFd);
+                return;
+            }
+
+            while (client->hasCompleteCommand()) {
+                auto cmdLine = client->getNextCommand();
+                std::string cmdName = CommandRouter::getCommandName(cmdLine);
+
+                // Check if client can execute this command
+                if (!client->canExecuteCommand(cmdName)) {
+                    if (client->getType() == ClientConnection::Type::Player && 
+                        client->getState() == ClientConnection::State::UNREGISTERED) {
+                        client->sendData("ko\n");  // Invalid command for unregistered player
+                    }
+                    continue;
+                }
+
+                // Route to appropriate command handler based on client type
+                std::unique_ptr<Command> command;
+                if (client->getType() == ClientConnection::Type::Spectator) {
+                    command = commandRouter_->routeCommand(cmdLine, client);
+                } else if (client->getType() == ClientConnection::Type::Player) {
+                    command = commandRouter_->routeCommand(cmdLine, client);
+                }
+
+                if (command) {
+                    command->execute();
+                } else {
+                    client->sendData("ko\n");  // Unknown command
+                }
+            }
+        }
+
+        if (events & (EPOLLERR | EPOLLHUP)) {
+            clientManager_.removeClient(clientFd);
+        }
+
+        // TODO: handle EPOLLOUT if you have outgoing write queues
+    }
 
     void NetworkManager::sendInitialStateToSpectator(ClientConnection* spectator) {
         if (!spectator || spectator->getType() != ClientConnection::Type::Spectator) {
@@ -211,96 +197,13 @@ namespace Zappy {
        spectator->sendData(ss.str());
     }
 
-    void NetworkManager::handleClientData() {
-        for (const auto& event : events_) {
-            if (event.data.fd == getPlayerServerFd() || event.data.fd == getSpectatorServerFd()) {
-                continue;  // Skip server sockets
-            }
-            
-            auto it = clients_.find(event.data.fd);
-            if (it == clients_.end()) {
-                continue;  // Client not found
-            }
-            
-            auto& client = it->second;
-            
-            // Handle readable events
-            if (event.events & EPOLLIN) {
-                if (!client->readData()) {
-                    removeClient(event.data.fd);
-                    continue;
-                }
-                
-                // Process any complete commands
-                while (client->hasCompleteCommand()) {
-                    std::string commandLine = client->getNextCommand();
-                    std::string commandName = CommandRouter::getCommandName(commandLine);
-
-                    // Check if client can execute this command
-                    if (!client->canExecuteCommand(commandName)) {
-                        if (client->getType() == ClientConnection::Type::Player && 
-                            client->getState() == ClientConnection::State::UNREGISTERED) {
-                            client->sendData("ko\n");  // Invalid command for unregistered player
-                        }
-                        continue;
-                    }
-
-                    // Route to appropriate command handler based on client type
-                    std::unique_ptr<Command> command;
-                    if (client->getType() == ClientConnection::Type::Spectator) {
-                        command = commandRouter_->routeCommand(commandLine, client.get());
-                    } else if (client->getType() == ClientConnection::Type::Player) {
-                        command = commandRouter_->routeCommand(commandLine, client.get());
-                    }
-
-                    if (command) {
-                        command->execute();
-                    } else {
-                        client->sendData("ko\n");  // Unknown command
-                    }
-                }
-            }
-            
-            // Handle writable events if needed
-            if (event.events & EPOLLOUT) {
-                // Handle any pending writes
-            }
-            
-            // Handle error conditions
-            if (event.events & (EPOLLERR | EPOLLHUP)) {
-                removeClient(event.data.fd);
-            }
-        }
-    }
-
-    void NetworkManager::removeClient(int clientId) {
-        auto it = clients_.find(clientId);
-        if (it != clients_.end()) {
-            epoll_ctl(epollFd_, EPOLL_CTL_DEL, clientId, nullptr);
-            clients_.erase(it);
-        }
-    }
-
-    ClientConnection* NetworkManager::getClient(int clientId) {
-        auto it = clients_.find(clientId);
-        return it != clients_.end() ? it->second.get() : nullptr;
-    }
-
-    const ClientConnection* NetworkManager::getClient(int clientId) const {
-        auto it = clients_.find(clientId);
-        return it != clients_.end() ? it->second.get() : nullptr;
+    size_t NetworkManager::connectedClientsSize() const {
+        return clientManager_.getClients().size();
     }
 
     void NetworkManager::registerCommandHandler(const std::string& command, CommandHandler handler) {
         commandRouter_->registerHandler(command, handler);
     }
-
-    // void NetworkManager::handleCommand(const std::string& command, ClientConnection* client) {
-    //     auto cmd = commandRouter_->routeCommand(command, client);
-    //     if (cmd) {
-    //         cmd->execute();
-    //     }
-    // }
 
     void NetworkManager::handleStdinCommand() {
         char buf[1024];
@@ -349,7 +252,7 @@ namespace Zappy {
     }
 
     void NetworkManager::broadcastToSpectators(const std::string& message) {
-        for (const auto& [fd, client] : clients_) {
+        for (const auto& [fd, client] : clientManager_.getClients()) {
             if (client->getType() == ClientConnection::Type::Spectator) {
                 client->sendData(message);
             }

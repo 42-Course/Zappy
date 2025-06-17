@@ -8,6 +8,8 @@
 #include "net/Socket.hpp"
 #include "ClientConnection.hpp"
 #include "CommandRouter.hpp"
+#include "EventLoop.hpp"
+#include "ClientManager.hpp"
 #include "commands/Command.hpp"
 #include "core/Player.hpp"
 #include "core/Team.hpp"
@@ -19,17 +21,15 @@ namespace Zappy {
     class NetworkManager : public IObserver {
     public:
         NetworkManager(World& world, int playerPort, int spectatorPort);
-        ~NetworkManager();
+        ~NetworkManager() = default;
 
         void start();
         void stop();
         void update();
 
-        // Connection management
-        void removeClient(int clientId);
-        ClientConnection* getClient(int clientId);
-        const ClientConnection* getClient(int clientId) const;
-        const std::map<int, std::unique_ptr<ClientConnection>>& getClients() const { return clients_; }
+        // Client Manager
+        const ClientManager& getClientManager() const { return clientManager_; }
+        size_t connectedClientsSize() const;
 
         // Port getters
         int getPlayerPort() const { return playerPort_; }
@@ -63,25 +63,28 @@ namespace Zappy {
         void onResourceRemoved(const Tile* tile, ResourceType type) override;
 
     private:
-        void initializeEpoll();
-        void acceptNewConnections();
-        void handleClientData();
+        void acceptNewConnection(int serverFd, ClientConnection::Type type);
+        void handleClientEvent(int clientFd, uint32_t events);
         void handleStdinCommand();
         void cleanup();
         void broadcastToSpectators(const std::string& message);
         void sendInitialStateToSpectator(ClientConnection* spectator);
 
         World& world_;  // Reference to World
-        int epollFd_;
         Socket playerSocket_;
         Socket spectatorSocket_;
         int playerPort_;
         int spectatorPort_;
-        std::vector<epoll_event> events_;
-        std::map<int, std::unique_ptr<ClientConnection>> clients_;
         std::unique_ptr<CommandRouter> commandRouter_;
         std::unique_ptr<CommandRouter> serverCommandRouter_;
         
+
+
+        EventLoop eventLoop_;
+        ClientManager clientManager_;
+        // Socket playerSocket_;
+        // Socket spectatorSocket_;
+
         static const int MAX_EVENTS = 64;
         bool running_;
     };

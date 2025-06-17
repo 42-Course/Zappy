@@ -21,7 +21,10 @@ SRC += srcs/core/Engine.cpp \
 SRC += srcs/net/NetworkManager.cpp \
        srcs/net/ClientConnection.cpp \
        srcs/net/CommandRouter.cpp \
-       srcs/net/Socket.cpp
+       srcs/net/Socket.cpp \
+       srcs/net/EventLoop.cpp \
+       srcs/net/ClientManager.cpp 
+
 
 # Command System
 SRC += srcs/commands/Command.cpp \

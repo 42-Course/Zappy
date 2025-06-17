@@ -4,7 +4,7 @@
 
 namespace Zappy {
 
-MSZCommand::MSZCommand(ClientConnection* client, World* world)
+MSZCommand::MSZCommand(World& world, ClientConnection* client)
     : Command("msz", CommandType::SPECTATOR, 0, client), world_(world) {}
 
 bool MSZCommand::parseArgs(const std::vector<std::string>& args) {
@@ -17,24 +17,11 @@ bool MSZCommand::parseArgs(const std::vector<std::string>& args) {
     return validateArgCount(0);
 }
 
-CommandStatus MSZCommand::execute() {
-    if (!world_) {
-        setErrorMessage("World not initialized");
-        return CommandStatus::FAILED;
-    }
-    
+CommandStatus MSZCommand::execute() {    
     try {
-        // Format: msz X Y
-        const Map& map = world_->getMap();
-        std::string response = getName() + " " + 
-            std::to_string(map.getWidth()) + " " + 
-            std::to_string(map.getHeight()) + "\n";
+        getClient()->sendData(world_.getMap().toMszString());
         
-        // Send response to client
-        getClient()->sendData(response);
-        
-        logCommand("Sent map size: " + std::to_string(map.getWidth()) + 
-                  "x" + std::to_string(map.getHeight()));
+        logCommand("Sent map size");
         
         return CommandStatus::COMPLETED;
     } catch (const std::exception& e) {

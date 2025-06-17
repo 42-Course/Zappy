@@ -2,20 +2,22 @@
 
 #include "commands/Command.hpp"
 #include "net/ClientConnection.hpp"
+#include "core/World.hpp"
 
 namespace Zappy {
 
-class World;  // Forward declaration
+class World;
 
-class MSZCommand : public Command {
+class BCTCommand : public Command {
 public:
-    MSZCommand( World& world, ClientConnection* client);
-    
+    BCTCommand(World& world, const std::vector<std::string>& tokens, ClientConnection* client);
     CommandStatus execute() override;
     bool parseArgs(const std::vector<std::string>& args) override;
 
 private:
     World& world_;
+    int x_;
+    int y_;
 };
 
-} // namespace Zappy 
+}  // namespace Zappy

@@ -5,6 +5,7 @@
 #include "commands/server/WatchCommand.hpp"
 #include "commands/server/ClearCommand.hpp"
 #include "commands/spectator/MSZCommand.hpp"
+#include "commands/spectator/BCTCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -70,7 +71,11 @@ namespace Zappy {
         // Register spectator command handlers
         network_->registerSpectatorCommand("msz", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             (void)tokens;
-            return std::make_unique<MSZCommand>(client, world_.get());
+            return std::make_unique<MSZCommand>(*world_, client);
+        });
+
+        network_->registerSpectatorCommand("bct", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<BCTCommand>(*world_, tokens, client);
         });
     }
 

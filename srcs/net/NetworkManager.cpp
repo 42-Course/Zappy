@@ -1,4 +1,5 @@
 #include "net/NetworkManager.hpp"
+#include "commands/ICommand.hpp"
 #include "commands/Command.hpp"
 #include <stdexcept>
 #include <unistd.h>
@@ -173,12 +174,10 @@ namespace Zappy {
                         return;
                 }
 
-
-                if (command) {
-                    command->execute();
-                } else {
-                    client->sendData("ko\n");  // Unknown command
-                }
+                if (command && command->getStatus() != CommandStatus::INVALID)
+                    if (command->execute() != CommandStatus::FAILED)
+                        continue ;
+                client->sendData("ko\n");  // Unknown command
             }
         }
 

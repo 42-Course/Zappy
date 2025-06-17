@@ -7,18 +7,19 @@
 #include <sys/epoll.h>
 #include "net/Socket.hpp"
 #include "ClientConnection.hpp"
-#include "CommandRouter.hpp"
 #include "EventLoop.hpp"
 #include "ClientManager.hpp"
+#include "commands/ICommand.hpp"
 #include "commands/Command.hpp"
+#include "commands/CommandDispatcher.hpp"
+#include "services/SpectatorBroadcaster.hpp"
 #include "core/Player.hpp"
 #include "core/Team.hpp"
 #include "core/Tile.hpp"
-#include "core/IObserver.hpp"
 #include "core/World.hpp"
 
 namespace Zappy {
-    class NetworkManager : public IObserver {
+    class NetworkManager {
     public:
         NetworkManager(World& world, int playerPort, int spectatorPort);
         ~NetworkManager() = default;
@@ -40,34 +41,21 @@ namespace Zappy {
         int getSpectatorServerFd() const { return spectatorSocket_.getFd(); }
 
         // Command handling
-        void registerCommandHandler(const std::string& command, CommandHandler handler);
-        void registerServerCommandHandler(const std::string& command, CommandHandler handler);
-        // void handleCommand(const std::string& command, ClientConnection* client);
+        void registerPlayerCommand(const std::string& command, CommandHandler handler);
+        void registerSpectatorCommand(const std::string& command, CommandHandler handler);
+        void registerServerCommand(const std::string& command, CommandHandler handler);
 
         // Command introspection
         std::vector<std::string> getServerCommandNames() const;
-        std::unique_ptr<Command> createServerCommand(const std::string& command, 
+        std::unique_ptr<ICommand> createServerCommand(const std::string& command, 
                                                    const std::vector<std::string>& tokens = {},
                                                    ClientConnection* client = nullptr) const;
-
-        // Observer interface implementation
-        void onPlayerMoved(const Player* player) override;
-        void onPlayerTurned(const Player* player) override;
-        void onPlayerLevelUp(const Player* player) override;
-        void onPlayerInventoryChanged(const Player* player) override;
-        void onPlayerDied(const Player* player) override;
-        void onPlayerAdded(const Player* player) override;
-        void onPlayerRemoved(const Player* player) override;
-        void onTeamWon(const Team* team) override;
-        void onResourceAdded(const Tile* tile, ResourceType type) override;
-        void onResourceRemoved(const Tile* tile, ResourceType type) override;
 
     private:
         void acceptNewConnection(int serverFd, ClientConnection::Type type);
         void handleClientEvent(int clientFd, uint32_t events);
         void handleStdinCommand();
         void cleanup();
-        void broadcastToSpectators(const std::string& message);
         void sendInitialStateToSpectator(ClientConnection* spectator);
 
         World& world_;  // Reference to World
@@ -75,15 +63,13 @@ namespace Zappy {
         Socket spectatorSocket_;
         int playerPort_;
         int spectatorPort_;
-        std::unique_ptr<CommandRouter> commandRouter_;
-        std::unique_ptr<CommandRouter> serverCommandRouter_;
-        
-
 
         EventLoop eventLoop_;
         ClientManager clientManager_;
-        // Socket playerSocket_;
-        // Socket spectatorSocket_;
+        SpectatorBroadcaster broadcaster_;
+        CommandDispatcher playerDispatcher_;
+        CommandDispatcher spectatorDispatcher_;
+        CommandDispatcher serverDispatcher_; 
 
         static const int MAX_EVENTS = 64;
         bool running_;

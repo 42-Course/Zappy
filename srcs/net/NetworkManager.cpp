@@ -12,7 +12,7 @@
 #include "core/Team.hpp"
 #include "core/Tile.hpp"
 #include <sstream>
-#include "net/CommandRouter.hpp"
+#include "commands/CommandDispatcher.hpp"
 
 namespace Zappy {
     NetworkManager::NetworkManager(World& world, int playerPort, int spectatorPort)
@@ -21,8 +21,7 @@ namespace Zappy {
         , spectatorSocket_(AF_INET, SOCK_STREAM, 0)
         , playerPort_(playerPort)
         , spectatorPort_(spectatorPort)
-        , commandRouter_(std::make_unique<CommandRouter>())
-        , serverCommandRouter_(std::make_unique<CommandRouter>())
+        , broadcaster_(clientManager_)
         , running_(false) {
         
         try {
@@ -126,7 +125,7 @@ namespace Zappy {
 
             while (client->hasCompleteCommand()) {
                 auto cmdLine = client->getNextCommand();
-                std::string cmdName = CommandRouter::getCommandName(cmdLine);
+                std::string cmdName = CommandDispatcher::extractCommandName(cmdLine);
 
                 // Check if client can execute this command
                 if (!client->canExecuteCommand(cmdName)) {
@@ -138,12 +137,19 @@ namespace Zappy {
                 }
 
                 // Route to appropriate command handler based on client type
-                std::unique_ptr<Command> command;
-                if (client->getType() == ClientConnection::Type::Spectator) {
-                    command = commandRouter_->routeCommand(cmdLine, client);
-                } else if (client->getType() == ClientConnection::Type::Player) {
-                    command = commandRouter_->routeCommand(cmdLine, client);
+                std::unique_ptr<ICommand> command;
+                switch (client->getType()) {
+                    case ClientConnection::Type::Spectator:
+                        command = spectatorDispatcher_.dispatch(cmdLine, client);
+                        break;
+                    case ClientConnection::Type::Player:
+                        command = playerDispatcher_.dispatch(cmdLine, client);
+                        break;
+                    default:
+                        client->sendData("ko\n");
+                        return;
                 }
+
 
                 if (command) {
                     command->execute();
@@ -171,7 +177,6 @@ namespace Zappy {
         // Map size
         std::stringstream ss;
         ss << "msz " << map.getWidth() << " " << map.getHeight() << std::endl;
-//        spectator->sendData(ss.str());
 
         // Team names
         for (const auto& team : teams) {
@@ -201,10 +206,6 @@ namespace Zappy {
         return clientManager_.getClients().size();
     }
 
-    void NetworkManager::registerCommandHandler(const std::string& command, CommandHandler handler) {
-        commandRouter_->registerHandler(command, handler);
-    }
-
     void NetworkManager::handleStdinCommand() {
         char buf[1024];
         std::string stdinBuffer;
@@ -224,7 +225,7 @@ namespace Zappy {
                 }
                 
                 if (!cmd.empty()) {
-                    auto command = serverCommandRouter_->routeCommand(cmd, nullptr);
+                    auto command = serverDispatcher_.dispatch(cmd, nullptr);
                     if (command) {
                         command->execute();
                     }
@@ -237,146 +238,25 @@ namespace Zappy {
         }
     }
 
-    void NetworkManager::registerServerCommandHandler(const std::string& command, CommandHandler handler) {
-        serverCommandRouter_->registerHandler(command, handler);
+    void NetworkManager::registerPlayerCommand(const std::string& cmd, CommandHandler h) {
+        playerDispatcher_.registerHandler(cmd, std::move(h));
+    }
+
+    void NetworkManager::registerSpectatorCommand(const std::string& cmd, CommandHandler h) {
+        spectatorDispatcher_.registerHandler(cmd, std::move(h));
+    }
+
+    void NetworkManager::registerServerCommand(const std::string& cmd, CommandHandler h) {
+        serverDispatcher_.registerHandler(cmd, std::move(h));
     }
 
     std::vector<std::string> NetworkManager::getServerCommandNames() const {
-        return serverCommandRouter_->getCommandNames();
+        return serverDispatcher_.getCommandNames();
     }
 
-    std::unique_ptr<Command> NetworkManager::createServerCommand(const std::string& command,
+    std::unique_ptr<ICommand> NetworkManager::createServerCommand(const std::string& command,
                                                                const std::vector<std::string>& tokens,
                                                                ClientConnection* client) const {
-        return serverCommandRouter_->createCommand(command, tokens, client);
+        return serverDispatcher_.createCommand(command, tokens, client);
     }
-
-    void NetworkManager::broadcastToSpectators(const std::string& message) {
-        for (const auto& [fd, client] : clientManager_.getClients()) {
-            if (client->getType() == ClientConnection::Type::Spectator) {
-                client->sendData(message);
-            }
-        }
-    }
-
-    void NetworkManager::onPlayerMoved(const Player* player) {
-        if (!player) return;
-        std::string ppo = "ppo " + std::to_string(player->getId()) + " " +
-                         std::to_string(player->getX()) + " " +
-                         std::to_string(player->getY()) + " " +
-                         std::to_string(static_cast<int>(player->getDirection())) + "\n";
-        broadcastToSpectators(ppo);
-    }
-
-    void NetworkManager::onPlayerTurned(const Player* player) {
-        if (!player) return;
-        std::string ppo = "ppo " + std::to_string(player->getId()) + " " +
-                         std::to_string(player->getX()) + " " +
-                         std::to_string(player->getY()) + " " +
-                         std::to_string(static_cast<int>(player->getDirection())) + "\n";
-        broadcastToSpectators(ppo);
-    }
-
-    void NetworkManager::onPlayerLevelUp(const Player* player) {
-        if (!player) return;
-        std::string plv = "plv " + std::to_string(player->getId()) + " " +
-                         std::to_string(player->getLevel()) + "\n";
-        broadcastToSpectators(plv);
-    }
-
-    void NetworkManager::onPlayerInventoryChanged(const Player* player) {
-        if (!player) return;
-        const auto& inventory = player->getInventory();
-        std::string pin = "pin " + std::to_string(player->getId()) + " " +
-                         std::to_string(player->getX()) + " " +
-                         std::to_string(player->getY()) + " " +
-                         std::to_string(inventory.getFood()) + " " +
-                         std::to_string(inventory.getLinemate()) + " " +
-                         std::to_string(inventory.getDeraumere()) + " " +
-                         std::to_string(inventory.getSibur()) + " " +
-                         std::to_string(inventory.getMendiane()) + " " +
-                         std::to_string(inventory.getPhiras()) + " " +
-                         std::to_string(inventory.getThystame()) + "\n";
-        broadcastToSpectators(pin);
-    }
-
-    void NetworkManager::onPlayerDied(const Player* player) {
-        if (!player) return;
-        broadcastToSpectators("pdi " + std::to_string(player->getId()) + "\n");
-    }
-
-    void NetworkManager::onResourceAdded(const Tile* tile, ResourceType type) {
-        if (!tile) return;
-        (void)type;
-        // TODO: Get tile coordinates from World
-        int x = 0, y = 0;  // Placeholder
-        std::string bct = "bct " + std::to_string(x) + " " + std::to_string(y) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::FOOD)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::LINEMATE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::DERAUMERE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::SIBUR)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::MENDIANE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::PHIRAS)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::THYSTAME)) + "\n";
-        broadcastToSpectators(bct);
-    }
-
-    void NetworkManager::onResourceRemoved(const Tile* tile, ResourceType type) {
-        if (!tile) return;
-        (void)type;
-        // TODO: Get tile coordinates from World
-        int x = 0, y = 0;  // Placeholder
-        std::string bct = "bct " + std::to_string(x) + " " + std::to_string(y) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::FOOD)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::LINEMATE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::DERAUMERE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::SIBUR)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::MENDIANE)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::PHIRAS)) + " " +
-                         std::to_string(tile->getResourceCount(ResourceType::THYSTAME)) + "\n";
-        broadcastToSpectators(bct);
-    }
-
-    void NetworkManager::onPlayerAdded(const Player* player) {
-        if (!player) return;
-        std::stringstream ss;
-        ss << "pnw " << player->getId() << " "
-           << player->getX() << " "
-           << player->getY() << " "
-           << static_cast<int>(player->getDirection()) << " "
-           << player->getLevel() << " "
-           << player->getTeam().getName() << "\n";
-        broadcastToSpectators(ss.str());
-    }
-
-    void NetworkManager::onPlayerRemoved(const Player* player) {
-        if (!player) return;
-        std::stringstream ss;
-        ss << "pdi " << player->getId() << "\n";
-        broadcastToSpectators(ss.str());
-    }
-
-    void NetworkManager::onTeamWon(const Team* team) {
-        if (!team) return;
-        std::stringstream ss;
-        ss << "seg " << team->getName() << "\n";
-        broadcastToSpectators(ss.str());
-    }
-} 
-
-// void NetworkManager::handleMapUpdate(int x, int y, const Tile* tile) {
-//     if (!tile) {
-//         return;
-//     }
-
-//     // Broadcast tile update to spectators
-//     std::string bct = "bct " + std::to_string(x) + " " + std::to_string(y) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::FOOD)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::LINEMATE)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::DERAUMERE)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::SIBUR)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::MENDIANE)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::PHIRAS)) + " " +
-//                      std::to_string(tile->getResourceCount(ResourceType::THYSTAME)) + "\n";
-//     broadcastToSpectators(bct);
-// }
+}

@@ -47,28 +47,28 @@ namespace Zappy {
 
     void Engine::registerCommands() {
         // Register command handlers
-        network_->registerServerCommandHandler("help", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerServerCommand("help", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<HelpCommand>(*this, tokens, client);
         });
 
-        network_->registerServerCommandHandler("status", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerServerCommand("status", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<StatusCommand>(*this, tokens, client);
         });
 
-        network_->registerServerCommandHandler("exit", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerServerCommand("exit", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<ExitCommand>(*this, tokens, client);
         });
 
-        network_->registerServerCommandHandler("watch", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerServerCommand("watch", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<WatchCommand>(*this, tokens, *watchService_, client);
         });
 
-        network_->registerServerCommandHandler("clear", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerServerCommand("clear", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<ClearCommand>(*this, tokens, client);
         });
 
         // Register spectator command handlers
-        network_->registerCommandHandler("msz", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+        network_->registerSpectatorCommand("msz", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             (void)tokens;
             return std::make_unique<MSZCommand>(client, world_.get());
         });

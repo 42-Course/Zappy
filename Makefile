@@ -20,15 +20,14 @@ SRC += srcs/core/Engine.cpp \
 # Network components
 SRC += srcs/net/NetworkManager.cpp \
        srcs/net/ClientConnection.cpp \
-       srcs/net/CommandRouter.cpp \
        srcs/net/Socket.cpp \
        srcs/net/EventLoop.cpp \
        srcs/net/ClientManager.cpp 
 
-
 # Command System
 SRC += srcs/commands/Command.cpp \
        srcs/commands/CommandFactory.cpp \
+       srcs/commands/CommandDispatcher.cpp \
        srcs/commands/CommandHandler.cpp
 
 # Spectator Commands
@@ -46,7 +45,8 @@ SRC += srcs/commands/server/ExitCommand.cpp \
 
 # Services
 SRC += srcs/services/WatchService.cpp \
-       srcs/services/Logger.cpp
+       srcs/services/Logger.cpp \
+       srcs/services/SpectatorBroadcaster.cpp
 
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -g -O3 # -fsanitize=leak,address
 #CFLAGS = -O3 -g -Wall -Wextra -Werror -std=c++20 -pedantic -fsanitize=leak

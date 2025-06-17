@@ -16,6 +16,9 @@ namespace Zappy {
         void removeResource(Resource* resource);
         int getResourceCount(ResourceType type) const;
         const std::vector<Resource*>& getResources() const { return resources_; }
+        std::vector<int> getAllResourceCounts() const;
+        std::string getResourceCountsAsString() const;
+        std::string toBctString(int x, int y) const;
 
     protected:
         void notifyResourceAdded(ResourceType type) const;

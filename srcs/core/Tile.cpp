@@ -1,6 +1,7 @@
 #include "core/Tile.hpp"
 #include "core/Resource.hpp"
 #include <algorithm>
+#include <sstream>
 
 namespace Zappy {
     Tile::Tile() = default;
@@ -46,4 +47,31 @@ namespace Zappy {
         return std::count_if(resources_.begin(), resources_.end(),
             [type](const Resource* r) { return r->getType() == type; });
     }
+    
+    std::vector<int> Tile::getAllResourceCounts() const {
+        std::vector<int> counts;
+        counts.reserve(static_cast<int>(ResourceType::THYSTAME) + 1);
+        for (int i = 0; i <= static_cast<int>(ResourceType::THYSTAME); ++i) {
+            counts.push_back(getResourceCount(static_cast<ResourceType>(i)));
+        }
+        return counts;
+    }
+
+    std::string Tile::getResourceCountsAsString() const {
+        std::stringstream ss;
+        const auto counts = getAllResourceCounts();
+        for (size_t i = 0; i < counts.size(); ++i) {
+            if (i > 0) ss << " ";
+            ss << counts[i];
+        }
+        return ss.str();
+    }
+
+    std::string Tile::toBctString(int x, int y) const {
+        std::stringstream ss;
+
+        ss << "bct " << x << " " << y << " " << getResourceCountsAsString() << "\n";
+        return ss.str();
+    }
+
 } 

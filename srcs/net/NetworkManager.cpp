@@ -113,6 +113,28 @@ namespace Zappy {
         }
     }
 
+    bool NetworkManager::tryRegisterPlayer(ClientConnection* client, const std::string& teamName) {
+        auto player = world_.createPlayer(teamName);
+        if (!player) {
+            client->sendData("ko\n");
+            return false;
+        }
+
+        player->attach(&broadcaster_);  // Subscribe to events
+        client->setType(ClientConnection::Type::Player);
+        client->setState(ClientConnection::State::ACTIVE);
+        client->setPlayer(player);
+
+        client->sendData("WELCOME\n");
+
+        const Map& map = world_.getMap();
+        client->sendData("msz " + std::to_string(map.getWidth()) + " " + std::to_string(map.getHeight()) + "\n");
+
+        broadcaster_.broadcast(client->getPlayer()->toPnwString());
+        return true;
+    }
+
+
     void NetworkManager::handleClientEvent(int clientFd, uint32_t events) {
         ClientConnection* client = clientManager_.getClient(clientFd);
         if (!client) return;
@@ -127,11 +149,13 @@ namespace Zappy {
                 auto cmdLine = client->getNextCommand();
                 std::string cmdName = CommandDispatcher::extractCommandName(cmdLine);
 
-                // Check if client can execute this command
                 if (!client->canExecuteCommand(cmdName)) {
-                    if (client->getType() == ClientConnection::Type::Player && 
-                        client->getState() == ClientConnection::State::UNREGISTERED) {
-                        client->sendData("ko\n");  // Invalid command for unregistered player
+                    const bool isUnregisteredPlayer = (
+                        client->getType() == ClientConnection::Type::Player &&
+                        client->getState() == ClientConnection::State::UNREGISTERED
+                    );
+                    if (isUnregisteredPlayer && !tryRegisterPlayer(client, cmdLine)) {
+                        // clientManager_.removeClient(clientFd);  // Optional: kick on failed registration
                     }
                     continue;
                 }

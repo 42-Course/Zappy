@@ -20,10 +20,10 @@ namespace Zappy {
         void onTeamWon(const Team* team) override;
         void onResourceAdded(const Tile* tile, ResourceType type) override;
         void onResourceRemoved(const Tile* tile, ResourceType type) override;
+        void broadcast(const std::string& message);
 
     private:
         const ClientManager& clientManager_; // Owned by NetworkManager
-        void broadcast(const std::string& message);
         std::string formatTileMessage(const Tile* tile, int x, int y);
     };
 }

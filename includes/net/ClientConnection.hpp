@@ -46,10 +46,10 @@ namespace Zappy {
         
         // Accessors
         int getFd() const { return fd_; }
-        Player* getPlayer() { return player_.get(); }
-        Spectator* getSpectator() { return spectator_.get(); }
-        void setPlayer(std::unique_ptr<Player> player) { player_ = std::move(player); }
-        void setSpectator(std::unique_ptr<Spectator> spectator) { spectator_ = std::move(spectator); }
+        Player* getPlayer() { return player_; }
+        // Spectator* getSpectator() { return spectator_.get(); }
+        void setPlayer(Player* player) { player_ = player; }
+        // void setSpectator(std::unique_ptr<Spectator> spectator) { spectator_ = std::move(spectator); }
 
     private:
         static constexpr size_t BUFFER_SIZE = 4096;
@@ -61,8 +61,9 @@ namespace Zappy {
         std::string commandBuffer_;
         std::queue<std::string> pendingCommands_;
         
-        std::unique_ptr<Player> player_;
-        std::unique_ptr<Spectator> spectator_;
+        // std::unique_ptr<Player> player_;
+        Player* player_;
+        // std::unique_ptr<Spectator> spectator_;
         
         void processBuffer();
         bool isCommandComplete(const std::string& cmd) const;

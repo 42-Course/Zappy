@@ -51,13 +51,15 @@ namespace Zappy {
                                                    const std::vector<std::string>& tokens = {},
                                                    ClientConnection* client = nullptr) const;
 
+
     private:
         void acceptNewConnection(int serverFd, ClientConnection::Type type);
         void handleClientEvent(int clientFd, uint32_t events);
         void handleStdinCommand();
         void cleanup();
         void sendInitialStateToSpectator(ClientConnection* spectator);
-
+        bool tryRegisterPlayer(ClientConnection* client, const std::string& teamName);
+        
         World& world_;  // Reference to World
         Socket playerSocket_;
         Socket spectatorSocket_;

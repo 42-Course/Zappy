@@ -8,6 +8,11 @@
 #include "commands/spectator/BCTCommand.hpp"
 #include "commands/spectator/MCTCommand.hpp"
 #include "commands/spectator/TNACommand.hpp"
+#include "commands/spectator/PPOCommand.hpp"
+#include "commands/spectator/PLVCommand.hpp"
+#include "commands/spectator/PINCommand.hpp"
+#include "commands/spectator/SGTCommand.hpp"
+#include "commands/spectator/SSTCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -72,8 +77,7 @@ namespace Zappy {
 
         // Register spectator command handlers
         network_->registerSpectatorCommand("msz", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
-            (void)tokens;
-            return std::make_unique<MSZCommand>(*world_, client);
+            return std::make_unique<MSZCommand>(*world_, tokens, client);
         });
 
         network_->registerSpectatorCommand("bct", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
@@ -88,6 +92,25 @@ namespace Zappy {
             return std::make_unique<TNACommand>(*world_, tokens, client);
         });
 
+        network_->registerSpectatorCommand("ppo", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<PPOCommand>(*world_, tokens, client);
+        });
+
+        network_->registerSpectatorCommand("plv", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<PLVCommand>(*world_, tokens, client);
+        });
+
+        network_->registerSpectatorCommand("pin", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<PINCommand>(*world_, tokens, client);
+        });
+        
+        network_->registerSpectatorCommand("sgt", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<SGTCommand>(*gameLoop_, tokens, client);
+        });
+
+        network_->registerSpectatorCommand("sst", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<SSTCommand>(*gameLoop_, tokens, client);
+        });
     }
 
     Engine::~Engine() {

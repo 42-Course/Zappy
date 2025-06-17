@@ -1,7 +1,0 @@
-2025-06-17 21:32:41.372 [ERROR] Command mct invalid: Invalid command name: bct (expected: mct)
-2025-06-17 21:32:45.765 [ERROR] Command mct invalid: Invalid command name: bct (expected: mct)
-2025-06-17 21:32:49.513 [ERROR] Command mct invalid: Invalid command name: bct (expected: mct)
-2025-06-17 21:32:59.434 [ERROR] Command mct invalid: Invalid command name: bct (expected: mct)
-2025-06-17 21:34:02.421 [ERROR] Command mct invalid: Expected 0 arguments, got 1
-2025-06-17 21:35:49.301 [ERROR] Command tna invalid: Expected 0 arguments, got 1
-2025-06-17 21:35:52.538 [ERROR] Command tna invalid: Expected 0 arguments, got 1

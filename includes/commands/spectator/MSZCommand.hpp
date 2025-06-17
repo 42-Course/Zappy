@@ -9,7 +9,7 @@ class World;  // Forward declaration
 
 class MSZCommand : public Command {
 public:
-    MSZCommand( World& world, ClientConnection* client);
+    MSZCommand( World& world, const std::vector<std::string>& tokens, ClientConnection* client);
     
     CommandStatus execute() override;
     bool parseArgs(const std::vector<std::string>& args) override;

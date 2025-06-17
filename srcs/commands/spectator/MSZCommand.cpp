@@ -3,17 +3,17 @@
 #include <sstream>
 
 namespace Zappy {
-
-MSZCommand::MSZCommand(World& world, ClientConnection* client)
-    : Command("msz", CommandType::SPECTATOR, 0, client), world_(world) {}
+MSZCommand::MSZCommand( World& world, const std::vector<std::string>& tokens, ClientConnection* client)
+    : Command("msz", CommandType::SPECTATOR, 0, client), world_(world) {
+        if (!parseArgs(tokens)) {
+            setStatus(CommandStatus::INVALID);
+        }
+    }
 
 bool MSZCommand::parseArgs(const std::vector<std::string>& args) {
-    // First call base class implementation to store args
     if (!Command::parseArgs(args)) {
         return false;
     }
-    
-    // MSZ command takes no arguments
     return validateArgCount(0);
 }
 

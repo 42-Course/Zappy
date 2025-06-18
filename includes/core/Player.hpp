@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <queue>
+#include "commands/ICommand.hpp"
 #include "Resource.hpp"
 #include "Inventory.hpp"
 #include "IObserver.hpp"
@@ -42,7 +44,6 @@ namespace Zappy {
         // Inventory management
         void addResource(ResourceType type, int amount);
         void removeResource(ResourceType type, int amount);
-        void setInventory(const Inventory& inventory);
         void take(Resource* resource);
         void drop(Resource* resource);
 
@@ -50,6 +51,10 @@ namespace Zappy {
         bool startIncantation();
         void fork();
         void broadcast(const std::string& message);
+
+        // Command handling
+        bool canQueueCommand() const { return commandQueue_.size() < 10; }
+        void enqueueCommand(std::unique_ptr<ICommand> command);
 
         // Life management
         void die();
@@ -81,5 +86,8 @@ namespace Zappy {
         int level_;
         Inventory inventory_;
         bool alive_;
+        int ticksSinceLastFood_;
+        int currentCommandTicks_;
+        std::queue<std::unique_ptr<ICommand>> commandQueue_;
     };
 } 

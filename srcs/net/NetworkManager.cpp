@@ -175,10 +175,23 @@ namespace Zappy {
                         return;
                 }
 
-                if (command && command->getStatus() != CommandStatus::INVALID)
-                    if (command->execute() != CommandStatus::FAILED)
-                        continue ;
-                client->sendData("ko\n");  // Unknown command
+                
+                if (command && command->getStatus() != CommandStatus::INVALID) {
+                    if (client->getType() == ClientConnection::Type::Player) {
+                        Player* player = client->getPlayer();
+                        if (!player->canQueueCommand()) {
+                            client->sendData("ko\n");
+                        } else {
+                            player->enqueueCommand(std::move(command));
+                        }
+                    } else {
+                        // Spectator commands execute immediately
+                        if (command->execute() == CommandStatus::FAILED)
+                            client->sendData("ko\n");
+                    }
+                } else {
+                    client->sendData("ko\n");
+                }
             }
         }
 

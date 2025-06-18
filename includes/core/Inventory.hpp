@@ -11,8 +11,8 @@ namespace Zappy {
         ~Inventory() = default;
 
         // Resource management
-        bool add(Resource* resource);
-        bool remove(Resource* resource);
+        bool add(ResourceType type, int amount = 1);
+        bool remove(ResourceType type, int amount = 1);
         int getCount(ResourceType type) const;
 
         // Resource getters

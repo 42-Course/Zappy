@@ -14,7 +14,13 @@ namespace Zappy {
         , level_(1)
         , inventory_()
         , alive_(true)
-    {}
+        , ticksSinceLastFood_(0)
+        , currentCommandTicks_(0)
+    {
+        inventory_.add(ResourceType::FOOD, 10);
+        // for (int i = 0; i < INITIAL_FOOD; ++i)
+        //     inventory_.addResource(Resource())
+    }
 
     Player::~Player() {
         // Notify observers that player is being destroyed
@@ -76,9 +82,8 @@ namespace Zappy {
         if (!alive_ || amount <= 0) return;
         
         // Create a single resource and add it multiple times
-        Resource resource(type);
         for (int i = 0; i < amount; i++) {
-            if (!inventory_.add(&resource)) {
+            if (!inventory_.add(type)) {
                 break; // Stop if we can't add more
             }
         }
@@ -89,19 +94,18 @@ namespace Zappy {
         if (!alive_ || amount <= 0) return;
         
         // Create a single resource and remove it multiple times
-        Resource resource(type);
         for (int i = 0; i < amount; i++) {
-            if (!inventory_.remove(&resource)) {
+            if (!inventory_.remove(type)) {
                 break; // Stop if we can't remove more
             }
         }
         notifyInventoryChanged();
     }
 
-    void Player::setInventory(const Inventory& inventory) {
-        if (!alive_) return;
-        inventory_ = inventory;
-        notifyInventoryChanged();
+    void Player::enqueueCommand(std::unique_ptr<ICommand> command) {
+        if (canQueueCommand()) {
+            commandQueue_.push(std::move(command));
+        }
     }
 
     void Player::die() {
@@ -118,7 +122,7 @@ namespace Zappy {
     void Player::take(Resource* resource) {
         if (!alive_ || !resource) return;
         
-        if (inventory_.add(resource)) {
+        if (inventory_.add(resource->getType())) {
             notifyInventoryChanged();
         }
     }
@@ -126,7 +130,7 @@ namespace Zappy {
     void Player::drop(Resource* resource) {
         if (!alive_ || !resource) return;
         
-        if (inventory_.remove(resource)) {
+        if (inventory_.remove(resource->getType())) {
             notifyInventoryChanged();
         }
     }
@@ -160,7 +164,35 @@ namespace Zappy {
 
     void Player::update() {
         if (!alive_) return;
-        
+
+        // Food consumption
+        ++ticksSinceLastFood_;
+        if (ticksSinceLastFood_ >= 126) {
+            if (inventory_.getCount(ResourceType::FOOD) > 0) {
+                inventory_.remove(ResourceType::FOOD, 1);
+                ticksSinceLastFood_ = 0;
+                notifyInventoryChanged();
+            } else {
+                die();  // No food left
+                return;
+            }
+        }
+
+        // Command execution
+        if (!commandQueue_.empty()) {
+            auto& cmd = commandQueue_.front();
+            ++currentCommandTicks_;
+            if (currentCommandTicks_ >= cmd->getTimeCost()) {
+                if (cmd->execute() != CommandStatus::FAILED) {
+                    commandQueue_.pop();
+                    currentCommandTicks_ = 0;
+                } else {
+                    // optionally log or handle "ko\n"
+                    commandQueue_.pop();
+                    currentCommandTicks_ = 0;
+                }
+            }
+        }
         // TODO: Implement time-based updates
         // - Check food level
         // - Update action cooldowns

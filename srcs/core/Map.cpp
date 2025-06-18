@@ -109,7 +109,6 @@ namespace Zappy {
         Tile* tile = getTile(x, y);
         if (tile && resource) {
             tile->addResource(resource);
-            notifyUpdate(x, y, tile);
         }
     }
 
@@ -117,7 +116,6 @@ namespace Zappy {
         Tile* tile = getTile(x, y);
         if (tile && resource) {
             tile->removeResource(resource);
-            notifyUpdate(x, y, tile);
         }
     }
 
@@ -136,9 +134,4 @@ namespace Zappy {
         // following the specified resource density rules
     }
 
-    void Map::notifyUpdate(int x, int y, const Tile* tile) {
-        if (updateCallback_) {
-            updateCallback_(x, y, tile);
-        }
-    }
 } 

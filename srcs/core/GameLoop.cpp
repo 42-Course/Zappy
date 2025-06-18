@@ -65,7 +65,7 @@ namespace Zappy {
             double fixedTimeStep = 1.0 / tickRate_;
 
             // Update as many times as necessary to catch up
-            while (accumulator_ >= fixedTimeStep) {
+            if (accumulator_ >= fixedTimeStep) { // Changed while -> if
                 if (fixedUpdateCallback_) {
                     fixedUpdateCallback_();
                 }

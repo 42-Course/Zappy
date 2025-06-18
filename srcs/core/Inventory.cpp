@@ -11,20 +11,17 @@ namespace Zappy {
         }
     }
 
-    bool Inventory::add(Resource* resource) {
-        if (!resource) return false;
-        resources_[resource->getType()]++;
+    bool Inventory::add(ResourceType type, int amount) {
+        if (amount <= 0) return false;
+        resources_[type] += amount;
         return true;
     }
 
-    bool Inventory::remove(Resource* resource) {
-        if (!resource) return false;
-        auto it = resources_.find(resource->getType());
-        if (it != resources_.end() && it->second > 0) {
-            it->second--;
-            return true;
-        }
-        return false;
+    bool Inventory::remove(ResourceType type, int amount) {
+        auto& count = resources_[type];
+        if (amount <= 0 || count < amount) return false;
+        count -= amount;
+        return true;
     }
 
     int Inventory::getCount(ResourceType type) const {

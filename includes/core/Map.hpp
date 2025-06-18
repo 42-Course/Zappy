@@ -38,10 +38,6 @@ namespace Zappy {
         void expand(int newWidth, int newHeight);
         void expandToInclude(int x, int y);
 
-        // Event callbacks
-        using MapUpdateCallback = std::function<void(int x, int y, const Tile* tile)>;
-        void setUpdateCallback(MapUpdateCallback callback) { updateCallback_ = callback; }
-
         // Serialization helpers for network responses
         std::string toMszString() const;
     private:
@@ -49,9 +45,7 @@ namespace Zappy {
         int height_;
         bool infinite_;
         std::vector<std::unique_ptr<Tile>> tiles_;
-        MapUpdateCallback updateCallback_;
 
         void resizeTiles(int newWidth, int newHeight);
-        void notifyUpdate(int x, int y, const Tile* tile);
     };
 } 

@@ -16,8 +16,9 @@
 #include "commands/CommandDispatcher.hpp"
 
 namespace Zappy {
-    NetworkManager::NetworkManager(World& world, int playerPort, int spectatorPort)
+    NetworkManager::NetworkManager(World& world, GameLoop& gameLoop, int playerPort, int spectatorPort)
         : world_(world)
+        , gameLoop_(gameLoop)
         , playerSocket_(AF_INET, SOCK_STREAM, 0)
         , spectatorSocket_(AF_INET, SOCK_STREAM, 0)
         , playerPort_(playerPort)
@@ -199,6 +200,18 @@ namespace Zappy {
         std::stringstream ss;
         ss << map.toMszString();
 
+        ss << gameLoop_.toSgtString();
+
+        // Tiles
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                const Tile* tile = map.getTile(x, y);
+                if (!tile) continue;
+
+                ss << tile->toBctString(x, y);
+            }
+        }
+
         // Team names
         for (const auto& team : world_.getTeams()) {
             ss << team->toTnaString();
@@ -208,16 +221,6 @@ namespace Zappy {
         for (const auto& [id, player] : world_.getPlayers()) {
             if (player) {
                 ss << player->toPnwString();
-            }
-        }
-
-        // Tiles
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
-                const Tile* tile = map.getTile(x, y);
-                if (!tile) continue;
-
-                ss << tile->toBctString(x, y);
             }
         }
 

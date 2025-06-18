@@ -13,6 +13,7 @@
 #include "commands/spectator/PINCommand.hpp"
 #include "commands/spectator/SGTCommand.hpp"
 #include "commands/spectator/SSTCommand.hpp"
+#include "commands/player/ForwardCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -23,8 +24,8 @@ namespace Zappy {
 
     Engine::Engine(const Config& config)
         : world_(std::make_unique<World>(config.getMapWidth(), config.getMapHeight(), config.isInfiniteMap()))
-        , network_(std::make_unique<NetworkManager>(*world_, config.getPlayerPort(), config.getSpectatorPort()))
         , gameLoop_(std::make_unique<GameLoop>(config.getTickRate()))
+        , network_(std::make_unique<NetworkManager>(*world_, *gameLoop_, config.getPlayerPort(), config.getSpectatorPort()))
         , watchService_(std::make_unique<WatchService>(*this))
         , running_(false) {
         
@@ -110,6 +111,11 @@ namespace Zappy {
 
         network_->registerSpectatorCommand("sst", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<SSTCommand>(*gameLoop_, tokens, client);
+        });
+
+        // Register spectator command handlers
+        network_->registerPlayerCommand("forward", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<ForwardCommand>(*world_, tokens, client);
         });
     }
 

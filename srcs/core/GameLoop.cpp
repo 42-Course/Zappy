@@ -52,6 +52,11 @@ namespace Zappy {
         lastUpdate_ = now;
     }
 
+    std::string GameLoop::toSgtString() const {
+        return  "sgt " +  std::to_string(tickRate_) + "\n";
+    }
+
+
     void GameLoop::run() {
         while (running_) {
             calculateDeltaTime();

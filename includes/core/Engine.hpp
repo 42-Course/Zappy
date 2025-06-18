@@ -39,8 +39,8 @@ namespace Zappy {
         void registerCommands();
         
         std::unique_ptr<World> world_;
-        std::unique_ptr<NetworkManager> network_;
         std::unique_ptr<GameLoop> gameLoop_;
+        std::unique_ptr<NetworkManager> network_;
         std::unique_ptr<WatchService> watchService_;
         bool running_;
         

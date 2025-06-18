@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <chrono>
+#include <string>
 
 namespace Zappy {
     class GameLoop {
@@ -23,6 +24,8 @@ namespace Zappy {
         unsigned int getCurrentTick() const { return currentTick_; }
         bool isRunning() const { return running_; }
         
+        // Serialization helpers for network responses
+        std::string toSgtString() const; // Time
     private:
         void run();
         void calculateDeltaTime();

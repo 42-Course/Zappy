@@ -13,6 +13,7 @@
 #include "commands/Command.hpp"
 #include "commands/CommandDispatcher.hpp"
 #include "services/SpectatorBroadcaster.hpp"
+#include "core/GameLoop.hpp"
 #include "core/Player.hpp"
 #include "core/Team.hpp"
 #include "core/Tile.hpp"
@@ -21,7 +22,7 @@
 namespace Zappy {
     class NetworkManager {
     public:
-        NetworkManager(World& world, int playerPort, int spectatorPort);
+        NetworkManager(World& world, GameLoop& gameLoop, int playerPort, int spectatorPort);
         ~NetworkManager() = default;
 
         void start();
@@ -61,6 +62,7 @@ namespace Zappy {
         bool tryRegisterPlayer(ClientConnection* client, const std::string& teamName);
         
         World& world_;  // Reference to World
+        GameLoop& gameLoop_;  // Reference to GameLoop
         Socket playerSocket_;
         Socket spectatorSocket_;
         int playerPort_;

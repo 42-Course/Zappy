@@ -42,7 +42,7 @@ SRC += srcs/commands/spectator/MSZCommand.cpp \
        srcs/commands/spectator/SSTCommand.cpp
 
 # Player Commands
-# To be added...
+SRC += srcs/commands/player/ForwardCommand.cpp
 
 # STDIN Commands
 SRC += srcs/commands/server/ExitCommand.cpp \

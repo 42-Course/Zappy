@@ -36,9 +36,7 @@ bool SSTCommand::parseArgs(const std::vector<std::string>& args) {
 CommandStatus SSTCommand::execute() {
     gameLoop_.setTickRate(tickRate_);
 
-    std::stringstream ss;
-    ss << "sgt " << tickRate_ << "\n";
-    getClient()->sendData(ss.str());
+    getClient()->sendData(gameLoop_.toSgtString());
 
     logCommand("Set tick rate to " + std::to_string(tickRate_));
     return CommandStatus::COMPLETED;

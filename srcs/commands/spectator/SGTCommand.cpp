@@ -15,9 +15,7 @@ bool SGTCommand::parseArgs(const std::vector<std::string>& args) {
 }
 
 CommandStatus SGTCommand::execute() {
-    std::stringstream ss;
-    ss << "sgt " << gameLoop_.getTickRate() << "\n";
-    getClient()->sendData(ss.str());
+    getClient()->sendData(gameLoop_.toSgtString());
     logCommand("Sent current tick rate");
     return CommandStatus::COMPLETED;
 }

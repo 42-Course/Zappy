@@ -1,3 +1,5 @@
 2025-06-18 15:10:42.037 [ERROR] Command sst invalid: sst must be between 1 and 300
 2025-06-18 15:12:16.519 [ERROR] Command sst invalid: sst must be between 1 and 300
 2025-06-18 15:12:19.520 [ERROR] Command sst invalid: sst must be between 1 and 300
+2025-06-18 16:32:46.645 [ERROR] Command Forward invalid: Invalid command name: advance (expected: Forward)
+2025-06-18 16:32:48.475 [ERROR] Command Forward invalid: Invalid command name: advance (expected: Forward)

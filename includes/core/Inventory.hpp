@@ -24,6 +24,7 @@ namespace Zappy {
         int getPhiras() const { return getCount(ResourceType::PHIRAS); }
         int getThystame() const { return getCount(ResourceType::THYSTAME); }
 
+        std::string toInventoryString() const;
     private:
         std::map<ResourceType, int> resources_;
     };

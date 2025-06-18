@@ -14,6 +14,9 @@
 #include "commands/spectator/SGTCommand.hpp"
 #include "commands/spectator/SSTCommand.hpp"
 #include "commands/player/ForwardCommand.hpp"
+#include "commands/player/RightCommand.hpp"
+#include "commands/player/LeftCommand.hpp"
+#include "commands/player/InventoryCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -113,10 +116,23 @@ namespace Zappy {
             return std::make_unique<SSTCommand>(*gameLoop_, tokens, client);
         });
 
-        // Register spectator command handlers
+        // Register player command handlers
         network_->registerPlayerCommand("forward", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<ForwardCommand>(*world_, tokens, client);
         });
+
+        network_->registerPlayerCommand("right", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<RightCommand>(*world_, tokens, client);
+        });
+
+        network_->registerPlayerCommand("left", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<LeftCommand>(*world_, tokens, client);
+        });
+
+        network_->registerPlayerCommand("inventory", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<InventoryCommand>(*world_, tokens, client);
+        });
+
     }
 
     Engine::~Engine() {

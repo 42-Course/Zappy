@@ -53,11 +53,11 @@ namespace Zappy {
     }
 
     void GameLoop::run() {
-        const double fixedTimeStep = 1.0 / tickRate_;
-
         while (running_) {
             calculateDeltaTime();
             accumulator_ += deltaTime_;
+
+            double fixedTimeStep = 1.0 / tickRate_;
 
             // Update as many times as necessary to catch up
             while (accumulator_ >= fixedTimeStep) {

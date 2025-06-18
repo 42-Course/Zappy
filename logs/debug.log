@@ -1,0 +1,16 @@
+2025-06-18 15:09:38.699 [INFO] Zappy Server starting up...
+2025-06-18 15:09:38.699 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-06-18 15:09:38.699 [INFO] Added team: Team Rocket
+2025-06-18 15:09:38.699 [INFO] Initializing game engine...
+2025-06-18 15:09:38.699 [INFO] Setting up signal handlers...
+2025-06-18 15:09:38.699 [INFO] Starting game engine...
+2025-06-18 15:10:39.005 [INFO] Command sgt: Sent current tick rate
+2025-06-18 15:10:42.037 [ERROR] Command sst invalid: sst must be between 1 and 300
+2025-06-18 15:10:43.622 [INFO] Command sst: Set tick rate to 1
+2025-06-18 15:11:10.630 [INFO] Command sst: Set tick rate to 4
+2025-06-18 15:11:32.906 [INFO] Command sst: Set tick rate to 64
+2025-06-18 15:12:05.517 [INFO] Command sst: Set tick rate to 1
+2025-06-18 15:12:16.519 [ERROR] Command sst invalid: sst must be between 1 and 300
+2025-06-18 15:12:19.520 [ERROR] Command sst invalid: sst must be between 1 and 300
+2025-06-18 15:12:22.520 [INFO] Command sst: Set tick rate to 300
+2025-06-18 15:13:53.451 [INFO] Zappy Server shutting down normally

@@ -13,7 +13,7 @@ namespace Zappy {
     class World {
     public:
         World(int width, int height, bool infiniteMap = false);
-        ~World();
+        // ~World();
 
         // Map operations
         const Map& getMap() const { return *map_; }

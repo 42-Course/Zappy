@@ -12,8 +12,6 @@ namespace Zappy {
         });
     }
 
-    World::~World() = default;
-
     bool World::addTeam(const std::string& name, int maxPlayers) {
         if (getTeam(name)) {
             return false;  // Team already exists

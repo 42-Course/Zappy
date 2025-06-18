@@ -18,9 +18,9 @@ namespace Zappy {
 
     Player::~Player() {
         // Notify observers that player is being destroyed
-        notify([this](IObserver* obs) {
-            obs->onPlayerDied(this);
-        });
+        // notify([this](IObserver* obs) {
+        //     obs->onPlayerDied(this);
+        // });
     }
 
     void Player::notifyMoved() const {

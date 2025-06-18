@@ -35,18 +35,6 @@ static void print_help() {
         "  -h           display this help message" << std::endl;
 }
 
-// void setnonblocking(int fd) {
-//     int flags = fcntl(fd, F_GETFL, 0);
-//     if (flags == -1) {
-//         perror("fcntl()");
-//         exit(EXIT_FAILURE);
-//     }
-//     if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-//         perror("fcntl()");
-//         exit(EXIT_FAILURE);     
-//     }
-// }
-
 // ssize_t gettimeofday_ms() {
 //     struct timeval tv;
 

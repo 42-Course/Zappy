@@ -18,7 +18,8 @@ namespace Zappy {
         const std::string& getName() const { return name_; }
         int getMaxPlayers() const { return maxPlayers_; }
         int getCurrentPlayers() const { return players_.size(); }
-        bool canAddPlayer() const { return players_.size() < maxPlayers_; }
+        int availableSlots() const { return maxPlayers_ - players_.size(); }
+        bool canAddPlayer() const { return availableSlots() > 0; }
         
         // Player management
         void addPlayer(Player* player);

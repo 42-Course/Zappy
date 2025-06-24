@@ -121,6 +121,7 @@ namespace Zappy {
             client->sendData("ko\n");
             return false;
         }
+        auto team = world_.getTeam(teamName);
 
         player->attach(&broadcaster_);  // Subscribe to events
         client->setType(ClientConnection::Type::Player);
@@ -128,6 +129,8 @@ namespace Zappy {
         client->setPlayer(player);
 
         client->sendData("WELCOME\n");
+
+        client->sendData(std::to_string(team->availableSlots() + 1) + "\n");
 
         client->sendData(world_.getMap().toMszString());
 
@@ -190,7 +193,7 @@ namespace Zappy {
                             client->sendData("ko\n");
                     }
                 } else {
-                    client->sendData("ko\n");
+                    client->sendData("command not found or invalid\n");
                 }
             }
         }

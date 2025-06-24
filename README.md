@@ -121,3 +121,6 @@ When DEBUG mode is ON, the `suc` & `sbp` will display more information on the re
 </center>
 
 ***
+
+Details:
+Subject only mentions players can go from left to right, but then shows sound transmision going from north to south...

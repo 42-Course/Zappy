@@ -59,6 +59,10 @@ namespace Zappy {
         });
     }
 
+    std::pair<int, int> Player::getPosition() const {
+        return std::pair<int, int>(x_, y_);
+    }
+
     void Player::setPosition(int x, int y) {
         if (!alive_) return;
         x_ = x;

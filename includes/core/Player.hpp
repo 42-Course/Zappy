@@ -35,6 +35,7 @@ namespace Zappy {
         bool isAlive() const { return alive_; }
 
         // Movement
+        std::pair<int, int> getPosition() const;
         void setPosition(int x, int y);
         void setDirection(Direction direction);
 

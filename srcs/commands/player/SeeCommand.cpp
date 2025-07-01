@@ -61,10 +61,13 @@ CommandStatus SeeCommand::execute() {
             const Tile* tile = map.getTile(tx, ty);
             result.push_back(tile ? tile->resourcesToString() : "");
 
-            // for (Player* p : getPlayers()) {
-            //     items.push_back("player");
-            // } 
-            // later deal with players, players should be gotten from the world
+            for (auto&[id, other_player] : world_.getPlayers()) {
+                if (other_player->getId() == player->getId())
+                    continue;
+                auto [x, y] = other_player->getPosition();
+                if (x == tx && y == ty)
+                    result.push_back("player");
+            }
         }
     }
 

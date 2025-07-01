@@ -19,6 +19,7 @@ namespace Zappy {
         std::vector<int> getAllResourceCounts() const;
         std::string getResourceCountsAsString() const;
         std::string toBctString(int x, int y) const;
+        std::string resourcesToString() const;
 
     protected:
         void notifyResourceAdded(ResourceType type) const;

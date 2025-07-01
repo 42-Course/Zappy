@@ -17,6 +17,7 @@
 #include "commands/player/RightCommand.hpp"
 #include "commands/player/LeftCommand.hpp"
 #include "commands/player/InventoryCommand.hpp"
+#include "commands/player/SeeCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -131,6 +132,10 @@ namespace Zappy {
 
         network_->registerPlayerCommand("inventory", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<InventoryCommand>(*world_, tokens, client);
+        });
+
+        network_->registerPlayerCommand("see", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<SeeCommand>(*world_, tokens, client);
         });
 
     }

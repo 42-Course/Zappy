@@ -182,6 +182,7 @@ namespace Zappy {
         if (!commandQueue_.empty()) {
             auto& cmd = commandQueue_.front();
             ++currentCommandTicks_;
+            // possibly check if command is possible (ko? or should ko only be when finished)
             if (currentCommandTicks_ >= cmd->getTimeCost()) {
                 if (cmd->execute() != CommandStatus::FAILED) {
                     commandQueue_.pop();
@@ -194,8 +195,6 @@ namespace Zappy {
             }
         }
         // TODO: Implement time-based updates
-        // - Check food level
-        // - Update action cooldowns
         // - Check for level up conditions
         // - Handle ongoing actions
     }

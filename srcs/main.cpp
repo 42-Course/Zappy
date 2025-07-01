@@ -35,15 +35,6 @@ static void print_help() {
         "  -h           display this help message" << std::endl;
 }
 
-// ssize_t gettimeofday_ms() {
-//     struct timeval tv;
-
-//     if(gettimeofday(&tv, NULL) == -1) {
-//         throw std::runtime_error(std::string("gettimeofday()") + std::string(strerror(errno)));
-//     }
-//     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-// }
-
 int main(int argc, char *argv[])
 {
     // Seed rand

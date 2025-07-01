@@ -1,5 +1,6 @@
 #include "core/Tile.hpp"
 #include "core/Resource.hpp"
+#include "core/utils.hpp"
 #include <algorithm>
 #include <sstream>
 
@@ -66,6 +67,17 @@ namespace Zappy {
         }
         return ss.str();
     }
+
+    std::string Tile::resourcesToString() const {
+        std::vector<std::string> items;
+
+        for (const auto& res : getResources()) {
+            items.push_back(res->getName());
+        }
+
+        return join(items, " ");
+    }
+
 
     std::string Tile::toBctString(int x, int y) const {
         std::stringstream ss;

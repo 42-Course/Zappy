@@ -71,7 +71,7 @@ namespace Zappy {
                 }
                 currentTick_++;
                 accumulator_ -= fixedTimeStep;
-                updateCallback_();
+                updateCallback_(); // world update callback
             }
 
             // // Variable update

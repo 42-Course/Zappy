@@ -4,7 +4,9 @@ NAME = Zappy
 .RECIPEPREFIX = >
 
 # Core components
-SRC = srcs/main.cpp
+SRC =  srcs/main.cpp \
+       srcs/core/utils.cpp
+
 SRC += srcs/core/Engine.cpp \
        srcs/core/World.cpp \
        srcs/core/GameLoop.cpp \
@@ -45,7 +47,8 @@ SRC += srcs/commands/spectator/MSZCommand.cpp \
 SRC += srcs/commands/player/ForwardCommand.cpp \
        srcs/commands/player/RightCommand.cpp \
        srcs/commands/player/LeftCommand.cpp \
-       srcs/commands/player/InventoryCommand.cpp
+       srcs/commands/player/InventoryCommand.cpp \
+       srcs/commands/player/SeeCommand.cpp
 
 # STDIN Commands
 SRC += srcs/commands/server/ExitCommand.cpp \

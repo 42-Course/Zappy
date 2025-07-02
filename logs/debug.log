@@ -138,3 +138,161 @@
 
 2025-07-01 18:31:39.196 [INFO] Command forward: Moved player forward to (8, 11)
 2025-07-01 18:31:44.213 [INFO] Zappy Server shutting down normally
+2025-07-02 10:05:41.792 [INFO] Zappy Server starting up...
+2025-07-02 10:05:41.793 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:05:41.793 [INFO] Added team: Team Rocket
+2025-07-02 10:05:41.793 [INFO] Initializing game engine...
+2025-07-02 10:05:41.793 [INFO] Setting up signal handlers...
+2025-07-02 10:05:41.793 [INFO] Starting game engine...
+2025-07-02 10:05:44.948 [INFO] Zappy Server shutting down normally
+2025-07-02 10:07:03.441 [INFO] Zappy Server starting up...
+2025-07-02 10:07:03.441 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:07:03.441 [INFO] Added team: Team Rocket
+2025-07-02 10:07:03.441 [INFO] Initializing game engine...
+2025-07-02 10:07:03.441 [INFO] Setting up signal handlers...
+2025-07-02 10:07:03.441 [INFO] Starting game engine...
+2025-07-02 10:07:12.413 [INFO] Command sst: Set tick rate to 1
+2025-07-02 10:07:26.416 [INFO] Command sst: Set tick rate to 3
+2025-07-02 10:07:27.750 [INFO] Command see: Player sees: {, player, , , }
+
+2025-07-02 10:07:33.086 [INFO] Command see: Player sees: {, player, , , }
+
+2025-07-02 10:11:45.563 [INFO] Zappy Server starting up...
+2025-07-02 10:11:45.563 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:11:45.563 [INFO] Added team: Team Rocket
+2025-07-02 10:11:45.563 [INFO] Initializing game engine...
+2025-07-02 10:11:45.563 [ERROR] Fatal error: Failed to bind player socket
+2025-07-02 10:11:47.895 [INFO] Zappy Server shutting down normally
+2025-07-02 10:11:50.452 [INFO] Zappy Server starting up...
+2025-07-02 10:11:50.452 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:11:50.452 [INFO] Added team: Team Rocket
+2025-07-02 10:11:50.452 [INFO] Initializing game engine...
+2025-07-02 10:11:50.452 [INFO] Setting up signal handlers...
+2025-07-02 10:11:50.452 [INFO] Starting game engine...
+2025-07-02 10:12:02.561 [INFO] Command sst: Set tick rate to 4
+2025-07-02 10:12:08.567 [INFO] Command see: Player sees: {, , , }
+
+2025-07-02 10:12:56.346 [INFO] Zappy Server shutting down normally
+2025-07-02 10:25:17.169 [INFO] Zappy Server starting up...
+2025-07-02 10:25:17.169 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:25:17.169 [INFO] Added team: Team Rocket
+2025-07-02 10:25:17.169 [INFO] Initializing game engine...
+2025-07-02 10:25:17.172 [INFO] Setting up signal handlers...
+2025-07-02 10:25:17.172 [INFO] Starting game engine...
+2025-07-02 10:25:39.794 [INFO] Zappy Server shutting down normally
+2025-07-02 10:29:04.870 [INFO] Zappy Server starting up...
+2025-07-02 10:29:04.870 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:29:04.870 [INFO] Added team: Team Rocket
+2025-07-02 10:29:04.870 [INFO] Initializing game engine...
+2025-07-02 10:29:04.873 [INFO] Setting up signal handlers...
+2025-07-02 10:29:04.873 [INFO] Starting game engine...
+2025-07-02 10:29:08.625 [INFO] Zappy Server shutting down normally
+2025-07-02 10:29:16.601 [INFO] Zappy Server starting up...
+2025-07-02 10:29:16.601 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:29:16.602 [INFO] Added team: Team Rocket
+2025-07-02 10:29:16.602 [INFO] Initializing game engine...
+2025-07-02 10:29:16.605 [INFO] Setting up signal handlers...
+2025-07-02 10:29:16.605 [INFO] Starting game engine...
+2025-07-02 10:29:43.156 [INFO] Command sst: Set tick rate to 1
+2025-07-02 10:29:58.159 [INFO] Command sst: Set tick rate to 2
+2025-07-02 10:29:59.660 [INFO] Command forward: Moved player forward to (0, 20)
+2025-07-02 10:30:00.160 [INFO] Command sst: Set tick rate to 1
+2025-07-02 10:30:39.169 [INFO] Command left: Player turned left
+2025-07-02 10:30:39.170 [INFO] Command sst: Set tick rate to 7
+2025-07-02 10:30:42.890 [INFO] Command left: Player turned left
+2025-07-02 10:30:45.895 [INFO] Command left: Player turned left
+2025-07-02 10:30:58.053 [INFO] Command right: Player turned right
+2025-07-02 10:31:10.216 [INFO] Command left: Player turned left
+2025-07-02 10:31:11.217 [INFO] Command left: Player turned left
+2025-07-02 10:31:18.801 [INFO] Command see: Player sees: {. player, ., ., .}
+
+2025-07-02 10:32:40.638 [INFO] Zappy Server shutting down normally
+2025-07-02 10:34:09.250 [INFO] Zappy Server starting up...
+2025-07-02 10:34:09.250 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:34:09.250 [INFO] Added team: Team Rocket
+2025-07-02 10:34:09.250 [INFO] Initializing game engine...
+2025-07-02 10:34:09.253 [INFO] Setting up signal handlers...
+2025-07-02 10:34:09.253 [INFO] Starting game engine...
+2025-07-02 10:43:02.468 [INFO] Zappy Server shutting down normally
+2025-07-02 10:43:11.929 [INFO] Zappy Server starting up...
+2025-07-02 10:43:11.929 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 10:43:11.929 [INFO] Added team: Team Rocket
+2025-07-02 10:43:11.929 [INFO] Initializing game engine...
+2025-07-02 10:43:11.932 [INFO] Setting up signal handlers...
+2025-07-02 10:43:11.932 [INFO] Starting game engine...
+2025-07-02 10:53:40.957 [INFO] Zappy Server shutting down normally
+2025-07-02 10:53:59.271 [INFO] Zappy Server starting up...
+2025-07-02 10:53:59.271 [INFO] Configuration created: 10x10 map, 3 players per team
+2025-07-02 10:53:59.271 [INFO] Added team: Team Rocket
+2025-07-02 10:53:59.271 [INFO] Initializing game engine...
+2025-07-02 10:53:59.272 [INFO] Setting up signal handlers...
+2025-07-02 10:53:59.272 [INFO] Starting game engine...
+2025-07-02 10:55:04.574 [INFO] Command sst: Set tick rate to 1
+2025-07-02 10:55:26.577 [INFO] Command sst: Set tick rate to 4
+2025-07-02 10:55:27.077 [INFO] Command forward: Moved player forward to (9, 6)
+2025-07-02 10:55:34.081 [INFO] Command left: Player turned left
+2025-07-02 10:55:37.083 [INFO] Command forward: Moved player forward to (10, 6)
+2025-07-02 10:55:41.836 [INFO] Command left: Player turned left
+2025-07-02 10:55:43.587 [INFO] Command left: Player turned left
+2025-07-02 10:55:45.338 [INFO] Command forward: Moved player forward to (9, 6)
+2025-07-02 10:55:47.089 [INFO] Command forward: Moved player forward to (8, 6)
+2025-07-02 10:55:48.840 [INFO] Command forward: Moved player forward to (7, 6)
+2025-07-02 10:55:50.591 [INFO] Command forward: Moved player forward to (6, 6)
+2025-07-02 10:55:53.093 [INFO] Command forward: Moved player forward to (-1, 9)
+2025-07-02 10:55:57.345 [INFO] Command left: Player turned left
+2025-07-02 10:56:00.347 [INFO] Command left: Player turned left
+2025-07-02 10:56:10.352 [INFO] Command forward: Moved player forward to (0, 9)
+2025-07-02 10:56:13.603 [INFO] Command forward: Moved player forward to (1, 9)
+2025-07-02 10:56:18.105 [INFO] Command forward: Moved player forward to (2, 9)
+2025-07-02 10:56:24.108 [INFO] Command right: Player turned right
+2025-07-02 10:56:26.609 [INFO] Command forward: Moved player forward to (2, 10)
+2025-07-02 10:56:32.363 [INFO] Command left: Player turned left
+2025-07-02 10:56:34.114 [INFO] Command left: Player turned left
+2025-07-02 10:56:35.865 [INFO] Command forward: Moved player forward to (2, 9)
+2025-07-02 10:56:38.116 [INFO] Command forward: Moved player forward to (2, 8)
+2025-07-02 10:56:39.867 [INFO] Command forward: Moved player forward to (2, 7)
+2025-07-02 10:56:41.868 [INFO] Command forward: Moved player forward to (2, 6)
+2025-07-02 10:56:43.869 [INFO] Command forward: Moved player forward to (2, 5)
+2025-07-02 10:56:46.370 [INFO] Command left: Player turned left
+2025-07-02 10:57:31.645 [INFO] Command inventory: Sent inventory
+2025-07-02 10:58:01.160 [INFO] Command forward: Moved player forward to (-1, 1)
+2025-07-02 10:58:05.912 [INFO] Command left: Player turned left
+2025-07-02 10:58:07.663 [INFO] Command left: Player turned left
+2025-07-02 10:58:15.667 [INFO] Command forward: Moved player forward to (0, 1)
+2025-07-02 10:58:17.418 [INFO] Command forward: Moved player forward to (1, 1)
+2025-07-02 10:58:19.169 [INFO] Command forward: Moved player forward to (2, 1)
+2025-07-02 10:58:20.920 [INFO] Command forward: Moved player forward to (3, 1)
+2025-07-02 10:58:22.671 [INFO] Command forward: Moved player forward to (4, 1)
+2025-07-02 10:58:24.422 [INFO] Command right: Player turned right
+2025-07-02 10:58:26.173 [INFO] Command forward: Moved player forward to (4, 2)
+2025-07-02 10:58:27.924 [INFO] Command forward: Moved player forward to (4, 3)
+2025-07-02 10:58:29.675 [INFO] Command forward: Moved player forward to (4, 4)
+2025-07-02 10:58:36.178 [INFO] Command forward: Moved player forward to (4, 5)
+2025-07-02 10:58:38.930 [INFO] Command forward: Moved player forward to (4, 6)
+2025-07-02 10:58:40.930 [INFO] Command forward: Moved player forward to (5, 6)
+2025-07-02 10:58:44.932 [INFO] Command see: Player sees: {thystame phiras mendiane sibur deraumere linemate food, thystame phiras mendiane sibur deraumere linemate food, thystame phiras mendiane sibur deraumere linemate food player, thystame phiras mendiane sibur deraumere linemate food}
+
+2025-07-02 11:00:09.723 [INFO] Command see: Player sees: {thystame phiras mendiane sibur deraumere linemate food, thystame phiras mendiane sibur deraumere linemate food, thystame phiras mendiane sibur deraumere linemate food, thystame phiras mendiane sibur deraumere linemate food}
+
+2025-07-02 11:01:40.538 [INFO] Zappy Server shutting down normally
+2025-07-02 11:03:37.130 [INFO] Zappy Server starting up...
+2025-07-02 11:03:37.131 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-02 11:03:37.131 [INFO] Added team: Team Rocket
+2025-07-02 11:03:37.131 [INFO] Initializing game engine...
+2025-07-02 11:03:37.134 [INFO] Setting up signal handlers...
+2025-07-02 11:03:37.134 [INFO] Starting game engine...
+2025-07-02 11:03:56.085 [INFO] Zappy Server shutting down normally
+2025-07-02 11:03:58.957 [INFO] Zappy Server starting up...
+2025-07-02 11:03:58.957 [INFO] Configuration created: 10x10 map, 3 players per team
+2025-07-02 11:03:58.957 [INFO] Added team: Team Rocket
+2025-07-02 11:03:58.957 [INFO] Initializing game engine...
+2025-07-02 11:03:58.958 [INFO] Setting up signal handlers...
+2025-07-02 11:03:58.958 [INFO] Starting game engine...
+2025-07-02 11:04:22.744 [INFO] Command sst: Set tick rate to 1
+2025-07-02 11:04:41.746 [INFO] Command forward: Moved player forward to (1, 0)
+2025-07-02 11:04:51.748 [INFO] Command left: Player turned left
+2025-07-02 11:04:58.749 [INFO] Command left: Player turned left
+2025-07-02 11:05:05.750 [INFO] Command forward: Moved player forward to (1, 1)
+2025-07-02 11:05:54.757 [INFO] Command see: Player sees: {thystame thystame thystame sibur sibur deraumere deraumere deraumere deraumere linemate food food food food, thystame thystame phiras phiras phiras mendiane deraumere deraumere food food food food food, thystame mendiane mendiane mendiane deraumere deraumere deraumere linemate linemate linemate, thystame thystame thystame thystame thystame phiras mendiane sibur sibur sibur deraumere deraumere deraumere deraumere deraumere linemate food}
+
+2025-07-02 11:05:54.757 [INFO] Command sst: Set tick rate to 7

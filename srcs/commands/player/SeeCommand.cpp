@@ -56,18 +56,20 @@ CommandStatus SeeCommand::execute() {
     for (int l = 0; l <= level; ++l) {
         for (int offset = -l; offset <= l; ++offset) {
             int tx, ty;
+            std::vector<std::string> contents;
             computeTileInView(px, py, dir, l, offset, tx, ty);
             map.normalizeCoordinates(tx, ty);  // safe even if not infinite
             const Tile* tile = map.getTile(tx, ty);
-            result.push_back(tile ? tile->resourcesToString() : "");
+            contents.push_back(tile ? tile->resourcesToString() : "");
 
             for (auto&[id, other_player] : world_.getPlayers()) {
                 if (other_player->getId() == player->getId())
                     continue;
                 auto [x, y] = other_player->getPosition();
                 if (x == tx && y == ty)
-                    result.push_back("player");
+                    contents.push_back("player");
             }
+            result.push_back(join(contents, " "));
         }
     }
 

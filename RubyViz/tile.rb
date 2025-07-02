@@ -32,26 +32,33 @@ class Tile
       z: z
     )
 
-    # Draw resources
     @resources.each_with_index do |count, index|
       next if count.zero?
 
       color = RESOURCE_COLORS[index]
-      size = (tile_size / 6.0).clamp(3, 10)  # Ensure a reasonable dot size
-      padding = (tile_size - (3 * size)) / 4
+      size = (tile_size / 6.0).clamp(3, 10)
+      x_offset = draw_x + index % 3 * size
+      y_offset = draw_y + index / 3 * size
 
-      count.times do |i|
-        row = i / 3
-        col = i % 3
-        Square.new(
-          x: draw_x + (col * (size + padding)) + padding,
-          y: draw_y + (row * (size + padding)) + padding,
-          size: size,
-          color: color,
-          z: z + 1
+      Square.new(
+        x: x_offset, y: y_offset,
+        size: size,
+        color: color,
+        z: z + 1
+      )
+
+      if count > 1
+        Text.new(
+          count.to_s,
+          x: x_offset,
+          y: y_offset,
+          size: (size * 0.8),
+          color: 'white',
+          z: z + 2
         )
       end
     end
+
   end
 
   def x

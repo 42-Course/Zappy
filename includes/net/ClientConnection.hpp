@@ -61,11 +61,10 @@ namespace Zappy {
         std::string commandBuffer_;
         std::queue<std::string> pendingCommands_;
         
-        // std::unique_ptr<Player> player_;
-        Player* player_;
+        Player* player_; // owned by the World object
         // std::unique_ptr<Spectator> spectator_;
         
         void processBuffer();
         bool isCommandComplete(const std::string& cmd) const;
     };
-} 
+}

@@ -137,7 +137,6 @@ namespace Zappy {
         network_->registerPlayerCommand("see", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<SeeCommand>(*world_, tokens, client);
         });
-
     }
 
     Engine::~Engine() {

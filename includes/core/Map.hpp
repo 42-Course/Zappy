@@ -3,11 +3,11 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include "core/Resource.hpp"
 
 namespace Zappy {
     // Forward declarations
     class Tile;
-    class Resource;
 
     class Map {
     public:
@@ -29,8 +29,8 @@ namespace Zappy {
         const Tile* getTile(int x, int y) const;
         
         // Resource operations
-        void addResource(int x, int y, Resource* resource);
-        void removeResource(int x, int y, Resource* resource);
+        void addResource(int x, int y, ResourceType type);
+        void removeResource(int x, int y, ResourceType type);
         
         // Map updates and expansion
         void update();

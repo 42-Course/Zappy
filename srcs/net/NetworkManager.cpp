@@ -240,6 +240,7 @@ namespace Zappy {
             }
         }
 
+        ss << std::endl;
        spectator->sendData(ss.str());
     }
 

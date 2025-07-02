@@ -105,17 +105,17 @@ namespace Zappy {
         tiles_ = std::move(newTiles);
     }
 
-    void Map::addResource(int x, int y, Resource* resource) {
+    void Map::addResource(int x, int y, ResourceType type) {
         Tile* tile = getTile(x, y);
-        if (tile && resource) {
-            tile->addResource(resource);
+        if (tile) {
+            tile->addResource(type);
         }
     }
 
-    void Map::removeResource(int x, int y, Resource* resource) {
+    void Map::removeResource(int x, int y, ResourceType type) {
         Tile* tile = getTile(x, y);
-        if (tile && resource) {
-            tile->removeResource(resource);
+        if (tile) {
+            tile->removeResource(type);
         }
     }
 

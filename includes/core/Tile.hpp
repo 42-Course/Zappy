@@ -1,22 +1,21 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
+#include <string>
 #include "Resource.hpp"
-#include "IObserver.hpp"
 #include "Subject.hpp"
 
 namespace Zappy {
     class Tile : public Subject {
     public:
         Tile();
-        ~Tile();
+        ~Tile() = default;
 
         // Resource operations
-        void addResource(Resource* resource);
-        void removeResource(Resource* resource);
+        void addResource(ResourceType type, int count = 1);
+        void removeResource(ResourceType type, int count = 1);
         int getResourceCount(ResourceType type) const;
-        const std::vector<Resource*>& getResources() const { return resources_; }
-        std::vector<int> getAllResourceCounts() const;
+        std::unordered_map<ResourceType, int> getAllResourceCounts() const;
         std::string getResourceCountsAsString() const;
         std::string toBctString(int x, int y) const;
         std::string resourcesToString() const;
@@ -26,6 +25,7 @@ namespace Zappy {
         void notifyResourceRemoved(ResourceType type) const;
 
     private:
-        std::vector<Resource*> resources_;  // Non-owning pointers, resources owned by World
+        std::unordered_map<ResourceType, int> resources_;
+        void initializeRandomResources();
     };
-} 
+}

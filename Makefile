@@ -48,7 +48,8 @@ SRC += srcs/commands/player/ForwardCommand.cpp \
        srcs/commands/player/RightCommand.cpp \
        srcs/commands/player/LeftCommand.cpp \
        srcs/commands/player/InventoryCommand.cpp \
-       srcs/commands/player/SeeCommand.cpp
+       srcs/commands/player/SeeCommand.cpp \
+       srcs/commands/player/TakeCommand.cpp
 
 # STDIN Commands
 SRC += srcs/commands/server/ExitCommand.cpp \

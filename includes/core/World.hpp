@@ -13,11 +13,11 @@ namespace Zappy {
     class World {
     public:
         World(int width, int height, bool infiniteMap = false);
-        // ~World();
+        ~World() = default;
 
         // Map operations
-        const Map& getMap() const { return *map_; }
-        const Map& getMap() { return *map_; }
+        Map& getMap() const { return *map_; }
+        Map& getMap() { return *map_; }
         bool isInfiniteMap() const { return map_->isInfinite(); }
         void setInfiniteMap(bool infinite) { map_->setInfinite(infinite); }
         

@@ -43,7 +43,7 @@ namespace Zappy {
         void levelUp();
 
         // Inventory management
-        void addResource(ResourceType type, int amount);
+        void addResource(ResourceType type, int amount = 1);
         void removeResource(ResourceType type, int amount);
         void take(Resource* resource);
         void drop(Resource* resource);

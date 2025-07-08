@@ -112,11 +112,16 @@ namespace Zappy {
         }
     }
 
-    void Map::removeResource(int x, int y, ResourceType type) {
+    bool Map::hasResource(const Tile &tile, ResourceType type) {
+        return tile.getResourceCount(type) > 0;
+    }
+
+    bool Map::removeResource(int x, int y, ResourceType type) {
         Tile* tile = getTile(x, y);
-        if (tile) {
-            tile->removeResource(type);
-        }
+        if (!tile || !hasResource(*tile, type))
+            return false;
+        tile->removeResource(type);
+        return true;
     }
 
     std::string Map::toMszString() const {

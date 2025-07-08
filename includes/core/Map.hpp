@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include "core/Resource.hpp"
+#include "core/Tile.hpp"
 
 namespace Zappy {
     // Forward declarations
@@ -30,7 +31,8 @@ namespace Zappy {
         
         // Resource operations
         void addResource(int x, int y, ResourceType type);
-        void removeResource(int x, int y, ResourceType type);
+        bool removeResource(int x, int y, ResourceType type);
+        bool hasResource(const Tile &tile, ResourceType type);
         
         // Map updates and expansion
         void update();

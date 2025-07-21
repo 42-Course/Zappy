@@ -14,6 +14,10 @@
 #include "core/Tile.hpp"
 #include <sstream>
 #include "commands/CommandDispatcher.hpp"
+#include "commands/spectator/MCTCommand.hpp"
+#include "commands/spectator/MSZCommand.hpp"
+#include "commands/spectator/SGTCommand.hpp"
+#include "commands/spectator/TNACommand.hpp"
 
 namespace Zappy {
     NetworkManager::NetworkManager(World& world, GameLoop& gameLoop, int playerPort, int spectatorPort)
@@ -210,33 +214,15 @@ namespace Zappy {
             return;
         }
 
-        const Map& map = world_.getMap();
-
-        // Map size
-        spectator->sendData(map.toMszString());
-        spectator->sendData(gameLoop_.toSgtString());
-
-        // Tiles
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
-                const Tile* tile = map.getTile(x, y);
-                if (tile) {
-                    spectator->sendData(tile->toBctString(x, y));
-                }
-            }
-        }
-
-        // Team names
-        for (const auto& team : world_.getTeams()) {
-            spectator->sendData(team->toTnaString());
-        }
+        MSZCommand(world_, {}, spectator).execute();
+        SGTCommand(gameLoop_, {}, spectator).execute();
+        MCTCommand(world_, {}, spectator).execute();
+        TNACommand(world_, {}, spectator).execute();
 
         // Players
-        for (const auto& [id, player] : world_.getPlayers()) {
-            if (player) {
+        for (const auto& [id, player] : world_.getPlayers())
+            if (player)
                 spectator->sendData(player->toPnwString());
-            }
-        }
 
        spectator->sendData("\n");
     }

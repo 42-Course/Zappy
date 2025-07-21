@@ -94,9 +94,10 @@ namespace Zappy {
         notifyInventoryChanged();
     }
 
-    void Player::removeResource(ResourceType type, int amount) {
-        if (!alive_ || amount <= 0) return;
+    bool Player::removeResource(ResourceType type, int amount) {
+        if (!alive_ || amount <= 0) return false;
         
+        if (inventory_.getCount(type) < amount) return false;
         // Create a single resource and remove it multiple times
         for (int i = 0; i < amount; i++) {
             if (!inventory_.remove(type)) {
@@ -104,6 +105,7 @@ namespace Zappy {
             }
         }
         notifyInventoryChanged();
+        return true;
     }
 
     void Player::enqueueCommand(std::unique_ptr<ICommand> command) {
@@ -122,22 +124,6 @@ namespace Zappy {
     //     // TODO: Implement vision cone based on direction
     //     // This will need World reference to check tiles
     // }
-    
-    void Player::take(Resource* resource) {
-        if (!alive_ || !resource) return;
-        
-        if (inventory_.add(resource->getType())) {
-            notifyInventoryChanged();
-        }
-    }
-
-    void Player::drop(Resource* resource) {
-        if (!alive_ || !resource) return;
-        
-        if (inventory_.remove(resource->getType())) {
-            notifyInventoryChanged();
-        }
-    }
 
     void Player::broadcast(const std::string& message) {
         if (!alive_ || message.empty()) return;

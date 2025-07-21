@@ -19,6 +19,7 @@
 #include "commands/player/InventoryCommand.hpp"
 #include "commands/player/SeeCommand.hpp"
 #include "commands/player/TakeCommand.hpp"
+#include "commands/player/DropCommand.hpp"
 #include <csignal>
 #include <string.h>
 #include <iostream>
@@ -141,6 +142,10 @@ namespace Zappy {
 
         network_->registerPlayerCommand("take", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
             return std::make_unique<TakeCommand>(*world_, tokens, client);
+        });
+
+        network_->registerPlayerCommand("drop", [this](const std::vector<std::string>& tokens, ClientConnection* client) {
+            return std::make_unique<DropCommand>(*world_, tokens, client);
         });
     }
 

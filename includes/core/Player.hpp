@@ -44,9 +44,7 @@ namespace Zappy {
 
         // Inventory management
         void addResource(ResourceType type, int amount = 1);
-        void removeResource(ResourceType type, int amount);
-        void take(Resource* resource);
-        void drop(Resource* resource);
+        bool removeResource(ResourceType type, int amount = 1);
 
         // Game mechanics
         bool startIncantation();

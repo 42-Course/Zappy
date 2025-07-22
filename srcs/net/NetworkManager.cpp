@@ -223,8 +223,11 @@ namespace Zappy {
         for (const auto& [id, player] : world_.getPlayers())
             if (player)
                 spectator->sendData(player->toPnwString());
-
-       spectator->sendData("\n");
+        
+        // History of commands
+        for (const auto & history_entry: broadcaster_.getHistory())
+            spectator->sendData(history_entry);
+        spectator->sendData("\n");
     }
 
     size_t NetworkManager::connectedClientsSize() const {

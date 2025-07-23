@@ -1,0 +1,59 @@
+2025-07-23 15:47:10.604 [INFO] Zappy Server starting up...
+2025-07-23 15:47:10.604 [INFO] Configuration created: 10x10 map, 3 players per team
+2025-07-23 15:47:10.604 [INFO] Added team: Team Rocket
+2025-07-23 15:47:10.604 [INFO] Initializing game engine...
+2025-07-23 15:47:10.605 [INFO] Setting up signal handlers...
+2025-07-23 15:47:10.605 [INFO] Starting game engine...
+2025-07-23 15:47:14.322 [ERROR] Command msz invalid: Empty command
+2025-07-23 15:47:14.322 [INFO] Command msz: Sent map size
+2025-07-23 15:47:14.322 [ERROR] Command sgt invalid: Empty command
+2025-07-23 15:47:14.322 [INFO] Command sgt: Sent current tick rate
+2025-07-23 15:47:14.322 [ERROR] Command mct invalid: Empty command
+2025-07-23 15:47:14.323 [INFO] Command mct: Sent map content
+2025-07-23 15:47:14.323 [ERROR] Command tna invalid: Empty command
+2025-07-23 15:47:14.324 [INFO] Command tna: Sent all team names
+2025-07-23 15:47:15.515 [INFO] Command sst: Set tick rate to 1
+2025-07-23 15:47:37.521 [INFO] Command forward: Moved player forward to (4, 0)
+2025-07-23 15:47:38.521 [INFO] Command sst: Set tick rate to 7
+2025-07-23 15:47:39.379 [INFO] Command forward: Moved player forward to (4, 9)
+2025-07-23 15:47:42.242 [INFO] Command forward: Moved player forward to (4, 8)
+2025-07-23 15:47:43.960 [INFO] Command forward: Moved player forward to (4, 7)
+2025-07-23 15:47:47.253 [INFO] Command forward: Moved player forward to (4, 6)
+2025-07-23 15:47:48.255 [INFO] Command forward: Moved player forward to (4, 5)
+2025-07-23 15:47:49.256 [INFO] Command forward: Moved player forward to (4, 4)
+2025-07-23 15:47:50.258 [INFO] Command forward: Moved player forward to (4, 3)
+2025-07-23 15:47:51.260 [INFO] Command forward: Moved player forward to (4, 2)
+2025-07-23 15:47:52.262 [INFO] Command forward: Moved player forward to (4, 1)
+2025-07-23 15:47:53.264 [INFO] Command forward: Moved player forward to (4, 0)
+2025-07-23 15:47:54.266 [INFO] Command forward: Moved player forward to (4, 9)
+2025-07-23 15:47:55.268 [INFO] Command forward: Moved player forward to (4, 8)
+2025-07-23 15:47:58.416 [INFO] Command left: Player turned left
+2025-07-23 15:47:59.418 [INFO] Command forward: Moved player forward to (3, 8)
+2025-07-23 15:48:00.420 [INFO] Command forward: Moved player forward to (2, 8)
+2025-07-23 15:48:01.421 [INFO] Command forward: Moved player forward to (1, 8)
+2025-07-23 15:48:02.423 [INFO] Command forward: Moved player forward to (0, 8)
+2025-07-23 15:48:03.425 [INFO] Command forward: Moved player forward to (9, 8)
+2025-07-23 15:48:04.427 [INFO] Command forward: Moved player forward to (8, 8)
+2025-07-23 15:48:05.429 [INFO] Command forward: Moved player forward to (7, 8)
+2025-07-23 15:48:06.430 [INFO] Command forward: Moved player forward to (6, 8)
+2025-07-23 15:48:07.432 [INFO] Command forward: Moved player forward to (5, 8)
+2025-07-23 15:48:08.434 [INFO] Command left: Player turned left
+2025-07-23 15:48:09.435 [INFO] Command forward: Moved player forward to (5, 9)
+2025-07-23 15:48:10.437 [INFO] Command forward: Moved player forward to (5, 0)
+2025-07-23 15:48:11.438 [INFO] Command forward: Moved player forward to (5, 1)
+2025-07-23 15:48:12.440 [INFO] Command forward: Moved player forward to (5, 2)
+2025-07-23 15:48:13.442 [INFO] Command forward: Moved player forward to (5, 3)
+2025-07-23 15:48:14.444 [INFO] Command forward: Moved player forward to (5, 4)
+2025-07-23 15:48:15.446 [INFO] Command forward: Moved player forward to (5, 5)
+2025-07-23 15:48:16.447 [INFO] Command forward: Moved player forward to (5, 6)
+2025-07-23 15:48:17.449 [INFO] Command forward: Moved player forward to (5, 7)
+2025-07-23 15:48:18.451 [INFO] Command forward: Moved player forward to (5, 8)
+2025-07-23 15:48:19.453 [INFO] Command forward: Moved player forward to (5, 9)
+2025-07-23 15:48:20.455 [INFO] Command forward: Moved player forward to (5, 0)
+2025-07-23 15:48:21.456 [INFO] Command forward: Moved player forward to (5, 1)
+2025-07-23 15:48:22.458 [INFO] Command forward: Moved player forward to (5, 2)
+2025-07-23 15:48:23.460 [INFO] Command forward: Moved player forward to (5, 3)
+2025-07-23 15:48:24.462 [INFO] Command forward: Moved player forward to (5, 4)
+2025-07-23 15:48:25.463 [INFO] Command forward: Moved player forward to (5, 5)
+2025-07-23 15:48:26.466 [INFO] Command forward: Moved player forward to (5, 6)
+2025-07-23 15:54:21.304 [INFO] Zappy Server shutting down normally

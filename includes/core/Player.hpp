@@ -38,6 +38,7 @@ namespace Zappy {
         std::pair<int, int> getPosition() const;
         void setPosition(int x, int y);
         void setDirection(Direction direction);
+        void kick(Direction direction);
 
         // Level management
         void levelUp();

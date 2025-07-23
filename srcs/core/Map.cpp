@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cmath>
 
+// FOR NOW ALL MAPS ARE FINITE
+// INFINITE LOGIC WILL BE DONE LATER
 namespace Zappy {
     Map::Map(int width, int height, bool infinite) 
         : width_(width)
@@ -23,11 +25,11 @@ namespace Zappy {
     Map::~Map() = default;
 
     void Map::normalizeCoordinates(int& x, int& y) const {
-        if (!infinite_) {
-            return;  // No normalization needed for finite maps
+        if (infinite_) {
+            return;  // No normalization needed for infinite maps
         }
 
-        // Handle wrapping for infinite maps
+        // Handle wrapping for finite maps (Torus projection)
         if (x < 0) {
             x = width_ - (std::abs(x) % width_);
         } else if (x >= width_) {
@@ -60,50 +62,49 @@ namespace Zappy {
         if (!isValidCoordinate(x, y)) {
             return nullptr;
         }
-        int nx = x, ny = y;
-        normalizeCoordinates(nx, ny);
-        return tiles_[ny * width_ + nx].get();
+        normalizeCoordinates(x, y);
+        return tiles_[y * width_ + x].get();
     }
 
-    void Map::expand(int newWidth, int newHeight) {
-        if (newWidth <= width_ && newHeight <= height_) {
-            return;  // No expansion needed
-        }
+    // void Map::expand(int newWidth, int newHeight) {
+    //     if (newWidth <= width_ && newHeight <= height_) {
+    //         return;  // No expansion needed
+    //     }
 
-        resizeTiles(newWidth, newHeight);
-        width_ = newWidth;
-        height_ = newHeight;
-    }
+    //     resizeTiles(newWidth, newHeight);
+    //     width_ = newWidth;
+    //     height_ = newHeight;
+    // }
 
-    void Map::expandToInclude(int x, int y) {
-        if (infinite_) {
-            return;  // No expansion needed for infinite maps
-        }
+    // void Map::expandToInclude(int x, int y) {
+    //     if (infinite_) {
+    //         return;  // No expansion needed for infinite maps
+    //     }
 
-        int newWidth = std::max(width_, x + 1);
-        int newHeight = std::max(height_, y + 1);
-        expand(newWidth, newHeight);
-    }
+    //     int newWidth = std::max(width_, x + 1);
+    //     int newHeight = std::max(height_, y + 1);
+    //     expand(newWidth, newHeight);
+    // }
 
-    void Map::resizeTiles(int newWidth, int newHeight) {
-        std::vector<std::unique_ptr<Tile>> newTiles;
-        newTiles.reserve(newWidth * newHeight);
+    // void Map::resizeTiles(int newWidth, int newHeight) {
+    //     std::vector<std::unique_ptr<Tile>> newTiles;
+    //     newTiles.reserve(newWidth * newHeight);
 
-        // Create new tiles
-        for (int y = 0; y < newHeight; ++y) {
-            for (int x = 0; x < newWidth; ++x) {
-                if (x < width_ && y < height_) {
-                    // Move existing tile
-                    newTiles.push_back(std::move(tiles_[y * width_ + x]));
-                } else {
-                    // Create new tile
-                    newTiles.push_back(std::make_unique<Tile>());
-                }
-            }
-        }
+    //     // Create new tiles
+    //     for (int y = 0; y < newHeight; ++y) {
+    //         for (int x = 0; x < newWidth; ++x) {
+    //             if (x < width_ && y < height_) {
+    //                 // Move existing tile
+    //                 newTiles.push_back(std::move(tiles_[y * width_ + x]));
+    //             } else {
+    //                 // Create new tile
+    //                 newTiles.push_back(std::make_unique<Tile>());
+    //             }
+    //         }
+    //     }
 
-        tiles_ = std::move(newTiles);
-    }
+    //     tiles_ = std::move(newTiles);
+    // }
 
     void Map::addResource(int x, int y, ResourceType type) {
         Tile* tile = getTile(x, y);

@@ -58,7 +58,7 @@ CommandStatus SeeCommand::execute() {
             int tx, ty;
             std::vector<std::string> contents;
             computeTileInView(px, py, dir, l, offset, tx, ty);
-            map.normalizeCoordinates(tx, ty);  // safe even if not infinite
+            map.normalizeCoordinates(tx, ty);
             const Tile* tile = map.getTile(tx, ty);
             contents.push_back(tile ? tile->resourcesToString() : "");
 

@@ -70,6 +70,20 @@ namespace Zappy {
         notifyMoved();
     }
 
+    void Player::kick(Direction direction) {
+        if (!alive_) return;
+        std::pair<int, int> vec = {0, 0};
+
+        switch (direction) {
+            case Direction::NORTH: vec.second = -1;
+            case Direction::EAST: vec.first = 1;
+            case Direction::SOUTH: vec.second = 1;
+            case Direction::WEST: vec.first = -1;
+        }
+        setPosition(x_ + vec.first, y_ + vec.second)
+        // notifyKick();
+    }
+
     void Player::setDirection(Direction direction) {
         if (!alive_) return;
         direction_ = direction;

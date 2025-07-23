@@ -37,8 +37,8 @@ namespace Zappy {
         // Map updates and expansion
         void update();
         void generateResources();
-        void expand(int newWidth, int newHeight);
-        void expandToInclude(int x, int y);
+        // void expand(int newWidth, int newHeight);
+        // void expandToInclude(int x, int y);
 
         // Serialization helpers for network responses
         std::string toMszString() const;
@@ -48,6 +48,6 @@ namespace Zappy {
         bool infinite_;
         std::vector<std::unique_ptr<Tile>> tiles_;
 
-        void resizeTiles(int newWidth, int newHeight);
+        // void resizeTiles(int newWidth, int newHeight);
     };
 } 

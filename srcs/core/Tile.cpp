@@ -73,9 +73,9 @@ namespace Zappy {
     void Tile::initializeRandomResources() {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(0, 5); // adjust range as needed
+        std::uniform_int_distribution<int> dist(0, 1); // adjust range as needed
 
-        for (int i = 0; i <= static_cast<int>(ResourceType::THYSTAME); ++i) {
+        for (int i = 0; i <= /*static_cast<int>(ResourceType::THYSTAME)*/2; ++i) {
             ResourceType type = static_cast<ResourceType>(i);
             resources_[type] = dist(gen);
         }

@@ -3,6 +3,7 @@
 #include "core/Team.hpp"
 #include "core/Tile.hpp"
 #include <sstream>
+#include <iostream>
 
 namespace Zappy {
 
@@ -64,6 +65,16 @@ namespace Zappy {
         broadcast("pdi " + std::to_string(player->getId()) + "\n", true);
     }
 
+    void SpectatorBroadcaster::onPlayerDropedResource(const Player* player, ResourceType type) {
+        if (!player) return ;
+        broadcast("pdr " + std::to_string(player->getId()) + " " + std::to_string((int)type) + "\n", true);
+    }
+
+    void SpectatorBroadcaster::onPlayerTookResource(const Player* player, ResourceType type) {
+        if (!player) return ;
+        broadcast("pgt " + std::to_string(player->getId()) + " " + std::to_string((int)type) + "\n", true);
+    }
+
     void SpectatorBroadcaster::onPlayerAdded(const Player* player) {
         if (!player) return;
         std::stringstream ss;
@@ -101,10 +112,12 @@ namespace Zappy {
     }
 
     void SpectatorBroadcaster::onResourceAdded(const Tile* tile, ResourceType) {
+        std::cout << "Observer reacting added" << std::endl;
         broadcast(formatTileMessage(tile, 0, 0), true); // TODO: get actual x/y
     }
 
     void SpectatorBroadcaster::onResourceRemoved(const Tile* tile, ResourceType) {
+        std::cout << "Observer reacting removed" << std::endl;
         broadcast(formatTileMessage(tile, 0, 0), true); // TODO: get actual x/y
     }
 }

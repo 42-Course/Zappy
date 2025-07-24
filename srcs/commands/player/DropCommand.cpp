@@ -38,18 +38,21 @@ CommandStatus DropCommand::execute() {
   int px = player->getX();
   int py = player->getY();
 
-  Map& map = world_.getMap();
-
-  bool success = player->removeResource(type_);
+  bool success = player->removeResource(type_); // Observer will react
 
   if (!success) {
     getClient()->sendData("ko\n");  
     setErrorMessage("Unable to take resource");
     return CommandStatus::FAILED;
   }
-  map.addResource(px, py, type_);
+
+  Map& map = world_.getMap();
+
+  map.addResource(px, py, type_); // must add an observer notification to the tile
+  
   getClient()->sendData("ok\n");  
-  logCommand("Player takes resource");
+  
+  logCommand(player->toString() + " has taken a " + Resource::typeToString(type_));
   return CommandStatus::COMPLETED;
 }
 

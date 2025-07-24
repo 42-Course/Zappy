@@ -5,12 +5,13 @@
 #include <functional>
 #include "core/Resource.hpp"
 #include "core/Tile.hpp"
+#include "Subject.hpp"
 
 namespace Zappy {
     // Forward declarations
     class Tile;
 
-    class Map {
+    class Map: public Subject {
     public:
         Map(int width, int height, bool infinite);
         ~Map();
@@ -40,6 +41,10 @@ namespace Zappy {
         // void expand(int newWidth, int newHeight);
         // void expandToInclude(int x, int y);
 
+        // Map notifications
+        void notifyResourceAdded(const Tile *tile, ResourceType type) const;
+        void notifyResourceRemoved(const Tile *tile, ResourceType type) const;
+        
         // Serialization helpers for network responses
         std::string toMszString() const;
     private:

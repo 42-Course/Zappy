@@ -1,4 +1,40 @@
-2025-07-23 15:47:14.322 [ERROR] Command msz invalid: Empty command
-2025-07-23 15:47:14.322 [ERROR] Command sgt invalid: Empty command
-2025-07-23 15:47:14.322 [ERROR] Command mct invalid: Empty command
-2025-07-23 15:47:14.323 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:38:37.082 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:38:45.239 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:38:45.239 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:38:45.239 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:38:45.242 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:39:16.330 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:39:16.330 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:39:16.330 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:39:16.333 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:42:22.809 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:42:24.889 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:42:30.571 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:42:30.571 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:42:30.571 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:42:30.574 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:43:18.141 [ERROR] Command drop invalid: Unknown resource name: doof
+2025-07-24 15:43:23.433 [ERROR] Command drop invalid: Unknown resource name: dreaumere
+2025-07-24 15:52:17.195 [ERROR] Fatal error: Failed to bind spectator socket
+2025-07-24 15:52:33.471 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:52:33.471 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:52:33.471 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:52:33.474 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:53:35.812 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:53:35.812 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:53:35.812 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:53:35.815 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:55:08.163 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:55:08.164 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:55:08.164 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:55:08.167 [ERROR] Command tna invalid: Empty command
+2025-07-24 16:24:14.581 [ERROR] Command msz invalid: Empty command
+2025-07-24 16:24:14.581 [ERROR] Command sgt invalid: Empty command
+2025-07-24 16:24:14.581 [ERROR] Command mct invalid: Empty command
+2025-07-24 16:24:14.584 [ERROR] Command tna invalid: Empty command
+2025-07-24 16:27:37.821 [ERROR] Command msz invalid: Empty command
+2025-07-24 16:27:37.822 [ERROR] Command sgt invalid: Empty command
+2025-07-24 16:27:37.822 [ERROR] Command mct invalid: Empty command
+2025-07-24 16:27:37.825 [ERROR] Command tna invalid: Empty command
+2025-07-24 16:27:57.954 [ERROR] Command take invalid: Unknown resource name: doof
+2025-07-24 16:28:03.533 [ERROR] Command take invalid: Unknown resource name: doof

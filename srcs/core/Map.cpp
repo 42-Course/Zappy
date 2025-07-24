@@ -106,22 +106,38 @@ namespace Zappy {
     //     tiles_ = std::move(newTiles);
     // }
 
-    void Map::addResource(int x, int y, ResourceType type) {
-        Tile* tile = getTile(x, y);
-        if (tile) {
-            tile->addResource(type);
-        }
-    }
-
     bool Map::hasResource(const Tile &tile, ResourceType type) {
         return tile.getResourceCount(type) > 0;
     }
 
+    void Map::notifyResourceAdded(const Tile *tile, ResourceType type) const {
+        if (!tile) return;
+
+        notify([tile, type](IObserver* obs) {
+            obs->onResourceAdded(tile, type);
+        });
+    }
+
+    void Map::notifyResourceRemoved(const Tile *tile, ResourceType type) const {
+        if (!tile) return;
+
+        notify([tile, type](IObserver* obs) {
+            obs->onResourceRemoved(tile, type);
+        });
+    }
+
+    void Map::addResource(int x, int y, ResourceType type) {
+        Tile* tile = getTile(x, y);
+        if (!tile) return;
+        tile->addResource(type);
+        notifyResourceAdded(tile, type);
+    }
+
     bool Map::removeResource(int x, int y, ResourceType type) {
         Tile* tile = getTile(x, y);
-        if (!tile || !hasResource(*tile, type))
-            return false;
+        if (!tile || !hasResource(*tile, type)) return false;
         tile->removeResource(type);
+        notifyResourceRemoved(tile, type);
         return true;
     }
 

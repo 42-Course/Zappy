@@ -20,10 +20,6 @@ namespace Zappy {
         std::string toBctString(int x, int y) const;
         std::string resourcesToString() const;
 
-    protected:
-        void notifyResourceAdded(ResourceType type) const;
-        void notifyResourceRemoved(ResourceType type) const;
-
     private:
         std::unordered_map<ResourceType, int> resources_;
         void initializeRandomResources();

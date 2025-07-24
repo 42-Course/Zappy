@@ -1,59 +1,170 @@
-2025-07-23 15:47:10.604 [INFO] Zappy Server starting up...
-2025-07-23 15:47:10.604 [INFO] Configuration created: 10x10 map, 3 players per team
-2025-07-23 15:47:10.604 [INFO] Added team: Team Rocket
-2025-07-23 15:47:10.604 [INFO] Initializing game engine...
-2025-07-23 15:47:10.605 [INFO] Setting up signal handlers...
-2025-07-23 15:47:10.605 [INFO] Starting game engine...
-2025-07-23 15:47:14.322 [ERROR] Command msz invalid: Empty command
-2025-07-23 15:47:14.322 [INFO] Command msz: Sent map size
-2025-07-23 15:47:14.322 [ERROR] Command sgt invalid: Empty command
-2025-07-23 15:47:14.322 [INFO] Command sgt: Sent current tick rate
-2025-07-23 15:47:14.322 [ERROR] Command mct invalid: Empty command
-2025-07-23 15:47:14.323 [INFO] Command mct: Sent map content
-2025-07-23 15:47:14.323 [ERROR] Command tna invalid: Empty command
-2025-07-23 15:47:14.324 [INFO] Command tna: Sent all team names
-2025-07-23 15:47:15.515 [INFO] Command sst: Set tick rate to 1
-2025-07-23 15:47:37.521 [INFO] Command forward: Moved player forward to (4, 0)
-2025-07-23 15:47:38.521 [INFO] Command sst: Set tick rate to 7
-2025-07-23 15:47:39.379 [INFO] Command forward: Moved player forward to (4, 9)
-2025-07-23 15:47:42.242 [INFO] Command forward: Moved player forward to (4, 8)
-2025-07-23 15:47:43.960 [INFO] Command forward: Moved player forward to (4, 7)
-2025-07-23 15:47:47.253 [INFO] Command forward: Moved player forward to (4, 6)
-2025-07-23 15:47:48.255 [INFO] Command forward: Moved player forward to (4, 5)
-2025-07-23 15:47:49.256 [INFO] Command forward: Moved player forward to (4, 4)
-2025-07-23 15:47:50.258 [INFO] Command forward: Moved player forward to (4, 3)
-2025-07-23 15:47:51.260 [INFO] Command forward: Moved player forward to (4, 2)
-2025-07-23 15:47:52.262 [INFO] Command forward: Moved player forward to (4, 1)
-2025-07-23 15:47:53.264 [INFO] Command forward: Moved player forward to (4, 0)
-2025-07-23 15:47:54.266 [INFO] Command forward: Moved player forward to (4, 9)
-2025-07-23 15:47:55.268 [INFO] Command forward: Moved player forward to (4, 8)
-2025-07-23 15:47:58.416 [INFO] Command left: Player turned left
-2025-07-23 15:47:59.418 [INFO] Command forward: Moved player forward to (3, 8)
-2025-07-23 15:48:00.420 [INFO] Command forward: Moved player forward to (2, 8)
-2025-07-23 15:48:01.421 [INFO] Command forward: Moved player forward to (1, 8)
-2025-07-23 15:48:02.423 [INFO] Command forward: Moved player forward to (0, 8)
-2025-07-23 15:48:03.425 [INFO] Command forward: Moved player forward to (9, 8)
-2025-07-23 15:48:04.427 [INFO] Command forward: Moved player forward to (8, 8)
-2025-07-23 15:48:05.429 [INFO] Command forward: Moved player forward to (7, 8)
-2025-07-23 15:48:06.430 [INFO] Command forward: Moved player forward to (6, 8)
-2025-07-23 15:48:07.432 [INFO] Command forward: Moved player forward to (5, 8)
-2025-07-23 15:48:08.434 [INFO] Command left: Player turned left
-2025-07-23 15:48:09.435 [INFO] Command forward: Moved player forward to (5, 9)
-2025-07-23 15:48:10.437 [INFO] Command forward: Moved player forward to (5, 0)
-2025-07-23 15:48:11.438 [INFO] Command forward: Moved player forward to (5, 1)
-2025-07-23 15:48:12.440 [INFO] Command forward: Moved player forward to (5, 2)
-2025-07-23 15:48:13.442 [INFO] Command forward: Moved player forward to (5, 3)
-2025-07-23 15:48:14.444 [INFO] Command forward: Moved player forward to (5, 4)
-2025-07-23 15:48:15.446 [INFO] Command forward: Moved player forward to (5, 5)
-2025-07-23 15:48:16.447 [INFO] Command forward: Moved player forward to (5, 6)
-2025-07-23 15:48:17.449 [INFO] Command forward: Moved player forward to (5, 7)
-2025-07-23 15:48:18.451 [INFO] Command forward: Moved player forward to (5, 8)
-2025-07-23 15:48:19.453 [INFO] Command forward: Moved player forward to (5, 9)
-2025-07-23 15:48:20.455 [INFO] Command forward: Moved player forward to (5, 0)
-2025-07-23 15:48:21.456 [INFO] Command forward: Moved player forward to (5, 1)
-2025-07-23 15:48:22.458 [INFO] Command forward: Moved player forward to (5, 2)
-2025-07-23 15:48:23.460 [INFO] Command forward: Moved player forward to (5, 3)
-2025-07-23 15:48:24.462 [INFO] Command forward: Moved player forward to (5, 4)
-2025-07-23 15:48:25.463 [INFO] Command forward: Moved player forward to (5, 5)
-2025-07-23 15:48:26.466 [INFO] Command forward: Moved player forward to (5, 6)
-2025-07-23 15:54:21.304 [INFO] Zappy Server shutting down normally
+2025-07-24 15:38:37.071 [INFO] Zappy Server starting up...
+2025-07-24 15:38:37.072 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:38:37.072 [INFO] Added team: Team Rocket
+2025-07-24 15:38:37.072 [INFO] Initializing game engine...
+2025-07-24 15:38:37.082 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:38:38.977 [INFO] Zappy Server starting up...
+2025-07-24 15:38:38.977 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:38:38.977 [INFO] Added team: Team Rocket
+2025-07-24 15:38:38.977 [INFO] Initializing game engine...
+2025-07-24 15:38:38.986 [INFO] Setting up signal handlers...
+2025-07-24 15:38:38.986 [INFO] Starting game engine...
+2025-07-24 15:38:45.239 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:38:45.239 [INFO] Command msz: Sent map size
+2025-07-24 15:38:45.239 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:38:45.239 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:38:45.239 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:38:45.242 [INFO] Command mct: Sent map content
+2025-07-24 15:38:45.242 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:38:45.242 [INFO] Command tna: Sent all team names
+2025-07-24 15:38:47.988 [INFO] Command sst: Set tick rate to 6
+2025-07-24 15:38:50.156 [INFO] Command sst: Set tick rate to 7
+2025-07-24 15:39:11.897 [INFO] Command see: Player sees: {linemate food, deraumere linemate, linemate food, }
+
+2025-07-24 15:39:16.330 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:39:16.330 [INFO] Command msz: Sent map size
+2025-07-24 15:39:16.330 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:39:16.330 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:39:16.330 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:39:16.333 [INFO] Command mct: Sent map content
+2025-07-24 15:39:16.333 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:39:16.333 [INFO] Command tna: Sent all team names
+2025-07-24 15:39:26.056 [INFO] Command forward: Moved player forward to (1, 17)
+2025-07-24 15:39:35.355 [INFO] Command take: Player takes resource
+2025-07-24 15:39:45.654 [INFO] Command take: Player takes resource
+2025-07-24 15:41:11.933 [INFO] Zappy Server shutting down normally
+2025-07-24 15:42:13.460 [INFO] Zappy Server starting up...
+2025-07-24 15:42:13.460 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:42:13.460 [INFO] Added team: Team Rocket
+2025-07-24 15:42:13.460 [INFO] Initializing game engine...
+2025-07-24 15:42:13.463 [INFO] Setting up signal handlers...
+2025-07-24 15:42:13.463 [INFO] Starting game engine...
+2025-07-24 15:42:22.806 [INFO] Zappy Server starting up...
+2025-07-24 15:42:22.806 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:42:22.806 [INFO] Added team: Team Rocket
+2025-07-24 15:42:22.806 [INFO] Initializing game engine...
+2025-07-24 15:42:22.809 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:42:24.886 [INFO] Zappy Server starting up...
+2025-07-24 15:42:24.886 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:42:24.886 [INFO] Added team: Team Rocket
+2025-07-24 15:42:24.886 [INFO] Initializing game engine...
+2025-07-24 15:42:24.889 [ERROR] Fatal error: Failed to bind player socket
+2025-07-24 15:42:30.571 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:42:30.571 [INFO] Command msz: Sent map size
+2025-07-24 15:42:30.571 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:42:30.571 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:42:30.571 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:42:30.574 [INFO] Command mct: Sent map content
+2025-07-24 15:42:30.574 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:42:30.574 [INFO] Command tna: Sent all team names
+2025-07-24 15:42:33.226 [INFO] Command sst: Set tick rate to 7
+2025-07-24 15:42:53.679 [INFO] Command see: Player sees: {deraumere linemate food, linemate, deraumere, }
+
+2025-07-24 15:42:56.969 [INFO] Command take: Player takes resource
+2025-07-24 15:43:04.837 [INFO] Command take: Player takes resource
+2025-07-24 15:43:08.556 [INFO] Command take: Player takes resource
+2025-07-24 15:43:17.283 [INFO] Command drop: P(1) - (Team Rocket) has taken a food
+2025-07-24 15:43:18.141 [ERROR] Command drop invalid: Unknown resource name: doof
+2025-07-24 15:43:23.433 [ERROR] Command drop invalid: Unknown resource name: dreaumere
+2025-07-24 15:43:36.880 [INFO] Command drop: P(1) - (Team Rocket) has taken a linemate
+2025-07-24 15:49:32.722 [INFO] Zappy Server shutting down normally
+2025-07-24 15:52:17.191 [INFO] Zappy Server starting up...
+2025-07-24 15:52:17.191 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:52:17.191 [INFO] Added team: Team Rocket
+2025-07-24 15:52:17.191 [INFO] Initializing game engine...
+2025-07-24 15:52:17.195 [ERROR] Fatal error: Failed to bind spectator socket
+2025-07-24 15:52:24.967 [INFO] Zappy Server starting up...
+2025-07-24 15:52:24.967 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:52:24.967 [INFO] Added team: Team Rocket
+2025-07-24 15:52:24.967 [INFO] Initializing game engine...
+2025-07-24 15:52:24.977 [INFO] Setting up signal handlers...
+2025-07-24 15:52:24.977 [INFO] Starting game engine...
+2025-07-24 15:52:33.471 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:52:33.471 [INFO] Command msz: Sent map size
+2025-07-24 15:52:33.471 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:52:33.471 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:52:33.471 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:52:33.474 [INFO] Command mct: Sent map content
+2025-07-24 15:52:33.474 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:52:33.474 [INFO] Command tna: Sent all team names
+2025-07-24 15:52:35.081 [INFO] Command sst: Set tick rate to 7
+2025-07-24 15:52:46.380 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 15:53:27.712 [INFO] Zappy Server shutting down normally
+2025-07-24 15:53:31.137 [INFO] Zappy Server starting up...
+2025-07-24 15:53:31.137 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:53:31.137 [INFO] Added team: Team Rocket
+2025-07-24 15:53:31.137 [INFO] Initializing game engine...
+2025-07-24 15:53:31.140 [INFO] Setting up signal handlers...
+2025-07-24 15:53:31.140 [INFO] Starting game engine...
+2025-07-24 15:53:35.812 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:53:35.812 [INFO] Command msz: Sent map size
+2025-07-24 15:53:35.812 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:53:35.812 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:53:35.812 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:53:35.815 [INFO] Command mct: Sent map content
+2025-07-24 15:53:35.815 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:53:35.815 [INFO] Command tna: Sent all team names
+2025-07-24 15:53:37.971 [INFO] Command sst: Set tick rate to 7
+2025-07-24 15:53:48.555 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 15:54:55.915 [INFO] Zappy Server shutting down normally
+2025-07-24 15:54:59.889 [INFO] Zappy Server starting up...
+2025-07-24 15:54:59.889 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 15:54:59.889 [INFO] Added team: Team Rocket
+2025-07-24 15:54:59.889 [INFO] Initializing game engine...
+2025-07-24 15:54:59.893 [INFO] Setting up signal handlers...
+2025-07-24 15:54:59.893 [INFO] Starting game engine...
+2025-07-24 15:55:08.163 [ERROR] Command msz invalid: Empty command
+2025-07-24 15:55:08.164 [INFO] Command msz: Sent map size
+2025-07-24 15:55:08.164 [ERROR] Command sgt invalid: Empty command
+2025-07-24 15:55:08.164 [INFO] Command sgt: Sent current tick rate
+2025-07-24 15:55:08.164 [ERROR] Command mct invalid: Empty command
+2025-07-24 15:55:08.167 [INFO] Command mct: Sent map content
+2025-07-24 15:55:08.167 [ERROR] Command tna invalid: Empty command
+2025-07-24 15:55:08.167 [INFO] Command tna: Sent all team names
+2025-07-24 15:55:09.634 [INFO] Command sst: Set tick rate to 7
+2025-07-24 15:55:19.648 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 15:57:55.402 [INFO] Zappy Server shutting down normally
+2025-07-24 16:24:02.901 [INFO] Zappy Server starting up...
+2025-07-24 16:24:02.901 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 16:24:02.901 [INFO] Added team: Team Rocket
+2025-07-24 16:24:02.901 [INFO] Initializing game engine...
+2025-07-24 16:24:02.903 [INFO] Setting up signal handlers...
+2025-07-24 16:24:02.903 [INFO] Starting game engine...
+2025-07-24 16:24:14.581 [ERROR] Command msz invalid: Empty command
+2025-07-24 16:24:14.581 [INFO] Command msz: Sent map size
+2025-07-24 16:24:14.581 [ERROR] Command sgt invalid: Empty command
+2025-07-24 16:24:14.581 [INFO] Command sgt: Sent current tick rate
+2025-07-24 16:24:14.581 [ERROR] Command mct invalid: Empty command
+2025-07-24 16:24:14.584 [INFO] Command mct: Sent map content
+2025-07-24 16:24:14.584 [ERROR] Command tna invalid: Empty command
+2025-07-24 16:24:14.584 [INFO] Command tna: Sent all team names
+2025-07-24 16:24:16.454 [INFO] Command sst: Set tick rate to 7
+2025-07-24 16:24:39.341 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 16:24:48.067 [INFO] Command take: Player takes resource
+2025-07-24 16:25:05.376 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 16:25:15.961 [INFO] Command take: Player takes resource
+2025-07-24 16:26:59.512 [INFO] Zappy Server shutting down normally
+2025-07-24 16:27:32.409 [INFO] Zappy Server starting up...
+2025-07-24 16:27:32.409 [INFO] Configuration created: 20x20 map, 3 players per team
+2025-07-24 16:27:32.409 [INFO] Added team: Team Rocket
+2025-07-24 16:27:32.409 [INFO] Initializing game engine...
+2025-07-24 16:27:32.413 [INFO] Setting up signal handlers...
+2025-07-24 16:27:32.413 [INFO] Starting game engine...
+2025-07-24 16:27:37.821 [ERROR] Command msz invalid: Empty command
+2025-07-24 16:27:37.822 [INFO] Command msz: Sent map size
+2025-07-24 16:27:37.822 [ERROR] Command sgt invalid: Empty command
+2025-07-24 16:27:37.822 [INFO] Command sgt: Sent current tick rate
+2025-07-24 16:27:37.822 [ERROR] Command mct invalid: Empty command
+2025-07-24 16:27:37.825 [INFO] Command mct: Sent map content
+2025-07-24 16:27:37.825 [ERROR] Command tna invalid: Empty command
+2025-07-24 16:27:37.825 [INFO] Command tna: Sent all team names
+2025-07-24 16:27:39.623 [INFO] Command sst: Set tick rate to 6
+2025-07-24 16:27:42.793 [INFO] Command sst: Set tick rate to 7
+2025-07-24 16:27:52.519 [INFO] Command see: Player sees: {linemate food, deraumere linemate food, deraumere, deraumere}
+
+2025-07-24 16:27:56.953 [INFO] Command take: Player takes resource
+2025-07-24 16:27:57.954 [ERROR] Command take invalid: Unknown resource name: doof
+2025-07-24 16:28:03.533 [ERROR] Command take invalid: Unknown resource name: doof
+2025-07-24 16:28:10.399 [INFO] Command take: Player takes resource
+2025-07-24 16:29:42.947 [INFO] Command drop: P(1) - (Team1) has taken a food
+2025-07-24 16:30:15.705 [INFO] Zappy Server shutting down normally

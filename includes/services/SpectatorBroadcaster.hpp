@@ -16,6 +16,8 @@ namespace Zappy {
         void onPlayerLevelUp(const Player* player) override;
         void onPlayerInventoryChanged(const Player* player) override;
         void onPlayerDied(const Player* player) override;
+        void onPlayerDropedResource(const Player* player, ResourceType type) override;
+        void onPlayerTookResource(const Player* player, ResourceType type) override;
         void onPlayerAdded(const Player* player) override;
         void onPlayerRemoved(const Player* player) override;
         void onTeamWon(const Team* team) override;

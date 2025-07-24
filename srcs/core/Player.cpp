@@ -59,6 +59,18 @@ namespace Zappy {
         });
     }
 
+    void Player::notifyDropedResource(ResourceType type) const {
+        notify([this, type](IObserver* obs) {
+            obs->onPlayerDropedResource(this, type);
+        });
+    }
+
+    void Player::notifyTookResource(ResourceType type) const {
+        notify([this, type](IObserver* obs) {
+            obs->onPlayerTookResource(this, type);
+        });
+    }
+
     std::pair<int, int> Player::getPosition() const {
         return std::pair<int, int>(x_, y_);
     }
@@ -75,12 +87,12 @@ namespace Zappy {
         std::pair<int, int> vec = {0, 0};
 
         switch (direction) {
-            case Direction::NORTH: vec.second = -1;
-            case Direction::EAST: vec.first = 1;
-            case Direction::SOUTH: vec.second = 1;
-            case Direction::WEST: vec.first = -1;
+            case Direction::NORTH: vec.second = -1; break;
+            case Direction::EAST: vec.first = 1; break;
+            case Direction::SOUTH: vec.second = 1; break;
+            case Direction::WEST: vec.first = -1; break;
         }
-        setPosition(x_ + vec.first, y_ + vec.second)
+        setPosition(x_ + vec.first, y_ + vec.second);
         // notifyKick();
     }
 
@@ -105,6 +117,7 @@ namespace Zappy {
                 break; // Stop if we can't add more
             }
         }
+        notifyTookResource(type);
         notifyInventoryChanged();
     }
 
@@ -118,6 +131,7 @@ namespace Zappy {
                 break; // Stop if we can't remove more
             }
         }
+        notifyDropedResource(type);
         notifyInventoryChanged();
         return true;
     }
@@ -133,11 +147,6 @@ namespace Zappy {
         alive_ = false;
         notifyDied();
     }
-
-    // void Player::look() {
-    //     // TODO: Implement vision cone based on direction
-    //     // This will need World reference to check tiles
-    // }
 
     void Player::broadcast(const std::string& message) {
         if (!alive_ || message.empty()) return;
@@ -242,6 +251,10 @@ namespace Zappy {
 
     std::string Player::toPbcString(const std::string& message) const {
         return "pbc " + std::to_string(id_) + " " + message + "\n";
+    }
+
+    std::string Player::toString() const {
+        return "P(" + std::to_string(id_) + ") - (" + team_.getName() + ")";
     }
 
 } 

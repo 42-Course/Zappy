@@ -69,13 +69,16 @@ namespace Zappy {
         std::string toPinString() const;  // Inventory
         std::string toPexString() const;  // Expel
         std::string toPbcString(const std::string& message) const;  // Broadcast
-
+        std::string toString() const; // Player to String
     protected:
         void notifyMoved() const;
         void notifyTurned() const;
         void notifyLevelUp() const;
         void notifyInventoryChanged() const;
         void notifyDied() const;
+        void notifyDropedResource(ResourceType type) const;
+        void notifyTookResource(ResourceType type) const;
+
 
     private:
         int id_;

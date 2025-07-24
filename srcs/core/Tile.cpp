@@ -3,6 +3,7 @@
 #include "core/utils.hpp"
 #include <sstream>
 #include <random>
+#include <iostream>
 
 namespace Zappy {
 
@@ -12,7 +13,6 @@ namespace Zappy {
 
     void Tile::addResource(ResourceType type, int count) {
         resources_[type] += count;
-        notifyResourceAdded(type);
     }
 
     void Tile::removeResource(ResourceType type, int count) {
@@ -21,7 +21,6 @@ namespace Zappy {
             current = 0;
         else
             current -= count;
-        notifyResourceRemoved(type);
     }
 
     int Tile::getResourceCount(ResourceType type) const {
@@ -56,18 +55,6 @@ namespace Zappy {
                 items.push_back(Resource::typeToString(type));
         }
         return join(items, " ");
-    }
-    
-    void Tile::notifyResourceAdded(ResourceType type) const {
-        notify([this, type](IObserver* obs) {
-            obs->onResourceAdded(this, type);
-        });
-    }
-
-    void Tile::notifyResourceRemoved(ResourceType type) const {
-        notify([this, type](IObserver* obs) {
-            obs->onResourceRemoved(this, type);
-        });
     }
 
     void Tile::initializeRandomResources() {

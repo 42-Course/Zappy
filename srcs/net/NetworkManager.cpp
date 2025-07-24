@@ -63,6 +63,8 @@ namespace Zappy {
     }
 
     void NetworkManager::start() {
+        world_.getMap().attach(&broadcaster_);  // Subscribe the tile events
+
         // Register player socket
         eventLoop_.addFd(playerSocket_.getFd(), EPOLLIN | EPOLLET, [this](uint32_t events) {
             if (events & EPOLLIN)

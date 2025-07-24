@@ -16,6 +16,8 @@ namespace Zappy {
         virtual void onPlayerLevelUp(const Player* player) = 0;
         virtual void onPlayerInventoryChanged(const Player* player) = 0;
         virtual void onPlayerDied(const Player* player) = 0;
+        virtual void onPlayerDropedResource(const Player* player, ResourceType type) = 0;
+        virtual void onPlayerTookResource(const Player* player, ResourceType type) = 0;
 
         // Team notifications
         virtual void onPlayerAdded(const Player* player) = 0;

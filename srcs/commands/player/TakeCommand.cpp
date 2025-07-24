@@ -5,20 +5,20 @@
 
 namespace Zappy {
 
-TakeCommand::TakeCommand(World& world, const std::vector<std::string>& tokens, ClientConnection* client)
-  : Command("take", CommandType::PLAYER, 7, client), world_(world) {
+TakeCommand::TakeCommand(World &world, const std::vector<std::string> &tokens,
+                         ClientConnection *client)
+    : Command("take", CommandType::PLAYER, 7, client), world_(world) {
   if (!parseArgs(tokens)) {
     setStatus(CommandStatus::INVALID);
   }
 }
 
-bool TakeCommand::parseArgs(const std::vector<std::string>& args) {
+bool TakeCommand::parseArgs(const std::vector<std::string> &args) {
   if (!Command::parseArgs(args) || !validateArgCount(1))
     return false;
 
   std::string type_name = getArg(0);
-  transform(type_name.begin(), type_name.end(), type_name.begin(),
-              ::tolower);
+  transform(type_name.begin(), type_name.end(), type_name.begin(), ::tolower);
   try {
     type_ = Resource::stringToType(type_name);
   } catch (std::exception &e) {
@@ -29,27 +29,26 @@ bool TakeCommand::parseArgs(const std::vector<std::string>& args) {
 }
 
 CommandStatus TakeCommand::execute() {
-  Player* player = getClient()->getPlayer();
+  Player *player = getClient()->getPlayer();
   if (!player) {
-      setErrorMessage("Player not set");
-      return CommandStatus::FAILED;
+    setErrorMessage("Player not set");
+    return CommandStatus::FAILED;
   }
 
-  int px = player->getX();
-  int py = player->getY();
-  Map& map = world_.getMap();
+  int px   = player->getX();
+  int py   = player->getY();
+  Map &map = world_.getMap();
 
   bool success = map.removeResource(px, py, type_);
   if (!success) {
-    getClient()->sendData("ko\n");  
+    getClient()->sendData("ko\n");
     setErrorMessage("Unable to take resource");
     return CommandStatus::FAILED;
   }
   player->addResource(type_);
-  getClient()->sendData("ok\n");  
+  getClient()->sendData("ok\n");
   logCommand("Player takes resource");
   return CommandStatus::COMPLETED;
 }
 
-
-}
+} // namespace Zappy

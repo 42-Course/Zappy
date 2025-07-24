@@ -38,3 +38,4 @@
 2025-07-24 16:27:37.825 [ERROR] Command tna invalid: Empty command
 2025-07-24 16:27:57.954 [ERROR] Command take invalid: Unknown resource name: doof
 2025-07-24 16:28:03.533 [ERROR] Command take invalid: Unknown resource name: doof
+2025-07-24 17:36:19.839 [ERROR] Fatal error: Failed to bind player socket

@@ -1,149 +1,144 @@
 #include "net/ClientConnection.hpp"
-#include <unistd.h>
-#include <sys/socket.h>
+#include <algorithm>
 #include <errno.h>
 #include <stdexcept>
-#include <algorithm>
+#include <sys/socket.h>
+#include <unistd.h>
 
 namespace Zappy {
-    ClientConnection::ClientConnection(int fd)
-        : fd_(fd)
-        , type_(Type::Unknown)
-        , state_(State::UNREGISTERED)
-        , readBuffer_(BUFFER_SIZE) {
+ClientConnection::ClientConnection(int fd)
+    : fd_(fd), type_(Type::Unknown), state_(State::UNREGISTERED), readBuffer_(BUFFER_SIZE) {}
+
+ClientConnection::~ClientConnection() {
+  close();
+}
+
+bool ClientConnection::readData() {
+  ssize_t bytesRead;
+
+  do {
+    bytesRead = recv(fd_, readBuffer_.data(), BUFFER_SIZE, MSG_DONTWAIT);
+
+    if (bytesRead > 0) {
+      // Append received data to command buffer
+      commandBuffer_.append(readBuffer_.data(), bytesRead);
+      processBuffer();
+    } else if (bytesRead == 0) {
+      // Connection closed by peer
+      return false;
+    } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
+      // Error occurred
+      return false;
     }
+  } while (bytesRead > 0);
 
-    ClientConnection::~ClientConnection() {
-        close();
-    }
+  return true;
+}
 
-    bool ClientConnection::readData() {
-        ssize_t bytesRead;
-        
-        do {
-            bytesRead = recv(fd_, readBuffer_.data(), BUFFER_SIZE, MSG_DONTWAIT);
-            
-            if (bytesRead > 0) {
-                // Append received data to command buffer
-                commandBuffer_.append(readBuffer_.data(), bytesRead);
-                processBuffer();
-            } else if (bytesRead == 0) {
-                // Connection closed by peer
-                return false;
-            } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                // Error occurred
-                return false;
-            }
-        } while (bytesRead > 0);
+bool ClientConnection::sendData(const std::string &data) {
+  size_t totalSent = 0;
 
-        return true;
-    }
+  while (totalSent < data.length()) {
+    ssize_t sent = send(fd_, data.c_str() + totalSent, data.length() - totalSent, MSG_DONTWAIT);
 
-    bool ClientConnection::sendData(const std::string& data) {
-        size_t totalSent = 0;
-        
-        while (totalSent < data.length()) {
-            ssize_t sent = send(fd_, data.c_str() + totalSent, 
-                              data.length() - totalSent, MSG_DONTWAIT);
-            
-            if (sent > 0) {
-                totalSent += sent;
-            } else if (sent == -1) {
-                if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                    return false;
-                }
-                // Would block, try again later
-                break;
-            }
-        }
-        
-        return true;
-    }
-
-    void ClientConnection::close() {
-        if (fd_ != -1) {
-            ::close(fd_);
-            fd_ = -1;
-        }
-    }
-
-    void ClientConnection::setType(Type type) {
-        type_ = type;
-        // Spectators are immediately active after type is set
-        if (type == Type::Spectator) {
-            state_ = State::ACTIVE;
-        }
-    }
-
-    bool ClientConnection::canExecuteCommand(const std::string& command) const {
-        // Spectators can execute commands immediately
-        if (type_ == Type::Spectator) {
-            return true;
-        }
-
-        // Players need to follow the registration flow
-        if (type_ == Type::Player) {
-            // Unregistered players can only use team selection command
-            if (state_ == State::UNREGISTERED) {
-                return command == "team";  // Allow only team selection
-            }
-            
-            // Players who selected team but haven't received welcome message
-            if (state_ == State::TEAM_SELECTED) {
-                return false;  // Wait for server to send welcome message
-            }
-
-            // Active players can use any player command
-            if (state_ == State::ACTIVE) {
-                return true;
-            }
-        }
-
+    if (sent > 0) {
+      totalSent += sent;
+    } else if (sent == -1) {
+      if (errno != EAGAIN && errno != EWOULDBLOCK) {
         return false;
+      }
+      // Would block, try again later
+      break;
+    }
+  }
+
+  return true;
+}
+
+void ClientConnection::close() {
+  if (fd_ != -1) {
+    ::close(fd_);
+    fd_ = -1;
+  }
+}
+
+void ClientConnection::setType(Type type) {
+  type_ = type;
+  // Spectators are immediately active after type is set
+  if (type == Type::Spectator) {
+    state_ = State::ACTIVE;
+  }
+}
+
+bool ClientConnection::canExecuteCommand(const std::string &command) const {
+  // Spectators can execute commands immediately
+  if (type_ == Type::Spectator) {
+    return true;
+  }
+
+  // Players need to follow the registration flow
+  if (type_ == Type::Player) {
+    // Unregistered players can only use team selection command
+    if (state_ == State::UNREGISTERED) {
+      return command == "team"; // Allow only team selection
     }
 
-    bool ClientConnection::hasCompleteCommand() const {
-        return !pendingCommands_.empty();
+    // Players who selected team but haven't received welcome message
+    if (state_ == State::TEAM_SELECTED) {
+      return false; // Wait for server to send welcome message
     }
 
-    std::string ClientConnection::getNextCommand() {
-        if (pendingCommands_.empty()) {
-            return "";
-        }
-        
-        std::string cmd = pendingCommands_.front();
-        pendingCommands_.pop();
-        return cmd;
+    // Active players can use any player command
+    if (state_ == State::ACTIVE) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool ClientConnection::hasCompleteCommand() const {
+  return !pendingCommands_.empty();
+}
+
+std::string ClientConnection::getNextCommand() {
+  if (pendingCommands_.empty()) {
+    return "";
+  }
+
+  std::string cmd = pendingCommands_.front();
+  pendingCommands_.pop();
+  return cmd;
+}
+
+void ClientConnection::processBuffer() {
+  size_t pos;
+
+  // Process all complete commands in the buffer
+  while ((pos = commandBuffer_.find('\n')) != std::string::npos) {
+    std::string cmd = commandBuffer_.substr(0, pos);
+
+    // Remove any carriage return if present
+    if (!cmd.empty() && cmd.back() == '\r') {
+      cmd.pop_back();
     }
 
-    void ClientConnection::processBuffer() {
-        size_t pos;
-        
-        // Process all complete commands in the buffer
-        while ((pos = commandBuffer_.find('\n')) != std::string::npos) {
-            std::string cmd = commandBuffer_.substr(0, pos);
-            
-            // Remove any carriage return if present
-            if (!cmd.empty() && cmd.back() == '\r') {
-                cmd.pop_back();
-            }
-            
-            if (!cmd.empty()) {
-                pendingCommands_.push(cmd);
-            }
-            
-            // Remove processed command from buffer
-            commandBuffer_.erase(0, pos + 1);
-        }
-        
-        // If buffer is too large and no newline found, clear it
-        // This prevents memory exhaustion from malicious clients
-        if (commandBuffer_.length() > BUFFER_SIZE * 2) {
-            commandBuffer_.clear();
-        }
+    if (!cmd.empty()) {
+      pendingCommands_.push(cmd);
     }
 
-    bool ClientConnection::isCommandComplete(const std::string& cmd) const {
-        return !cmd.empty() && cmd.back() == '\n';
-    }
-} 
+    // Remove processed command from buffer
+    commandBuffer_.erase(0, pos + 1);
+  }
+
+  // If buffer is too large and no newline found, clear it
+  // This prevents memory exhaustion from malicious clients
+  if (commandBuffer_.length() > BUFFER_SIZE * 2) {
+    commandBuffer_.clear();
+  }
+}
+
+bool ClientConnection::isCommandComplete(const std::string &cmd) const {
+  return !cmd.empty() && cmd.back() == '\n';
+}
+} // namespace Zappy

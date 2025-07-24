@@ -91,6 +91,8 @@ DEBUG_OBJS_DIRS = ${DEBUG_OBJS_D}/core \
 OBJ = $(SRC:srcs/%.cpp=$(OBJS_D)/%.o)
 DEBUG_OBJ = $(SRC:srcs/%.cpp=$(DEBUG_OBJS_D)/%.o)
 
+LINTER = clang-tidy-12
+FORMAT = clang-format-12
 UNAME := $(shell uname)
 RM = rm -rf
 
@@ -155,6 +157,16 @@ show:
 > @printf "INCLUDES : $(INC)\n"
 > @printf "SRC      : $(C_YELLOW)$(SRC)$(C_GREEN)\n"
 > @printf "OBJ      : $(C_YELLOW)[$(OBJS_D)] --> $(OBJ)$(C_END)\n"
+
+lint:
+> @echo "$(C_BLUE)[Clang-Tidy] Linting all source files...$(C_END)"
+> @$(foreach file, $(SRC), $(LINTER) $(file) -- $(CFLAGS) $(INC) || exit 1;)
+> @echo "$(C_GREEN)[Clang-Tidy] All checks passed.$(C_END)"
+
+format:
+> @echo "$(C_BLUE)[Clang-Format] Formating all source files...$(C_END)"
+> @$(foreach file, $(SRC), $(FORMAT) -i $(file) || exit 1;)
+> @echo "$(C_GREEN)[Clang-Format] Finished.$(C_END)"
 
 .PHONY: all test re clean fclean show debug
 
